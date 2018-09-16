@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "The starcitygames.com shop price srapper",
   "homepage": "https://scg.dekker.gdn",
-  "email" : "dekker25@gmail.com",
+  "email": "dekker25@gmail.com",
   "scripts": {
     "build": "webpack --env production",
     "dev": "webpack-dev-server",
@@ -15,7 +15,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "@babel/runtime": "7.0.0-beta.49",
+    "@babel/runtime": "^7.0.0",
     "@types/body-parser": "^1.17.0",
     "@types/cheerio": "^0.22.8",
     "@types/colors": "^1.2.1",
@@ -36,7 +36,7 @@
     "cors": "^2.8.4",
     "css-loader": "^1.0.0",
     "express": "^4.16.3",
-    "file-loader": "^1.1.11",
+    "file-loader": "^2.0.0",
     "html-webpack-externals-plugin": "^3.8.0",
     "html-webpack-plugin": "^3.2.0",
     "lodash": "^4.17.10",
@@ -47,18 +47,18 @@
     "offline-plugin": "^5.0.5",
     "optimize-css-assets-webpack-plugin": "^5.0.0",
     "preload-webpack-plugin": "^3.0.0-beta.1",
-    "react": "16.4.2",
-    "react-dom": "16.4.2",
+    "react": "^16.5.1",
+    "react-dom": "^16.5.1",
     "sass-loader": "^7.0.3",
-    "style-loader": "^0.21.0",
+    "style-loader": "^0.23.0",
     "ts-node": "^7.0.0",
     "typescript": "^3.0.1",
-    "uglifyjs-webpack-plugin": "^1.2.7",
+    "uglifyjs-webpack-plugin": "^2.0.0",
     "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5",
     "webpack-pwa-manifest": "^3.6.3",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^3.0.0"
   },
   "nodemonConfig": {
     "watch": [
