@@ -8,4 +8,4 @@ COPY . /app
 WORKDIR /app
 
 RUN npm run build
-ENTRYPOINT [ "yarn", "start" ]
+ENTRYPOINT [ "npm", "start" ]
