@@ -1,0 +1,48 @@
+.update-label-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    min-height: 70px;
+    background: #ccffcc;
+    transition: 0.2s;
+    padding: 10px;
+    box-sizing: border-box;
+
+    &--hidden {
+        min-height: 0;
+        height: 0;
+        visibility: collapse;
+
+        .update-label {
+            display: none;
+            margin: 0;
+            height: 0;
+        }
+    }
+
+    &--failed {
+        background: #ef9a9a;
+    }
+}
+
+.update-label {
+    display: block;
+    box-sizing: border-box;
+    margin: auto;
+    text-align: center;
+
+    &__close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 10px;
+        font-size: 20px;
+        line-height: 20px;
+        width: 20px;
+        text-align: center;
+    }
+}

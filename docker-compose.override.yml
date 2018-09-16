@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  sosemivigelant-scg:
+    ports:
+      - "8081:8081"
+    environment:
+      - NODE_ENV=production
