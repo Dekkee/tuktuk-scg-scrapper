@@ -1,4 +1,4 @@
-Tuktuk Screen SCrapper
+Tuktuk Screen Scrapper
 <a href="https://teamcity.dekker.gdn/viewType.html?buildTypeId=Tuktuk_Build&guest=1">
 <img src="https://teamcity.dekker.gdn/app/rest/builds/buildType:(id:Tuktuk_Build)/statusIcon"/>
 </a>
