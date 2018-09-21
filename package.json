@@ -10,6 +10,7 @@
     "start": "ts-node ./src/server/server.ts",
     "server-dev": "nodemon"
   },
+  "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
   "main": "index.js",
   "author": "Dekker",
   "license": "MIT",
