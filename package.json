@@ -8,7 +8,8 @@
     "build": "webpack --env production",
     "dev": "webpack-dev-server",
     "start": "ts-node ./src/server/server.ts",
-    "server-dev": "nodemon"
+    "server-dev": "nodemon",
+    "test": "karma start --single-run"
   },
   "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
   "main": "index.js",
@@ -70,5 +71,16 @@
       "src/**/*.spec.ts"
     ],
     "exec": "ts-node ./src/server/server.ts"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^2.8.8",
+    "@types/sinon": "^5.0.2",
+    "jasmine-core": "^3.2.1",
+    "karma": "^3.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.2",
+    "karma-webpack": "^3.0.5",
+    "puppeteer": "^1.8.0",
+    "sinon": "^6.3.4"
   }
 }

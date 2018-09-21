@@ -2,9 +2,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const OfflinePlugin = require('offline-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
 
@@ -58,7 +58,7 @@ module.exports = (env) => {
     if (isProd) {
         plugins.push(
             new WebpackPwaManifest(manifest),
-            new HtmlWebpackExternalsPlugin({externals}),
+            new HtmlWebpackExternalsPlugin({ externals }),
             new MiniCssExtractPlugin(),
             new OfflinePlugin({
                 ServiceWorker: {
@@ -80,16 +80,17 @@ module.exports = (env) => {
         entry: './src/index.tsx',
         mode: env || 'development',
         module: {
-            rules: [{
-                test: /\.tsx?/,
-                use: 'awesome-typescript-loader'
-            },
+            rules: [
+                {
+                    test: /\.tsx?/,
+                    use: 'awesome-typescript-loader'
+                },
                 {
                     test: /\.scss$/,
                     use: [
                         isProd ? MiniCssExtractPlugin.loader : 'style-loader', // creates style nodes from JS strings
-                        "css-loader", // translates CSS into CommonJS
-                        "sass-loader" // compiles Sass to CSS
+                        'css-loader', // translates CSS into CommonJS
+                        'sass-loader' // compiles Sass to CSS
                     ]
                 },
                 {
