@@ -4,6 +4,7 @@ const isDocker = require('is-docker')();
 module.exports = (config) => {
     config.set({
         frameworks: ['jasmine'],
+        browsers: ['ChromeCustom'],
         // ... normal karma configuration
         files: [
             // all files ending in "_test"

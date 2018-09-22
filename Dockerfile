@@ -7,7 +7,7 @@ RUN cd /tmp && yarn && mkdir -p /app && cp -a /tmp/node_modules /app/
 COPY . /app
 WORKDIR /app
 
-RUN yarn test:ci
+# RUN yarn test:ci
 
 RUN yarn build
 ENTRYPOINT [ "yarn", "start" ]
