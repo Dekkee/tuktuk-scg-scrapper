@@ -4,7 +4,7 @@ Tuktuk Screen Scrapper
 </a>
 ===============
 StetCityGames prices scrapper
-url: scg.dekker.gdn
+url: https://scg.dekker.gdn
 
 How to run
 -------------
