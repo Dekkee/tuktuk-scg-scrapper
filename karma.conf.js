@@ -1,9 +1,9 @@
 const webpackConfig = require('./webpack.config');
+const isDocker = require('is-docker')();
 
 module.exports = (config) => {
     config.set({
         frameworks: ['jasmine'],
-        browsers: ['ChromeHeadless'],
         // ... normal karma configuration
         files: [
             // all files ending in "_test"
@@ -27,6 +27,14 @@ module.exports = (config) => {
             // webpack-dev-middleware configuration
             // i. e.
             stats: 'errors-only'
-        }
+        },
+        customLaunchers: {
+            ChromeCustom: {
+                base: 'ChromeHeadless',
+                // We must disable the Chrome sandbox when running Chrome inside Docker (Chrome's sandbox needs
+                // more permissions than Docker allows by default)
+                flags: isDocker ? ['--no-sandbox'] : []
+            }
+        },
     })
 };
