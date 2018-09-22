@@ -45,6 +45,7 @@
     "lodash": "^4.17.10",
     "mini-css-extract-plugin": "^0.4.1",
     "morgan": "^1.9.0",
+    "node-fetch": "^2.2.0",
     "node-sass": "^4.9.2",
     "nodemon": "^1.18.3",
     "offline-plugin": "^5.0.5",
