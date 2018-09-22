@@ -9,7 +9,8 @@
     "dev": "webpack-dev-server",
     "start": "ts-node ./src/server/server.ts",
     "server-dev": "nodemon",
-    "test": "karma start --single-run"
+    "test": "karma start --browsers ChromeCustom --single-run",
+    "test:ci": "karma start --reporters teamcity --browsers ChromeCustom --single-run --colors false"
   },
   "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
   "main": "index.js",
@@ -80,6 +81,7 @@
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.2",
+    "karma-teamcity-reporter": "^1.1.0",
     "karma-webpack": "^3.0.5",
     "puppeteer": "^1.8.0",
     "sinon": "^6.3.4"

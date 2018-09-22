@@ -7,7 +7,7 @@ RUN cd /tmp && npm ci && mkdir -p /app && cp -a /tmp/node_modules /app/
 COPY . /app
 WORKDIR /app
 
-RUN npm run test
+RUN npm run test:ci
 
 RUN npm run build
 ENTRYPOINT [ "npm", "start" ]
