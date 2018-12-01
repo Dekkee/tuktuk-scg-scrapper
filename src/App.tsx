@@ -1,15 +1,13 @@
 import * as React from 'react';
-import * as cn from 'classnames';
 
-import debounce = require('lodash/debounce');
 import { ParsedRow } from './entities/Row';
-import { CardLayout } from './components/CardLayout';
 import { SearchInput } from './components/SearchInput';
 import { searchByName } from './api';
 
 import './App.scss';
 import { Updater } from './pwa/updater';
 import { UpdateStatus, UpdateLabel } from './components/UpdateLabel';
+import { CardsLayout } from './components/CardsLayout';
 
 interface State {
     rows?: ParsedRow[];
@@ -65,21 +63,6 @@ export class App extends React.Component<{}, State> {
         }
     };
 
-    renderTable (rows: ParsedRow[]) {
-        return (rows
-                ? rows.length
-                    ? rows.map((row, i) => <CardLayout className={ cn({ 'card-layout--dark': i % 2 }) }
-                                                       card={ row }
-                                                       key={ i }/>)
-                    : <div className="empty-container">
-                        <div className="empty"><i className="icon-sad icon-big"/>Not found</div>
-                    </div>
-                : <div className="start-search-container">
-                    <div className="start-search"><i className="icon-search icon-big"/>Start search!!!</div>
-                </div>
-        );
-    };
-
     render () {
         const { rows, isFetching, updateStatus } = this.state;
         return (
@@ -91,7 +74,7 @@ export class App extends React.Component<{}, State> {
                             ? <div className="loading-container">
                                 <div className="loading"><i className="icon-spinner8 icon-big icon-rotating"/>Loading</div>
                             </div>
-                            : this.renderTable(rows)
+                            : <CardsLayout rows={rows}/>
                     }
                 </div>
                 <UpdateLabel status={ updateStatus } onRequestUpdate={ () => this.pwaUpdater.performUpdate() }

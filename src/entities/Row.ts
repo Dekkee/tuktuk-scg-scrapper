@@ -23,7 +23,7 @@ export interface RowBody {
         href: string;
         value: string;
     };
-    price: string;
+    price: string[];
 }
 
 export type RawRow = Partial<RowHeader> & Partial<RowBody>;

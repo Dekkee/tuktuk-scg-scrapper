@@ -1,0 +1,21 @@
+@import "../../palette";
+
+.card-layout {
+    padding: 4px 2px;
+
+    &--dark {
+        background: tuktuk-color('secondary');
+    }
+
+    &--set {
+        color: tuktuk-color('secondary');
+    }
+
+    &--price {
+        justify-self: end;
+    }
+
+    &__discount {
+        text-decoration: line-through;
+    }
+}

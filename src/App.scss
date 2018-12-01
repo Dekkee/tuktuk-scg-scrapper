@@ -17,12 +17,11 @@ body {
 }
 
 .content-container {
-    margin: 0 8px 10px 8px;
-}
-
-.cards-container {
-    display: grid;
-    grid-template-columns: auto auto 100px 100px 100px;
+    margin: 0 10px 20px 10px;
+    background: tuktuk-color('primary');
+    & > div {
+        background: tuktuk-color('background');
+    }
 }
 
 .loading-container,
@@ -32,6 +31,8 @@ body {
     justify-content: center;
     display: flex;
 }
+
+
 
 .loading,
 .empty,

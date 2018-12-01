@@ -1,0 +1,17 @@
+@import "../../palette";
+
+.row-separator {
+    width: 100%;
+    grid-column: span 4;
+    border-bottom: 1px solid tuktuk-color('foreground');
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: 1fr 50px 10px auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    grid-auto-rows: minmax(10px, auto);
+    align-items: center;
+    justify-items: start;
+}
