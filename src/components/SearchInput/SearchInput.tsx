@@ -1,24 +1,57 @@
 import * as React from 'react';
-import { ChangeEvent } from "react";
+import { ChangeEvent, KeyboardEvent } from 'react';
 
 import './SearchInput.scss';
 
 export interface Props {
-    onTextChanged: (text: string) => void;
+    // onTextChanged: (text: string) => void;
+    onSearchRequested: (text: string) => void;
 }
 
-export class SearchInput extends React.PureComponent<Props> {
-    constructor(props) {
+interface State {
+    text: string;
+}
+
+export class SearchInput extends React.PureComponent<Props, State> {
+    constructor (props) {
         super(props);
+
+        this.state = {
+            text: ''
+        };
     }
 
-    onInput = (e: ChangeEvent) => this.props.onTextChanged((e.target as HTMLInputElement).value);
+    onInput = (e: ChangeEvent) => this.setState({
+        ...this.state,
+        ...{ text: (e.target as HTMLInputElement).value }
+    });
 
-    render() {
+    onKeyPressed = (e) => {
+        if ((e as KeyboardEvent).key === 'Enter') {
+            this.handleSearchRequest(this.state.text);
+        }
+    };
+
+    handleSearchRequest = (text: string) => {
+        this.props.onSearchRequested(text);
+    };
+
+    render () {
         return (
             <div className="search-container">
-                <input onChange={(e) => this.onInput(e)} className="search-input" id="search-input" required />
-                <label htmlFor="search-input" className="search-label">Search</label>
+                <div className="search-panel">
+                    <div className="search-input">
+                        <input onChange={ (e) => this.onInput(e) } onKeyPress={ (e) => this.onKeyPressed(e) } id="search-input" required/>
+                        <div className="search-label">
+                            <label htmlFor="search-input" className="search-label--placeholder">Search</label>
+                        </div>
+                    </div>
+                    <button className="search-button" onClick={ () => this.handleSearchRequest(this.state.text) }>
+                        <div className="search-button--icon">
+                            <i className="icon-search"/>
+                        </div>
+                    </button>
+                </div>
             </div>
         );
     }
