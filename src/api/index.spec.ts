@@ -25,14 +25,14 @@ describe('api', () => {
     afterEach(() => sandbox.restore());
 
     it('normal usage', (done) => {
-        sandbox.stub(window, 'fetch').returns(oneSecPromise());
+        sandbox.stub(window, 'fetch').returns(oneSecPromise() as any);
         const promise = api.searchByName('name');
         promise.then(() => done(), (e) => console.error(e));
         clock.tick(2000);
     });
 
     it('double usage', (done) => {
-        sandbox.stub(window, 'fetch').returns(oneSecPromise());
+        sandbox.stub(window, 'fetch').returns(oneSecPromise() as any);
         const promise1 = api.searchByName('name');
         promise1.then(() => { throw new Error('called!') }, (e) => console.error(e));
         clock.tick(500);
