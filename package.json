@@ -1,14 +1,14 @@
 {
-  "name": "SoSemiVigelant.Scg",
+  "name": "tuktuk-scg-scrapper",
   "version": "0.1.0",
   "description": "The starcitygames.com shop price srapper",
   "homepage": "https://scg.dekker.gdn",
   "email": "dekker25@gmail.com",
   "scripts": {
     "build": "webpack --env production",
-    "dev": "webpack-dev-server",
+    "dev:client": "webpack-dev-server",
     "start": "ts-node ./src/server/server.ts",
-    "server-dev": "nodemon",
+    "dev:server": "nodemon",
     "test": "karma start --browsers ChromeCustom --single-run",
     "test:ci": "karma start --reporters teamcity --browsers ChromeCustom --single-run --colors false"
   },
@@ -34,7 +34,7 @@
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
     "classnames": "^2.2.6",
-    "clean-webpack-plugin": "^0.1.19",
+    "clean-webpack-plugin": "^1.0.0",
     "colors": "^1.3.1",
     "cors": "^2.8.4",
     "css-loader": "^1.0.0",
@@ -75,16 +75,16 @@
     "exec": "ts-node ./src/server/server.ts"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.8.8",
+    "@types/jasmine": "^3.3.0",
     "@types/sinon": "^5.0.2",
     "is-docker": "^1.1.0",
     "jasmine-core": "^3.2.1",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-jasmine": "^1.1.2",
+    "karma-jasmine": "^2.0.1",
     "karma-teamcity-reporter": "^1.1.0",
     "karma-webpack": "^3.0.5",
     "puppeteer": "^1.8.0",
-    "sinon": "^6.3.4"
+    "sinon": "^7.1.1"
   }
 }
