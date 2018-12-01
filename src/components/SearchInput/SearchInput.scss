@@ -1,10 +1,12 @@
+@import "../../palette";
+
 .search {
     &-container {
         display: flex;
         font-size: 15pt;
         color: inherit;
         height: 39px;
-        border: 1px solid #ccffcc;
+        border: 1px solid tuktuk-color('secondary');
         border-radius: 8px;
         box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
         overflow: hidden;
@@ -54,13 +56,13 @@
 
     &-button {
         width: 40px;
-        background: #ccffcc;
+        background: tuktuk-color('accent');
         display: flex;
         border: 0;
         justify-content: center;
         align-items: center;
         outline: none;
         font: inherit;
-        color: inherit;
+        color: tuktuk-color('background');
     }
 }

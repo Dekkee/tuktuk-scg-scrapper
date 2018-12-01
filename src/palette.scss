@@ -1,0 +1,12 @@
+$tuktuk-colors: (
+    'primary': #74d600,
+    'accent': #028900,
+    'secondary': #ccffcc,
+    'foreground': #283F3B,
+    'background': #fff,
+    'error': ef9a9a,
+);
+
+@function tuktuk-color($key: 'primary') {
+    @return map-get($tuktuk-colors, $key);
+}

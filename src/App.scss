@@ -1,7 +1,9 @@
+@import "palette";
+
 body {
     margin: 0;
-    background-color: #FFF;
-    color: #283F3B;
+    background-color: tuktuk-color('background');
+    color: tuktuk-color('foreground');
     font-family: "Roboto", Arial, Helvetica, sans-serif;
 }
 

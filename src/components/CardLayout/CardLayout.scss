@@ -1,3 +1,5 @@
+@import "../../palette";
+
 .card-layout {
     padding: 4px 2px;
     display: grid;
@@ -8,6 +10,6 @@
     align-items: center;
     justify-items: end;
     &--dark {
-        background: #ccffcc;
+        background: tuktuk-color('secondary');
     }
 }

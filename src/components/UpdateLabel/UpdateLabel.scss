@@ -1,3 +1,5 @@
+@import "../../palette";
+
 .update-label-container {
     position: fixed;
     display: flex;
@@ -7,7 +9,7 @@
     left: 0;
     width: 100%;
     min-height: 70px;
-    background: #ccffcc;
+    background: tuktuk-color('secondary');
     transition: 0.2s;
     padding: 10px;
     box-sizing: border-box;
@@ -25,7 +27,7 @@
     }
 
     &--failed {
-        background: #ef9a9a;
+        background: tuktuk-color('error');
     }
 }
 
