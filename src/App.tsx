@@ -44,7 +44,7 @@ export class App extends React.Component<{}, State> {
         this.setState({ ...this.state, updateStatus: UpdateStatus.Cancelled });
     }
 
-    private readonly requestData = debounce(async (value: string) => {
+    private readonly requestData = async (value: string) => {
         if (!value) {
             return;
         }
@@ -63,7 +63,7 @@ export class App extends React.Component<{}, State> {
             }
             this.setState({ ...this.state, isFetching: false });
         }
-    }, 300);
+    };
 
     renderTable (rows: ParsedRow[]) {
         return (rows
@@ -84,7 +84,7 @@ export class App extends React.Component<{}, State> {
         const { rows, isFetching, updateStatus } = this.state;
         return (
             <div className="main-container">
-                <SearchInput onTextChanged={ (value) => this.requestData(value) }/>
+                <SearchInput onSearchRequested={ (value) => this.requestData(value) }/>
                 <div className="content-container">
                     {
                         isFetching
