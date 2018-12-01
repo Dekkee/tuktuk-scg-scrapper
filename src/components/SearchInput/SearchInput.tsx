@@ -40,12 +40,13 @@ export class SearchInput extends React.PureComponent<Props, State> {
         return (
             <div className="search-container">
                 <div className="search-panel">
-                    <div className="search-input">
-                        <input onChange={ (e) => this.onInput(e) } onKeyPress={ (e) => this.onKeyPressed(e) } id="search-input" required/>
+                    <label className="search-input" htmlFor="search-input">
+                        <input onChange={ (e) => this.onInput(e) } onKeyPress={ (e) => this.onKeyPressed(e) }
+                               id="search-input" required/>
                         <div className="search-label">
-                            <label htmlFor="search-input" className="search-label--placeholder">Search</label>
+                            <div className="search-label--placeholder">Search</div>
                         </div>
-                    </div>
+                    </label>
                     <button className="search-button" onClick={ () => this.handleSearchRequest(this.state.text) }>
                         <div className="search-button--icon">
                             <i className="icon-search"/>
