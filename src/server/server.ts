@@ -3,10 +3,11 @@ import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 import * as colors from 'colors';
 import * as cors from 'cors';
+import * as querystring from 'querystring';
 import fetch from 'node-fetch';
 import { parseScgAnswer } from "./html-parser";
-const compression = require('compression');
 
+const compression = require('compression');
 const app = express()
     .use(morgan(':method :url -> :status'))
     .use(bodyParser.urlencoded({ extended: true }))
@@ -16,8 +17,15 @@ const app = express()
 app.use(compression({ threshold: 0 }));
 app.use(express.static('dist'));
 
+const pageSize = 25;
+
 app.get('/api', async function (req, resp) {
-    const answer = await (await fetch(`http://www.starcitygames.com/results?name=${req.query.name}`)).text();
+    const query = querystring.stringify({
+        name: req.query.name,
+        numpage: pageSize,
+        startnum: +req.query.page * pageSize || 0,
+    });
+    const answer = await (await fetch(`http://www.starcitygames.com/results?${query}`)).text();
     resp.status(200).send(parseScgAnswer(answer));
 });
 app.get('*', function (req, resp) {

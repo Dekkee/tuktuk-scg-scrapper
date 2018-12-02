@@ -94,14 +94,14 @@ const parseLink = (element: CheerioElement) => {
 const parseText = (element: CheerioElement) => cheerio.load(element)('td').text();
 
 const parsePrice = (element: CheerioElement) => {
-    const $ = cheerio.load(element);
-    const td = $('td');
+    const el = cheerio.load(element);
+    const td = el('td');
 
     const children = td.children('span');
     if (children.length > 1) {
         const arr = [];
         children.each((i, e) => {
-            arr.push($(e).text())
+            arr.push(el(e).text());
         });
         return arr;
     } else {
@@ -110,7 +110,7 @@ const parsePrice = (element: CheerioElement) => {
 };
 
 const parsePages = (element: Cheerio): ScgPaging => {
-    if (element.length < 2) return {};
+    if (element.length < 2) return { page: 0, pageCount: 1 };
 
     const row = element[ 1 ];
     const links = cheerio.load(row)('td div:first-child > a');
@@ -120,6 +120,6 @@ const parsePages = (element: Cheerio): ScgPaging => {
         if (page > pageCount) pageCount = page;
     });
     const pageNumber = cheerio.load(row)('td div:first-child > b > a').text();
-    const page = parseInt(pageNumber);
+    const page = parseInt(pageNumber) - 1;
     return { page, pageCount };
 };
