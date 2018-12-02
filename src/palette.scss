@@ -1,4 +1,4 @@
-$tuktuk-colors: ( 'primary': #ccffcc, 'accent': #028900, 'secondary': #20212447, 'foreground': #283F3B, 'background': #fff, 'error': #ef9a9a, );
+$tuktuk-colors: ( 'primary': #ccffcc, 'accent': #028900, 'secondary': #20212460, 'foreground': #283F3B, 'background': #fff, 'error': #ef9a9a, );
 @function tuktuk-color($key: 'primary') {
     @return map-get($tuktuk-colors, $key);
 }
