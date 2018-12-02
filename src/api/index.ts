@@ -45,6 +45,9 @@ export const autocomplete = async (text: string): Promise<Record<string, Autocom
         let response = null;
         window[ callback ] = function (object: Record<string, any>) {
             response = object;
+            if (scr) {
+                document.querySelector('body').removeChild(scr);
+            }
         };
         const scr = document.createElement('script');
         scr.src = url;
@@ -53,7 +56,10 @@ export const autocomplete = async (text: string): Promise<Record<string, Autocom
             if (Boolean(response)) {
                 resolve(response);
             } else {
-                reject('no data');
+                reject(new Error('no data'));
+                if (scr) {
+                    document.querySelector('body').removeChild(scr);
+                }
             }
         };
         document.querySelector('body').appendChild(scr);
