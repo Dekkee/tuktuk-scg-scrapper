@@ -31,6 +31,7 @@
             color: inherit;
             padding: 0 0 0 16px;
             outline: none;
+            margin: 0;
             &:focus {}
             &:focus+.search-label {
                 opacity: 0;
