@@ -40,18 +40,20 @@ export class SearchInput extends React.PureComponent<Props, State> {
     };
 
     private onAutocomplete = (text: string) => {
-        this.setState({ ...this.state, ...{ text } });
+        this.setState({ ...this.state, text });
         this.props.onSearchRequested(text);
     };
+
+    private onClear = () => this.setState({ ...this.state, text: '' });
 
     render () {
         const { autocompletion } = this.props;
         const { text } = this.state;
-        let arr: AutocompleteCard[] = [];
+        let aucompleteCards: AutocompleteCard[] = [];
         if (autocompletion) {
             const keys = Object.keys(autocompletion);
             for (let key of keys) {
-                arr.push(autocompletion[ key ]);
+                aucompleteCards.push(autocompletion[ key ]);
             }
         }
 
@@ -65,6 +67,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
                             <div className="search-label--placeholder">Search</div>
                         </div>
                     </label>
+                    { Boolean(text) && <div className="search-cross" onClick={ () => this.onClear() }>&times;</div> }
                     <button className="search-button" onClick={ () => this.handleSearchRequest(this.state.text) }>
                         <div className="search-button--icon">
                             <i className="icon-search"/>
@@ -72,9 +75,9 @@ export class SearchInput extends React.PureComponent<Props, State> {
                     </button>
                 </div>
                 {
-                    arr.length > 0 && <div className="autocompletion">
+                    Boolean(text) && aucompleteCards.length > 0 && <div className="autocompletion">
                         {
-                            arr.map((card, i) =>
+                            aucompleteCards.map((card, i) =>
                                 <div className="autocompletion--card" onClick={ () => this.onAutocomplete(card.name) }>
                                     <div className="autocompletion--card-name">{ card.name }</div>
                                     <div className="autocompletion--card-text">{ card.text }</div>
