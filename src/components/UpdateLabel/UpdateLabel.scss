@@ -1,5 +1,4 @@
 @import "../../palette";
-
 .update-label-container {
     position: fixed;
     display: flex;
@@ -9,23 +8,20 @@
     left: 0;
     width: 100%;
     min-height: 70px;
-    background: tuktuk-color('secondary');
+    background: tuktuk-color('primary');
     transition: 0.2s;
     padding: 10px;
     box-sizing: border-box;
-
     &--hidden {
         min-height: 0;
         height: 0;
         visibility: collapse;
-
         .update-label {
             display: none;
             margin: 0;
             height: 0;
         }
     }
-
     &--failed {
         background: tuktuk-color('error');
     }
@@ -36,7 +32,6 @@
     box-sizing: border-box;
     margin: auto;
     text-align: center;
-
     &__close {
         position: absolute;
         top: 0;
