@@ -39,9 +39,8 @@ export const searchByName = async (value: string, page: number = 0) => {
 
 export const autocomplete = async (text: string): Promise<Record<string, AutocompleteCard> | undefined> => {
     return new Promise((resolve, reject) => {
-        // http://www.starcitygames.com/autocomplete/products.php?callback=jQuery32107046950589933074_1543757384839&term=j&_=1543757384840
         const callback = `scg${getRandomInt(1000000, 9999999)}`;
-        const url = `http://www.starcitygames.com/autocomplete/products.php?callback=${callback}&term=${text}`;
+        const url = `//www.starcitygames.com/autocomplete/products.php?callback=${callback}&term=${text}`;
         let response = null;
         window[ callback ] = function (object: Record<string, any>) {
             response = object;
