@@ -9,23 +9,34 @@ export interface Props {
     rows: ParsedRow[]
 }
 
-export const CardsLayout = ({ rows }: Props) => {
-    return (rows
-        ? rows.length
-            ? <div className="cards-container"> {
-                rows.map((row, i) => <>
-                    <Card
-                        className={ cn({ 'card-layout--dark': i % 2 }) }
-                        card={ row }
-                        key={ i }/>
-                    { i < rows.length - 1 && <div className="row-separator"/> }
-                </>)
-            }
-            </div>
-            : <div className="empty-container">
-                <div className="empty"><i className="icon-sad icon-big"/>Not found</div>
-            </div>
-        : <div className="start-search-container">
-            <div className="start-search"><i className="icon-search icon-big"/>Start search!!!</div>
-        </div>);
-};
+const renderCards = (rows: ParsedRow[]) => (
+    <div className="cards-container"> {
+        rows.map((row, i) => <>
+            { i > 0 && <div className="row-separator" key={ 2 * i }/> }
+            <Card
+                className={ cn({ 'card-layout--dark': i % 2 }) }
+                card={ row }
+                key={ 2 * i + 1 }/>
+        </>) }
+    </div>
+);
+
+const renderNotFound = () => (
+    <div className="empty-container">
+        <div className="empty"><i className="icon-sad icon-big"/>Not found</div>
+    </div>
+);
+
+const renderStartSearch = () => (
+    <div className="start-search-container">
+        <div className="start-search"><i className="icon-search icon-big"/>Start search!!!</div>
+    </div>
+);
+
+export const CardsLayout = ({ rows }: Props) => (
+    rows
+    ? rows.length
+        ? renderCards(rows)
+        : renderNotFound()
+    : renderStartSearch()
+);

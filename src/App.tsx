@@ -8,11 +8,15 @@ import './App.scss';
 import { Updater } from './pwa/updater';
 import { UpdateStatus, UpdateLabel } from './components/UpdateLabel';
 import { CardsLayout } from './components/CardsLayout';
+import { Paging } from './entities/Paging';
+import { ShowMore } from './components/ShowMore';
+import { LoadingLabel } from './components/LoadingLabel';
 
-interface State {
+interface State extends Paging {
     rows?: ParsedRow[];
     isFetching: boolean;
     updateStatus: UpdateStatus;
+    searchText?: string;
 }
 
 export class App extends React.Component<{}, State> {
@@ -23,7 +27,8 @@ export class App extends React.Component<{}, State> {
         super(props);
 
         this.state = {
-            rows: null,
+            page: 0,
+            pageCount: 1,
             isFetching: false,
             updateStatus: UpdateStatus.NotRequired,
         };
@@ -42,41 +47,47 @@ export class App extends React.Component<{}, State> {
         this.setState({ ...this.state, updateStatus: UpdateStatus.Cancelled });
     }
 
-    private readonly requestData = async (value: string) => {
-        if (!value) {
+    private onSearch (value: string) {
+        if (!value || value === this.state.searchText) {
             return;
         }
-        this.setState({ ...this.state, isFetching: true });
-        try {
-            const { rows } = await searchByName(value);
-            if (rows && rows.length > 0) {
-                this.setState({ ...this.state, rows, isFetching: false });
-                return;
-            }
-        } catch (e) {
-            const domException = e as DOMException;
-            // abortError
-            if (domException.code === 20) {
-                return;
-            }
-            this.setState({ ...this.state, isFetching: false });
+        this.requestData(value);
+    }
+
+    private onMore () {
+        const { searchText, page } = this.state;
+        this.requestData(searchText, page + 1);
+    }
+
+    private readonly requestData = async (value: string, newPage: number = 0) => {
+        const { rows: stateRows = [] } = this.state;
+        const newStateRows = newPage > 0 ? stateRows : [];
+        this.setState({ ...this.state, isFetching: true, rows: newStateRows.length > 0 ? newStateRows : undefined });
+        const res = await searchByName(value, newPage);
+        if (!res) {
+            return;
         }
+        const { rows, page, pageCount } = res;
+        this.setState({
+            ...this.state,
+            rows: [ ...newStateRows, ...rows ],
+            page,
+            pageCount,
+            isFetching: false,
+            searchText: value
+        });
     };
 
     render () {
-        const { rows, isFetching, updateStatus } = this.state;
+        const { rows, pageCount, page, isFetching, updateStatus } = this.state;
         return (
             <div className="main-container">
-                <SearchInput onSearchRequested={ (value) => this.requestData(value) }/>
+                <SearchInput onSearchRequested={ (value) => this.onSearch(value) }/>
                 <div className="content-container">
-                    {
-                        isFetching
-                            ? <div className="loading-container">
-                                <div className="loading"><i className="icon-spinner8 icon-big icon-rotating"/>Loading</div>
-                            </div>
-                            : <CardsLayout rows={rows}/>
-                    }
+                    { (!isFetching || rows) && <CardsLayout rows={ rows }/> }
+                    { isFetching && <LoadingLabel/> }
                 </div>
+                { page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={ () => this.onMore() }/> }
                 <UpdateLabel status={ updateStatus } onRequestUpdate={ () => this.pwaUpdater.performUpdate() }
                              onUpdateCancelled={ () => this.onUpdateCancelled() }/>
             </div>
