@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as cn from 'classnames';
 import { ChangeEvent, KeyboardEvent } from 'react';
 
 import './SearchInput.scss';
@@ -67,7 +68,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
                             <div className="search-label--placeholder">Search</div>
                         </div>
                     </label>
-                    { Boolean(text) && <div className="search-cross" onClick={ () => this.onClear() }>&times;</div> }
+                    { <div className={cn("search-cross", {'search-cross--hidden': !Boolean(text)})} onClick={ () => this.onClear() }>&times;</div> }
                     <button className="search-button" onClick={ () => this.handleSearchRequest(this.state.text) }>
                         <div className="search-button--icon">
                             <i className="icon-search"/>
