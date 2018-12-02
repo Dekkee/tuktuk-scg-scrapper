@@ -12,7 +12,7 @@ import { Paging } from './entities/Paging';
 import { ShowMore } from './components/ShowMore';
 import { LoadingLabel } from './components/LoadingLabel';
 import { AutocompleteCard } from './entities/AutocompleteCard';
-import debounce from 'lodash/debounce';
+import { debounce } from 'lodash';
 
 interface State extends Paging {
     rows?: ParsedRow[];
