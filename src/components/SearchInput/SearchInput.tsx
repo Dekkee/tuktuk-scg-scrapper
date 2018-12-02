@@ -2,10 +2,12 @@ import * as React from 'react';
 import { ChangeEvent, KeyboardEvent } from 'react';
 
 import './SearchInput.scss';
+import { AutocompleteCard } from '../../entities/AutocompleteCard';
 
 export interface Props {
-    // onTextChanged: (text: string) => void;
+    onTextChanged: (text: string) => void;
     onSearchRequested: (text: string) => void;
+    autocompletion?: Record<string, AutocompleteCard>;
 }
 
 interface State {
@@ -21,22 +23,37 @@ export class SearchInput extends React.PureComponent<Props, State> {
         };
     }
 
-    onInput = (e: ChangeEvent) => this.setState({
-        ...this.state,
-        ...{ text: (e.target as HTMLInputElement).value }
-    });
+    private onInput = (e: ChangeEvent) => {
+        const { value } = e.target as HTMLInputElement;
+        this.setState({ ...this.state, ...{ text: value } });
+        this.props.onTextChanged(value);
+    };
 
-    onKeyPressed = (e) => {
+    private onKeyPressed = (e) => {
         if ((e as KeyboardEvent).key === 'Enter') {
             this.handleSearchRequest(this.state.text);
         }
     };
 
-    handleSearchRequest = (text: string) => {
+    private handleSearchRequest = (text: string) => {
+        this.props.onSearchRequested(text);
+    };
+
+    private onAutocomplete = (text: string) => {
+        this.setState({ ...this.state, ...{ text } });
         this.props.onSearchRequested(text);
     };
 
     render () {
+        const { autocompletion } = this.props;
+        let arr: AutocompleteCard[] = [];
+        if (autocompletion) {
+            const keys = Object.keys(autocompletion);
+            for (let key of keys) {
+                arr.push(autocompletion[ key ]);
+            }
+        }
+
         return (
             <div className="search-container">
                 <div className="search-panel">
@@ -53,6 +70,17 @@ export class SearchInput extends React.PureComponent<Props, State> {
                         </div>
                     </button>
                 </div>
+                {
+                    arr.length > 0 && <div className="autocompletion">
+                        {
+                            arr.map((card, i) =>
+                                <div className="autocompletion--card" onClick={ () => this.onAutocomplete(card.name) }>
+                                    <div className="autocompletion--card-name">{ card.name }</div>
+                                    <div className="autocompletion--card-text">{ card.text }</div>
+                                </div>)
+                        }
+                    </div>
+                }
             </div>
         );
     }

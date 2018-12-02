@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { ParsedRow } from './entities/Row';
 import { SearchInput } from './components/SearchInput';
-import { searchByName } from './api';
+import { autocomplete, searchByName } from './api';
 
 import './App.scss';
 import { Updater } from './pwa/updater';
@@ -11,12 +11,15 @@ import { CardsLayout } from './components/CardsLayout';
 import { Paging } from './entities/Paging';
 import { ShowMore } from './components/ShowMore';
 import { LoadingLabel } from './components/LoadingLabel';
+import { AutocompleteCard } from './entities/AutocompleteCard';
+import { debounce } from 'lodash';
 
 interface State extends Paging {
     rows?: ParsedRow[];
     isFetching: boolean;
     updateStatus: UpdateStatus;
     searchText?: string;
+    autocompletion?: Record<string, AutocompleteCard>;
 }
 
 export class App extends React.Component<{}, State> {
@@ -47,6 +50,22 @@ export class App extends React.Component<{}, State> {
         this.setState({ ...this.state, updateStatus: UpdateStatus.Cancelled });
     }
 
+    private onTextChanged = debounce(async (value: string) => {
+        if (!value) {
+            this.setState({ ...this.state, autocompletion: undefined });
+        }
+
+        try {
+            const records: Record<string, AutocompleteCard> = await autocomplete(value);
+            this.setState({ ...this.state, autocompletion: records });
+        } catch (e) {
+            if (e.message !== 'no data') {
+                throw e;
+            }
+            this.setState({ ...this.state, autocompletion: undefined });
+        }
+    }, 200);
+
     private onSearch (value: string) {
         if (!value || value === this.state.searchText) {
             return;
@@ -62,7 +81,12 @@ export class App extends React.Component<{}, State> {
     private readonly requestData = async (value: string, newPage: number = 0) => {
         const { rows: stateRows = [] } = this.state;
         const newStateRows = newPage > 0 ? stateRows : [];
-        this.setState({ ...this.state, isFetching: true, rows: newStateRows.length > 0 ? newStateRows : undefined });
+        this.setState({
+            ...this.state,
+            isFetching: true,
+            rows: newStateRows.length > 0 ? newStateRows : undefined,
+            autocompletion: undefined
+        });
         const res = await searchByName(value, newPage);
         if (!res) {
             return;
@@ -79,10 +103,12 @@ export class App extends React.Component<{}, State> {
     };
 
     render () {
-        const { rows, pageCount, page, isFetching, updateStatus } = this.state;
+        const { rows, pageCount, page, isFetching, updateStatus, autocompletion } = this.state;
         return (
             <div className="main-container">
-                <SearchInput onSearchRequested={ (value) => this.onSearch(value) }/>
+                <SearchInput onSearchRequested={ (value) => this.onSearch(value) }
+                             onTextChanged={ (value) => this.onTextChanged(value) }
+                             autocompletion={ autocompletion }/>
                 <div className="content-container">
                     { (!isFetching || rows) && <CardsLayout rows={ rows }/> }
                     { isFetching && <LoadingLabel/> }

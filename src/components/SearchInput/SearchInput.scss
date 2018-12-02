@@ -1,7 +1,9 @@
 @import "../../palette";
+
 .search {
     &-container {
         display: flex;
+        flex-direction: column;
         font-size: 15pt;
         color: inherit;
         border: 1px solid tuktuk-color('secondary');
@@ -61,5 +63,27 @@
         color: tuktuk-color('background');
         padding: 0;
         margin: 0;
+    }
+}
+
+.autocompletion {
+    &--card {
+        padding: 10px 16px;
+        border-top: 1px solid tuktuk-color('secondary');
+        cursor: pointer;
+
+        &:hover {
+            background: tuktuk-color('primary');
+            color: tuktuk-color('foreground');
+        }
+    }
+
+    &--card-name {
+        font-size: 18px;
+    }
+
+    &--card-text {
+        color: tuktuk-color('secondary');
+        font-size: 15px;
     }
 }
