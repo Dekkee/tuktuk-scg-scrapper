@@ -46,6 +46,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
 
     render () {
         const { autocompletion } = this.props;
+        const { text } = this.state;
         let arr: AutocompleteCard[] = [];
         if (autocompletion) {
             const keys = Object.keys(autocompletion);
@@ -58,7 +59,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
             <div className="search-container">
                 <div className="search-panel">
                     <label className="search-input" htmlFor="search-input">
-                        <input onChange={ (e) => this.onInput(e) } onKeyPress={ (e) => this.onKeyPressed(e) }
+                        <input value={ text } onChange={ (e) => this.onInput(e) } onKeyPress={ (e) => this.onKeyPressed(e) }
                                id="search-input" required/>
                         <div className="search-label">
                             <div className="search-label--placeholder">Search</div>
