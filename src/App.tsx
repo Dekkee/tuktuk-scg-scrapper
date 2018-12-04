@@ -79,6 +79,8 @@ export class App extends React.Component<{}, State> {
     }
 
     private readonly requestData = async (value: string, newPage: number = 0) => {
+        this.onTextChanged.cancel();
+        
         const { rows: stateRows = [] } = this.state;
         const newStateRows = newPage > 0 ? stateRows : [];
         this.setState({
