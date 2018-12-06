@@ -16,12 +16,16 @@ interface State {
 }
 
 export class SearchInput extends React.PureComponent<Props, State> {
-    constructor (props) {
+    private inputRef: React.RefObject<HTMLInputElement>;
+
+    constructor(props) {
         super(props);
 
         this.state = {
             text: ''
         };
+
+        this.inputRef = React.createRef();
     }
 
     private onInput = (e: ChangeEvent) => {
@@ -45,16 +49,19 @@ export class SearchInput extends React.PureComponent<Props, State> {
         this.props.onSearchRequested(text);
     };
 
-    private onClear = () => this.setState({ ...this.state, text: '' });
+    private onClear = () => {
+         this.setState({ ...this.state, text: '' });
+         this.inputRef.current.focus();
+    }
 
-    render () {
+    render() {
         const { autocompletion } = this.props;
         const { text } = this.state;
         let aucompleteCards: AutocompleteCard[] = [];
         if (autocompletion) {
             const keys = Object.keys(autocompletion);
             for (let key of keys) {
-                aucompleteCards.push(autocompletion[ key ]);
+                aucompleteCards.push(autocompletion[key]);
             }
         }
 
@@ -62,16 +69,20 @@ export class SearchInput extends React.PureComponent<Props, State> {
             <div className="search-container">
                 <div className="search-panel">
                     <label className="search-input" htmlFor="search-input">
-                        <input value={ text } onChange={ (e) => this.onInput(e) } onKeyPress={ (e) => this.onKeyPressed(e) }
-                               id="search-input" required/>
+                        <input value={text}
+                            onChange={(e) => this.onInput(e)}
+                            onKeyPress={(e) => this.onKeyPressed(e)}
+                            id="search-input"
+                            ref={this.inputRef}
+                            required />
                         <div className="search-label">
                             <div className="search-label--placeholder">Search</div>
                         </div>
                     </label>
-                    { <div className={cn("search-cross", {'search-cross--hidden': !Boolean(text)})} onClick={ () => this.onClear() }>&times;</div> }
-                    <button className="search-button" onClick={ () => this.handleSearchRequest(this.state.text) }>
+                    {<div className={cn("search-cross", { 'search-cross--hidden': !Boolean(text) })} onClick={() => this.onClear()}>&times;</div>}
+                    <button className="search-button" onClick={() => this.handleSearchRequest(this.state.text)}>
                         <div className="search-button--icon">
-                            <i className="icon-search"/>
+                            <i className="icon-search" />
                         </div>
                     </button>
                 </div>
@@ -79,9 +90,9 @@ export class SearchInput extends React.PureComponent<Props, State> {
                     Boolean(text) && aucompleteCards.length > 0 && <div className="autocompletion">
                         {
                             aucompleteCards.map((card, i) =>
-                                <div className="autocompletion--card" onClick={ () => this.onAutocomplete(card.name) }>
-                                    <div className="autocompletion--card-name">{ card.name }</div>
-                                    <div className="autocompletion--card-text">{ card.text }</div>
+                                <div className="autocompletion--card" onClick={() => this.onAutocomplete(card.name)}>
+                                    <div className="autocompletion--card-name">{card.name}</div>
+                                    <div className="autocompletion--card-text">{card.text}</div>
                                 </div>)
                         }
                     </div>
