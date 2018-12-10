@@ -9,6 +9,7 @@ export interface Props {
     onTextChanged: (text: string) => void;
     onSearchRequested: (text: string) => void;
     autocompletion?: Record<string, AutocompleteCard>;
+    inititalText?: string;
 }
 
 interface State {
@@ -22,7 +23,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            text: ''
+            text: this.props.inititalText || '',
         };
 
         this.inputRef = React.createRef();
