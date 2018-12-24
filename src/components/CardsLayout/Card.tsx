@@ -25,10 +25,10 @@ export class Card extends React.PureComponent<Props> {
                     <span>{ card.rarity }</span>
                     <span className="card-layout--price">
                         {
-                            card.price.slice(0, -1).map((p, i) =>
+                            card.price && card.price.slice(0, -1).map((p, i) =>
                                 <div className={ cn('card-layout__discount') } key={ i }>{ p }</div>)
                         }
-                        <div>{ card.price.pop() }</div>
+                        <div>{ card.price && card.price.pop() }</div>
                     </span>
                 </React.Fragment>)
             }
