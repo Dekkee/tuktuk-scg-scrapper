@@ -46,7 +46,7 @@ export class App extends React.Component<{}, State> {
 
         this.pwaUpdater = new Updater({
             onUpdateReady: () => this.setState({ ...this.state, updateStatus: UpdateStatus.Required }),
-            onUpdated: () => window.location.reload(),
+            onUpdated: () => window.location.reload(true),
             onUpdateFailed: () => this.setState({ ...this.state, updateStatus: UpdateStatus.Failed }),
             onUpdating: () => this.setState({ ...this.state, updateStatus: UpdateStatus.Updating }),
         });
