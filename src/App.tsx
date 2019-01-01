@@ -31,7 +31,6 @@ interface State extends Paging {
 
 export class App extends React.Component<{}, State> {
     private readonly pwaUpdater: Updater;
-    private controller: AbortController;
 
     constructor(props) {
         super(props);
@@ -50,8 +49,6 @@ export class App extends React.Component<{}, State> {
             onUpdateFailed: () => this.setState({ ...this.state, updateStatus: UpdateStatus.Failed }),
             onUpdating: () => this.setState({ ...this.state, updateStatus: UpdateStatus.Updating }),
         });
-
-        this.controller = null;
     }
 
     private onUpdateCancelled() {
