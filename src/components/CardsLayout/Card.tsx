@@ -7,7 +7,6 @@ import { ParsedRow } from '../../entities/Row';
 export interface Props {
     card: ParsedRow,
     className?: string,
-    key: number,
 }
 
 export class Card extends React.PureComponent<Props> {

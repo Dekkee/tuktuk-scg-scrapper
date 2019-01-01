@@ -11,13 +11,12 @@ export interface Props {
 
 const renderCards = (rows: ParsedRow[]) => (
     <div className="cards-container"> {
-        rows.map((row, i) => <>
-            { i > 0 && <div className="row-separator" key={ 2 * i }/> }
+        rows.map((row, i) => <React.Fragment key={i}>
+            { i > 0 && <div className="row-separator"/> }
             <Card
                 className={ cn({ 'card-layout--dark': i % 2 }) }
-                card={ row }
-                key={ 2 * i + 1 }/>
-        </>) }
+                card={ row } />
+        </React.Fragment>) }
     </div>
 );
 
