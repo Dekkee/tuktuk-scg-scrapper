@@ -17,10 +17,8 @@ export class ErrorTrap extends React.PureComponent<Props, State> {
         this.state = {};
     }
 
-    componentDidCatch(errorString, errorInfo) {
-        const error = new Error(errorInfo);
-        error.name = errorString;
-        this.setState({ ...this.state, error });
+    static getDerivedStateFromError(error) {
+        return { error };
     }
 
     onReloadClicked() {
@@ -37,7 +35,7 @@ export class ErrorTrap extends React.PureComponent<Props, State> {
                 ? <div className="error-trap error-trap__container">
                     <i className="icon-sad icon-big" />
                     <div className="error-trap__text">Something goes wrong! <br />
-                        Contack xXx_$@$h@K_xXx <br />
+                        Contact <a href="mailto:dekker25@gmail.com">xXx_$@$h@K_xXx</a> <br />
                         {error.name}: {error.message}</div>
                     <Button className="error-trap__button" label="Reload" onClick={() => this.onReloadClicked()} />
                 </div>
