@@ -1,21 +1,9 @@
 @import "../../palette";
-
 .show-more {
     &__container {
-        display: flex;
-        justify-content: center;
         margin: 0 10px 20px 10px;
     }
-
     &__button {
-        background: tuktuk-color('accent');
-        color: tuktuk-color('background');
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid tuktuk-color('accent');
-        box-shadow: 0 1px 6px tuktuk-color('secondary');
-        font-weight: bold;
         width: 50%;
-        text-align: center;
     }
 }

@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Button } from '../Button';
 import './ShowMore.scss';
 
 export interface Props {
@@ -7,5 +8,5 @@ export interface Props {
 }
 
 export const ShowMore = ({ onMoreRequested }: Props) => <div className="show-more__container">
-    <div className="show-more__button" onClick={ () => onMoreRequested() }>Show more</div>
+    <Button className="show-more__button" onClick={ () => onMoreRequested() } label="Show more"/>
 </div>;
