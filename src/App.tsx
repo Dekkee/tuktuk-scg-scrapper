@@ -13,6 +13,7 @@ import { ShowMore } from './components/ShowMore';
 import { LoadingLabel } from './components/LoadingLabel';
 import { AutocompleteCard } from './entities/AutocompleteCard';
 import { debounce } from './utils/debounce';
+import { ErrorTrap } from './components/ErrorTrap';
 
 interface Config {
     searchText?: string;
@@ -101,7 +102,7 @@ export class App extends React.Component<{}, State> {
         const { rows, page, pageCount } = res;
         const config: Config = {
             rows: [...newStateRows, ...rows],
-            page, 
+            page,
             pageCount,
             searchText: value
         }
@@ -117,17 +118,19 @@ export class App extends React.Component<{}, State> {
         const { rows, pageCount, page, isFetching, updateStatus, autocompletion, searchText } = this.state;
         return (
             <div className="main-container">
-                <SearchInput onSearchRequested={(value) => this.onSearch(value)}
-                    onTextChanged={(value) => this.onTextChanged(value)}
-                    autocompletion={autocompletion} 
-                    inititalText={searchText} />
-                <div className="content-container">
-                    {(!isFetching || rows) && <CardsLayout rows={rows} />}
-                    {isFetching && <LoadingLabel />}
-                </div>
-                {page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={() => this.onMore()} />}
-                <UpdateLabel status={updateStatus} onRequestUpdate={() => this.pwaUpdater.performUpdate()}
-                    onUpdateCancelled={() => this.onUpdateCancelled()} />
+                <ErrorTrap>
+                    <SearchInput onSearchRequested={(value) => this.onSearch(value)}
+                        onTextChanged={(value) => this.onTextChanged(value)}
+                        autocompletion={autocompletion}
+                        inititalText={searchText} />
+                    <div className="content-container">
+                        {(!isFetching || rows) && <CardsLayout rows={rows} />}
+                        {isFetching && <LoadingLabel />}
+                    </div>
+                    {page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={() => this.onMore()} />}
+                    <UpdateLabel status={updateStatus} onRequestUpdate={() => this.pwaUpdater.performUpdate()}
+                        onUpdateCancelled={() => this.onUpdateCancelled()} />
+                </ErrorTrap>
             </div>
         );
     }
