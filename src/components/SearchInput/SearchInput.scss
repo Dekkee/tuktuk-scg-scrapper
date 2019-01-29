@@ -78,25 +78,3 @@
         margin: 0;
     }
 }
-
-.autocompletion {
-    &--card {
-        padding: 10px 16px;
-        border-top: 1px solid tuktuk-color('secondary');
-        cursor: pointer;
-
-        &:hover {
-            background: tuktuk-color('primary');
-            color: tuktuk-color('foreground');
-        }
-    }
-
-    &--card-name {
-        font-size: 18px;
-    }
-
-    &--card-text {
-        color: tuktuk-color('secondary');
-        font-size: 15px;
-    }
-}
