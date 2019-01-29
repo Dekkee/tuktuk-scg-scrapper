@@ -14,7 +14,7 @@ export class Card extends React.PureComponent<Props> {
         const { name, set, cards } = this.props.card;
         return <>
             <span className="card-layout__header"
-                  style={ { gridRow: `span ${cards.length}` } }>
+                  style={ { gridRow: `span ${ cards.length }` } }>
                 <div>{ name.value }</div>
                 <div className="card-layout--set">{ set.value }</div>
             </span>
@@ -28,6 +28,7 @@ export class Card extends React.PureComponent<Props> {
                                 <div className={ cn('card-layout__discount') } key={ i }>{ p }</div>)
                         }
                         <div>{ card.price && card.price.pop() }</div>
+                        { isNaN(Number(card.stock)) && <div className="card-layout--stock">{ card.stock }</div> }
                     </span>
                 </React.Fragment>)
             }

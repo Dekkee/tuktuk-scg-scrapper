@@ -23,6 +23,7 @@ export interface RowBody {
         href: string;
         value: string;
     };
+    stock: string;
     price: string[];
 }
 

@@ -13,6 +13,12 @@
 
     &--price {
         justify-self: end;
+        text-align: right;
+    }
+
+    &--stock {
+        color: tuktuk-color('secondary');
+        font-size: 0.9em;
     }
 
     &__discount {
