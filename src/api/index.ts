@@ -11,7 +11,7 @@ const url = process.env.NODE_ENV === 'production'
 
 let controller = null;
 
-export const searchByName = async (value: string, page: number = 0) => {
+export const searchByName = async (value: string, isAutocompletion: boolean, page: number = 0) => {
     if (!value) {
         return;
     }
@@ -22,7 +22,8 @@ export const searchByName = async (value: string, page: number = 0) => {
     try {
         const query = stringify({
             name: value,
-            page: page || null
+            page: page || null,
+            auto: isAutocompletion
         });
         return await (await fetch(`${url}/api?${query}`, { signal: controller.signal })).json() as ScgResponce;
     } catch (e) {

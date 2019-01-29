@@ -24,7 +24,9 @@ app.get('/api', async function (req, resp) {
         name: req.query.name,
         numpage: pageSize,
         startnum: +req.query.page * pageSize || 0,
+        auto: req.query.auto === 'true' ? 'Y' : 'N'
     });
+
     const answer = await (await fetch(`http://www.starcitygames.com/results?${query}`)).text();
     resp.status(200).send(parseScgAnswer(answer));
 });

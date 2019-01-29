@@ -28,12 +28,13 @@ interface State extends Paging {
     updateStatus: UpdateStatus;
     searchText?: string;
     autocompletion?: Record<string, AutocompleteCard>;
+    isAutocompletion: boolean;
 }
 
 export class App extends React.Component<{}, State> {
     private readonly pwaUpdater: Updater;
 
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         const config: Config = JSON.parse(localStorage.getItem('config'));
@@ -42,6 +43,7 @@ export class App extends React.Component<{}, State> {
             ...config,
             isFetching: false,
             updateStatus: UpdateStatus.NotRequired,
+            isAutocompletion: false,
         };
 
         this.pwaUpdater = new Updater({
@@ -52,7 +54,7 @@ export class App extends React.Component<{}, State> {
         });
     }
 
-    private onUpdateCancelled() {
+    private onUpdateCancelled () {
         this.setState({ ...this.state, updateStatus: UpdateStatus.Cancelled });
     }
 
@@ -72,19 +74,19 @@ export class App extends React.Component<{}, State> {
         }
     }, 200);
 
-    private onSearch(value: string) {
+    private onSearch (value: string, isAutocompletion?: boolean) {
         if (!value || value === this.state.searchText) {
             return;
         }
-        this.requestData(value);
+        this.requestData(value, isAutocompletion);
     }
 
-    private onMore() {
-        const { searchText, page } = this.state;
-        this.requestData(searchText, page + 1);
+    private onMore () {
+        const { searchText, page, isAutocompletion } = this.state;
+        this.requestData(searchText, isAutocompletion, page + 1);
     }
 
-    private readonly requestData = async (value: string, newPage: number = 0) => {
+    private readonly requestData = async (value: string, isAutocompletion: boolean, newPage: number = 0) => {
         this.onTextChanged.cancel();
 
         const { rows: stateRows = [] } = this.state;
@@ -93,19 +95,20 @@ export class App extends React.Component<{}, State> {
             ...this.state,
             isFetching: true,
             rows: newStateRows.length > 0 ? newStateRows : undefined,
-            autocompletion: undefined
+            autocompletion: undefined,
+            isAutocompletion,
         });
-        const res = await searchByName(value, newPage);
+        const res = await searchByName(value, isAutocompletion, newPage);
         if (!res) {
             return;
         }
         const { rows, page, pageCount } = res;
         const config: Config = {
-            rows: [...newStateRows, ...rows],
+            rows: [ ...newStateRows, ...rows ],
             page,
             pageCount,
             searchText: value
-        }
+        };
         localStorage.setItem('config', JSON.stringify(config));
         this.setState({
             ...this.state,
@@ -114,22 +117,22 @@ export class App extends React.Component<{}, State> {
         });
     };
 
-    render() {
+    render () {
         const { rows, pageCount, page, isFetching, updateStatus, autocompletion, searchText } = this.state;
         return (
             <div className="main-container">
                 <ErrorTrap>
-                    <SearchInput onSearchRequested={(value) => this.onSearch(value)}
-                        onTextChanged={(value) => this.onTextChanged(value)}
-                        autocompletion={autocompletion}
-                        inititalText={searchText} />
+                    <SearchInput onSearchRequested={ this.onSearch.bind(this) }
+                                 onTextChanged={ (value) => this.onTextChanged(value) }
+                                 autocompletion={ autocompletion }
+                                 inititalText={ searchText }/>
                     <div className="content-container">
-                        {(!isFetching || rows) && <CardsLayout rows={rows} />}
-                        {isFetching && <LoadingLabel />}
+                        { (!isFetching || rows) && <CardsLayout rows={ rows }/> }
+                        { isFetching && <LoadingLabel/> }
                     </div>
-                    {page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={() => this.onMore()} />}
-                    <UpdateLabel status={updateStatus} onRequestUpdate={() => this.pwaUpdater.performUpdate()}
-                        onUpdateCancelled={() => this.onUpdateCancelled()} />
+                    { page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={ () => this.onMore() }/> }
+                    <UpdateLabel status={ updateStatus } onRequestUpdate={ () => this.pwaUpdater.performUpdate() }
+                                 onUpdateCancelled={ () => this.onUpdateCancelled() }/>
                 </ErrorTrap>
             </div>
         );
