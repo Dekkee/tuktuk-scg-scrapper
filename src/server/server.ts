@@ -5,7 +5,8 @@ import * as colors from 'colors';
 import * as cors from 'cors';
 import * as querystring from 'querystring';
 import fetch from 'node-fetch';
-import { parseScgAnswer } from "./html-parser";
+import { parseScgListAnswer } from "./html-parser/list";
+import { parseScgGetAnswer } from './html-parser/get';
 
 const compression = require('compression');
 const app = express()
@@ -19,7 +20,7 @@ app.use(express.static('dist'));
 
 const pageSize = 25;
 
-app.get('/api', async function (req, resp) {
+app.get('/api/list', async function (req, resp) {
     const query = querystring.stringify({
         name: req.query.name,
         numpage: pageSize,
@@ -28,8 +29,16 @@ app.get('/api', async function (req, resp) {
     });
 
     const answer = await (await fetch(`http://www.starcitygames.com/results?${query}`)).text();
-    resp.status(200).send(parseScgAnswer(answer));
+    resp.status(200).send(parseScgListAnswer(answer));
 });
+
+app.get('/api/get', async function (req, resp) {
+    const id = decodeURIComponent(req.query.name);
+
+    const answer = await (await fetch(`http://www.starcitygames.com/catalog/magic_the_gathering/product/${id}`)).text();
+    resp.status(200).send(parseScgGetAnswer(answer));
+});
+
 app.get('*', function (req, resp) {
     resp.status(404).send({
         message: 'NOT_FOUND',
@@ -41,5 +50,5 @@ app.get('*', function (req, resp) {
 const port = 8081;
 
 app.listen(port, function () {
-    console.log(colors.cyan(`Auctioneer server is running at http://localhost:${port}`));
+    console.log(colors.cyan(`Tuktuk server is running at http://localhost:${port}`));
 });

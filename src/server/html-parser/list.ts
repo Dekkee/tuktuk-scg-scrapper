@@ -6,9 +6,9 @@ type ScgPaging = {
     page?: number;
     pageCount?: number;
 };
-export type ScgResponce = { rows: ParsedRow[] } & ScgPaging;
+export type ScgListResponse = { rows: ParsedRow[] } & ScgPaging;
 
-export const parseScgAnswer = (input: string) => {
+export const parseScgListAnswer = (input: string) => {
     const dom = cheerio.load(input);
     const rows = dom('#content table table tr');
     const parsedRows = [];

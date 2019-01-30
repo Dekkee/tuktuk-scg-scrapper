@@ -14,6 +14,11 @@ export interface RowHeader {
     set: Partial<RowLink>;
 }
 
+export interface ReminableText {
+    reminder?: string;
+    text: string;
+}
+
 export interface RowBody {
     mana: string;
     type: string;
@@ -25,6 +30,13 @@ export interface RowBody {
     };
     stock: string;
     price: string[];
+    cardText: ReminableText;
+    oracleText: ReminableText;
+    artist: string;
+    loyalty: string;
+    subtype: string;
+    flavorText: string;
+    creatureType: string;
 }
 
 export type RawRow = Partial<RowHeader> & Partial<RowBody>;

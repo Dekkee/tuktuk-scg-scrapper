@@ -1,4 +1,4 @@
-import { ScgResponce } from '../server/html-parser';
+import { ScgListResponse } from '../server/html-parser/list';
 import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
 import { stringify } from 'querystring';
 
@@ -25,7 +25,7 @@ export const searchByName = async (value: string, isAutocompletion: boolean, pag
             page: page || null,
             auto: isAutocompletion
         });
-        return await (await fetch(`${url}/api?${query}`, { signal: controller.signal })).json() as ScgResponce;
+        return await (await fetch(`${url}/api?${query}`, { signal: controller.signal })).json() as ScgListResponse;
     } catch (e) {
         const domException = e as DOMException;
         // ignore abortError
