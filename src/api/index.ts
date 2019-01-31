@@ -25,7 +25,7 @@ export const searchByName = async (value: string, isAutocompletion: boolean, pag
             page: page || null,
             auto: isAutocompletion
         });
-        return await (await fetch(`${url}/api?${query}`, { signal: controller.signal })).json() as ScgListResponse;
+        return await (await fetch(`${url}/api/list?${query}`, { signal: controller.signal })).json() as ScgListResponse;
     } catch (e) {
         const domException = e as DOMException;
         // ignore abortError

@@ -1,19 +1,18 @@
 import * as React from 'react';
+import * as querystring from 'query-string';
 
 import { ParsedRow } from './entities/Row';
-import { SearchInput } from './components/SearchInput';
 import { autocomplete, searchByName } from './api';
 
 import './App.scss';
 import { Updater } from './pwa/updater';
 import { UpdateStatus, UpdateLabel } from './components/UpdateLabel';
-import { CardsLayout } from './components/CardsLayout';
 import { Paging } from './entities/Paging';
-import { ShowMore } from './components/ShowMore';
-import { LoadingLabel } from './components/LoadingLabel';
 import { AutocompleteCard } from './entities/AutocompleteCard';
 import { debounce } from './utils/debounce';
 import { ErrorTrap } from './components/ErrorTrap';
+import { SearchList } from './layout/SearchList';
+import { Route, RouteComponentProps, Switch, withRouter } from 'react-router';
 
 interface Config {
     searchText?: string;
@@ -29,21 +28,28 @@ interface State extends Paging {
     searchText?: string;
     autocompletion?: Record<string, AutocompleteCard>;
     isAutocompletion: boolean;
+    shouldUpdate: boolean;
 }
 
-export class App extends React.Component<{}, State> {
+type Props = Partial<RouteComponentProps>;
+
+@(withRouter as any)
+export class App extends React.Component<Props, State> {
     private readonly pwaUpdater: Updater;
 
     constructor (props) {
         super(props);
 
         const config: Config = JSON.parse(localStorage.getItem('config'));
+        const { name: queryName, auto } = querystring.parse(this.props.location.search);
 
         this.state = {
             ...config,
             isFetching: false,
             updateStatus: UpdateStatus.NotRequired,
             isAutocompletion: false,
+            searchText: queryName || config.searchText,
+            shouldUpdate: Boolean(queryName) && queryName !== config.searchText
         };
 
         this.pwaUpdater = new Updater({
@@ -54,11 +60,29 @@ export class App extends React.Component<{}, State> {
         });
     }
 
+    componentDidMount (): void {
+        const { shouldUpdate, searchText, isAutocompletion } = this.state;
+        if (shouldUpdate) {
+            this.requestData(searchText, isAutocompletion);
+        }
+    }
+
+    componentWillReceiveProps (nextProps): void {
+        const { name: queryName, auto } = querystring.parse(nextProps.location.search);
+        const { searchText } = this.state;
+
+        if (queryName !== searchText) {
+            this.setState({ ...this.state, searchText: queryName });
+            this.requestData(queryName, auto);
+        }
+    }
+
+
     private onUpdateCancelled () {
         this.setState({ ...this.state, updateStatus: UpdateStatus.Cancelled });
     }
 
-    private onTextChanged = debounce(async (value: string) => {
+    private onTextChangedDebounced = debounce(async (value: string) => {
         if (!value) {
             this.setState({ ...this.state, autocompletion: undefined });
         }
@@ -74,10 +98,23 @@ export class App extends React.Component<{}, State> {
         }
     }, 200);
 
+    private onTextChanged (value: string) {
+        this.setState({ ...this.state, searchText: value });
+        this.onTextChangedDebounced(value);
+    }
+
     private onSearch (value: string, isAutocompletion?: boolean) {
-        if (!value || value === this.state.searchText) {
+        if (!value) {
             return;
         }
+
+        const { history } = this.props;
+        const query: { name: string, auto?: boolean } = { name: value };
+        if (isAutocompletion) {
+            query.auto = true;
+        }
+        history.push(`?${ querystring.stringify(query) }`);
+
         this.requestData(value, isAutocompletion);
     }
 
@@ -87,7 +124,7 @@ export class App extends React.Component<{}, State> {
     }
 
     private readonly requestData = async (value: string, isAutocompletion: boolean, newPage: number = 0) => {
-        this.onTextChanged.cancel();
+        this.onTextChangedDebounced.cancel();
 
         const { rows: stateRows = [] } = this.state;
         const newStateRows = newPage > 0 ? stateRows : [];
@@ -97,6 +134,7 @@ export class App extends React.Component<{}, State> {
             rows: newStateRows.length > 0 ? newStateRows : undefined,
             autocompletion: undefined,
             isAutocompletion,
+            searchText: value
         });
         const res = await searchByName(value, isAutocompletion, newPage);
         if (!res) {
@@ -113,7 +151,8 @@ export class App extends React.Component<{}, State> {
         this.setState({
             ...this.state,
             ...config,
-            isFetching: false
+            isFetching: false,
+            shouldUpdate: false
         });
     };
 
@@ -122,15 +161,20 @@ export class App extends React.Component<{}, State> {
         return (
             <div className="main-container">
                 <ErrorTrap>
-                    <SearchInput onSearchRequested={ this.onSearch.bind(this) }
-                                 onTextChanged={ (value) => this.onTextChanged(value) }
-                                 autocompletion={ autocompletion }
-                                 inititalText={ searchText }/>
-                    <div className="content-container">
-                        { (!isFetching || rows) && <CardsLayout rows={ rows }/> }
-                        { isFetching && <LoadingLabel/> }
-                    </div>
-                    { page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={ () => this.onMore() }/> }
+                    <Switch>
+                        <Route path={ '/' }
+                               children={ <SearchList onSearch={ this.onSearch.bind(this) }
+                                                      onTextChanged={ (value) => this.onTextChanged(value) }
+                                                      onMore={ this.onMore.bind(this) }
+                                                      autocompletion={ autocompletion }
+                                                      searchText={ searchText }
+                                                      isFetching={ isFetching }
+                                                      rows={ rows }
+                                                      page={ page }
+                                                      pageCount={ pageCount }
+                               /> }/>
+                    </Switch>
+
                     <UpdateLabel status={ updateStatus } onRequestUpdate={ () => this.pwaUpdater.performUpdate() }
                                  onUpdateCancelled={ () => this.onUpdateCancelled() }/>
                 </ErrorTrap>

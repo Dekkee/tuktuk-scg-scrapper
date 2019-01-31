@@ -106,7 +106,8 @@ module.exports = (env) => {
         devServer: {
             compress: true,
             contentBase: './dist',
-            hot: true
+            hot: true,
+            historyApiFallback: true,
         },
         devtool: isProd && 'cheap-source-map',
         externals: isProd ? {
@@ -115,6 +116,10 @@ module.exports = (env) => {
                 [currentValue.module]: currentValue.global
             }), {})
         } : {},
+        output: {
+            path: path.resolve(__dirname, '..', 'dist'),
+            publicPath: '/',
+        },
         optimization: isProd ? {
             minimizer: [
                 new UglifyJsPlugin({

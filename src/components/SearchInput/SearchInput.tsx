@@ -10,22 +10,14 @@ export interface Props {
     onTextChanged: (text: string) => void;
     onSearchRequested: (text: string, isAutocomplete: boolean) => void;
     autocompletion?: Record<string, AutocompleteCard>;
-    inititalText?: string;
+    text?: string;
 }
 
-interface State {
-    text: string;
-}
-
-export class SearchInput extends React.PureComponent<Props, State> {
+export class SearchInput extends React.PureComponent<Props> {
     private inputRef: React.RefObject<HTMLInputElement>;
 
     constructor (props) {
         super(props);
-
-        this.state = {
-            text: this.props.inititalText || '',
-        };
 
         this.inputRef = React.createRef();
     }
@@ -37,11 +29,11 @@ export class SearchInput extends React.PureComponent<Props, State> {
     };
 
     private onKeyPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const { autocompletion } = this.props;
+        const { autocompletion, text } = this.props;
 
         switch (e.key) {
             case 'Enter':
-                this.handleSearchRequest(this.state.text);
+                this.handleSearchRequest(text);
                 break;
             case 'ArrowDown':
             case 'ArrowUp':
@@ -68,8 +60,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
     };
 
     render () {
-        const { autocompletion } = this.props;
-        const { text } = this.state;
+        const { autocompletion, text } = this.props;
         let aucompleteCards: AutocompleteCard[] = [];
         if (autocompletion) {
             const keys = Object.keys(autocompletion);
@@ -94,7 +85,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
                     </label>
                     { <div className={ cn('search-cross', { 'search-cross--hidden': !Boolean(text) }) }
                            onClick={ () => this.onClear() }>&times;</div> }
-                    <button className="search-button" onClick={ () => this.handleSearchRequest(this.state.text) }>
+                    <button className="search-button" onClick={ () => this.handleSearchRequest(text) }>
                         <div className="search-button--icon">
                             <i className="icon-search"/>
                         </div>
