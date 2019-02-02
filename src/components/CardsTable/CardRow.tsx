@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as cn from 'classnames';
 
-import './Card.scss';
+import './CardRow.scss';
 import { ParsedRow } from '../../entities/Row';
 
 export interface Props {
@@ -9,7 +9,7 @@ export interface Props {
     className?: string,
 }
 
-export class Card extends React.PureComponent<Props> {
+export class CardRow extends React.PureComponent<Props> {
     render () {
         const { name, set, cards } = this.props.card;
         return <>

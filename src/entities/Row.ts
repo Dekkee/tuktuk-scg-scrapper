@@ -19,17 +19,20 @@ export interface ReminableText {
     text: string;
 }
 
-export interface RowBody {
-    mana: string;
-    type: string;
-    pt: string;
-    rarity: string;
+export interface ConditionAndPrice {
     condition: {
         href: string;
         value: string;
     };
-    stock: string;
     price: string[];
+    rarity: string;
+    stock: string;
+}
+
+export interface RowBody {
+    mana: string;
+    type: string;
+    pt: string;
     cardText: ReminableText;
     oracleText: ReminableText;
     artist: string;
@@ -37,7 +40,9 @@ export interface RowBody {
     subtype: string;
     flavorText: string;
     creatureType: string;
+    rarity?: string;
 }
 
 export type RawRow = Partial<RowHeader> & Partial<RowBody>;
-export type ParsedRow = Partial<RowHeader> & { cards: Partial<RowBody>[] };
+export type ParsedRow = Partial<RowHeader> & { cards: Partial<ConditionAndPrice>[] };
+export type ParsedRowDetails = Partial<RowHeader> & Partial<RowBody> & { cards: Partial<ConditionAndPrice>[] };

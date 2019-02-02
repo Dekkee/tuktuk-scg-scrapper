@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as cn from 'classnames';
 import { ParsedRow } from '../../entities/Row';
-import { Card } from './Card';
+import { CardRow } from './CardRow';
 
-import './CardsLayout.scss';
+import './CardsTable.scss';
 
 export interface Props {
     rows: ParsedRow[]
@@ -13,7 +13,7 @@ const renderCards = (rows: ParsedRow[]) => (
     <div className="cards-container"> {
         rows.map((row, i) => <React.Fragment key={i}>
             { i > 0 && <div className="row-separator"/> }
-            <Card
+            <CardRow
                 className={ cn({ 'card-layout--dark': i % 2 }) }
                 card={ row } />
         </React.Fragment>) }
@@ -32,7 +32,7 @@ const renderStartSearch = () => (
     </div>
 );
 
-export const CardsLayout = ({ rows }: Props) => (
+export const CardsTable = ({ rows }: Props) => (
     rows
     ? rows.length
         ? renderCards(rows)

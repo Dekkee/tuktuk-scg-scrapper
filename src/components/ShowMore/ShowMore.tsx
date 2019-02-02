@@ -8,5 +8,5 @@ export interface Props {
 }
 
 export const ShowMore = ({ onMoreRequested }: Props) => <div className="show-more__container">
-    <Button className="show-more__button" onClick={ () => onMoreRequested() } label="Show more"/>
+    <Button className="show-more__button" onClick={ () => onMoreRequested() } label="Show more" width={200}/>
 </div>;

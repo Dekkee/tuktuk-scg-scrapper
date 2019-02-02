@@ -4,6 +4,7 @@ import { stringify } from 'querystring';
 
 import 'whatwg-fetch';
 import { AutocompleteCard } from '../entities/AutocompleteCard';
+import { ScgGetResponse } from '../server/html-parser/get';
 
 const url = process.env.NODE_ENV === 'production'
     ? ''
@@ -26,6 +27,31 @@ export const searchByName = async (value: string, isAutocompletion: boolean, pag
             auto: isAutocompletion
         });
         return await (await fetch(`${url}/api/list?${query}`, { signal: controller.signal })).json() as ScgListResponse;
+    } catch (e) {
+        const domException = e as DOMException;
+        // ignore abortError
+        if (domException.code === 20) {
+            return;
+        }
+        throw e;
+    } finally {
+        controller = null;
+    }
+};
+
+export const getCard = async (value: string) => {
+    if (!value) {
+        return;
+    }
+    if (controller) {
+        controller.abort();
+    }
+    controller = new AbortController();
+    try {
+        const query = stringify({
+            name: value,
+        });
+        return await (await fetch(`${url}/api/get?${query}`, { signal: controller.signal })).json() as ScgGetResponse;
     } catch (e) {
         const domException = e as DOMException;
         // ignore abortError
