@@ -3,6 +3,11 @@
 .card-layout {
     padding: 4px 2px;
 
+    &__header {
+        color: tuktuk-color('foreground');
+        text-decoration: none;
+    }
+
     &--dark {
         background: tuktuk-color('secondary');
     }

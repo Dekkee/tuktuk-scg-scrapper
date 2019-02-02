@@ -3,6 +3,7 @@ import * as cn from 'classnames';
 
 import './CardRow.scss';
 import { ParsedRow } from '../../entities/Row';
+import { Link } from 'react-router-dom';
 
 export interface Props {
     card: ParsedRow,
@@ -12,12 +13,13 @@ export interface Props {
 export class CardRow extends React.PureComponent<Props> {
     render () {
         const { name, set, cards } = this.props.card;
+        const cardId = encodeURIComponent(name.href.match(/product\/(.*)$/)[1]);
         return <>
-            <span className="card-layout__header"
+            <Link to={`/card/${cardId}`} className="card-layout__header"
                   style={ { gridRow: `span ${ cards.length }` } }>
                 <div>{ name.value }</div>
                 <div className="card-layout--set">{ set.value }</div>
-            </span>
+            </Link>
             {
                 cards.map((card, i) => <React.Fragment key={ i }>
                     <span>{ card.condition.value }</span>
