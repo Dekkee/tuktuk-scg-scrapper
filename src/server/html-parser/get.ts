@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
-import { ParsedRow } from '../../entities/Row';
+import { ParsedRowDetails } from '../../entities/Row';
 
-export type ScgGetResponse = { card: ParsedRow };
+export type ScgGetResponse = { card: ParsedRowDetails };
 
 export const parseScgGetAnswer = (input: string): ScgGetResponse => {
     const dom = cheerio.load(input);
@@ -58,7 +58,7 @@ export const parseScgGetAnswer = (input: string): ScgGetResponse => {
 
                     }
                     break;
-                default:
+                case null:
                     if (coursor) {
                         if (rowsMap[ coursor ].type === 'remindable') {
                             cardContent[ rowsMap[ coursor ].name ].text += text;
@@ -122,5 +122,14 @@ const articleFieldsArray = [
             return /out\sof\sstock/i.test(text) ? 'Out of stock' : (text.match(/(\d+)\sin\sstock/) || [])[ 1 ];
         }
     },
-    { name: 'price', reg: /^Price:\s/, getter: (el) => (el.text().match(/^Price:\s(.*)$/) || [])[ 1 ] }
+    {
+        name: 'price', reg: /^Price:\s/, getter: (el) => {
+            const match = (el.text().match(/(\$\d+\.\d+)/g) || []);
+            const prices = [match[0]];
+            if (Boolean(match[1])) {
+                prices.push(match[1]);
+            }
+            return prices;
+        }
+    }
 ];

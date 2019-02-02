@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 import omit = require('lodash/omit');
-import { ParsedRow, RawRow } from '../../entities/Row';
+import { ConditionAndPrice, ParsedRow, RawRow } from '../../entities/Row';
 
 type ScgPaging = {
     page?: number;
@@ -48,7 +48,7 @@ const columnMap = {
 const prepareRow = (raw: RawRow): ParsedRow => {
     const name = raw.name;
     const set = raw.set;
-    const cards = [ omit(raw, [ 'name, set' ]) ];
+    const cards = [ omit(raw, [ 'name, set' ]) ] as ConditionAndPrice[];
     return {
         name,
         set,
