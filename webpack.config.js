@@ -12,7 +12,8 @@ const webpack = require('webpack');
 const path = require('path');
 const manifest = require('./src/pwa/manifest');
 
-const externals = [{
+const externals = [
+    {
         module: 'react',
         entry: `https://unpkg.com/react@${require('./package').dependencies.react}/umd/react.production.min.js`,
         global: 'React',
@@ -24,7 +25,8 @@ const externals = [{
     },
 ];
 
-const vendors = [{
+const vendors = [
+    {
         entry: 'icomoon.woff2',
     },
     {
@@ -78,7 +80,8 @@ module.exports = (env) => {
         entry: './src/index.tsx',
         mode: env || 'development',
         module: {
-            rules: [{
+            rules: [
+                {
                     test: /\.tsx?/,
                     use: 'awesome-typescript-loader'
                 },
@@ -93,16 +96,6 @@ module.exports = (env) => {
                 {
                     test: /\.jpe?g$|\.gif$|\.svg$|\.woff$|\.woff2$|\.ttf$|\.wav$|\.mp3$/,
                     loader: 'file-loader?name=[name].[ext]'
-                },
-                {
-                    test: /\.m?js$/,
-                    include: /node_modules\/(query-string|strict-uri-encode)/,
-                    use: {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: ['@babel/preset-env']
-                        }
-                    }
                 }
             ]
         },
