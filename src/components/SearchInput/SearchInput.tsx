@@ -50,12 +50,11 @@ export class SearchInput extends React.PureComponent<Props> {
     };
 
     private onAutocomplete = (text: string) => {
-        this.setState({ ...this.state, text });
         this.props.onSearchRequested(text, true);
     };
 
     private onClear = () => {
-        this.setState({ ...this.state, text: '' });
+        this.props.onTextChanged('');
         this.inputRef.current.focus();
     };
 
@@ -78,7 +77,8 @@ export class SearchInput extends React.PureComponent<Props> {
                                onKeyDown={ (e) => this.onKeyPressed(e) }
                                id="search-input"
                                ref={ this.inputRef }
-                               required/>
+                               required
+                               autoComplete="off"/>
                         <div className="search-label">
                             <div className="search-label--placeholder">Search</div>
                         </div>

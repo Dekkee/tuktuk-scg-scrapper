@@ -96,6 +96,9 @@ export class SearchList extends React.Component<Props, State> {
 
     private onTextChanged (value: string) {
         this.setState({ ...this.state, searchText: value });
+        if (!value) {
+            return;
+        }
         this.onTextChangedDebounced(value);
     }
 
@@ -110,8 +113,6 @@ export class SearchList extends React.Component<Props, State> {
             query.auto = true;
         }
         history.push(`?${ querystring.stringify(query) }`);
-
-        this.requestData(value, isAutocompletion);
     }
 
     private onMore () {
