@@ -12,18 +12,6 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { debounce } from '../../utils/debounce';
 import { autocomplete, searchByName } from '../../api';
 
-// export interface Props {
-//     isFetching: boolean;
-//     rows?: ParsedRow[];
-//     searchText?: string;
-//     autocompletion?: Record<string, AutocompleteCard>;
-//     onSearch: (value: string, isAutocompletion?: boolean) => void;
-//     onTextChanged: (value: string) => void;
-//     onMore: () => void;
-//     pageCount: number;
-//     page: number;
-// }
-
 type Props = Partial<RouteComponentProps>;
 
 interface State extends Paging {
@@ -74,7 +62,6 @@ export class SearchList extends React.Component<Props, State> {
 
         if (queryName !== searchText) {
             this.setState({ ...this.state, searchText: queryName });
-            this.requestData(queryName, auto);
         }
     }
 
@@ -113,6 +100,7 @@ export class SearchList extends React.Component<Props, State> {
             query.auto = true;
         }
         history.push(`?${ querystring.stringify(query) }`);
+        this.requestData(value, isAutocompletion);
     }
 
     private onMore () {
