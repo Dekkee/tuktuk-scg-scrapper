@@ -11,11 +11,11 @@ interface Props {
 export class CardDetails extends React.PureComponent<Props> {
     render () {
         const { card } = this.props;
-        console.log(card);
+
         return (<div className="card-details">
             <div className="card-details__title">{ card.name.value }</div>
             <a className="card-details__set" href={ card.set.href }>{ card.set.value }</a>
-            <img className="card-details__img" src={ card.name.img }/>
+            <img className="card-details__img" src={ card.name.img } alt={card.name.value}/>
             <div className="card-details__card-type"><b>Card type: </b>{ card.type }</div>
             {
                 card.creatureType &&
