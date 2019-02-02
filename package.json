@@ -18,6 +18,8 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
     "@babel/runtime": "^7.0.0",
     "@types/body-parser": "^1.17.0",
     "@types/cheerio": "^0.22.8",
@@ -33,6 +35,7 @@
     "@types/react-router-dom": "^4.3.1",
     "abortcontroller-polyfill": "^1.1.9",
     "awesome-typescript-loader": "^5.2.0",
+    "babel-loader": "^8.0.5",
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
     "classnames": "^2.2.6",
