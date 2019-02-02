@@ -12,8 +12,7 @@ const webpack = require('webpack');
 const path = require('path');
 const manifest = require('./src/pwa/manifest');
 
-const externals = [
-    {
+const externals = [{
         module: 'react',
         entry: `https://unpkg.com/react@${require('./package').dependencies.react}/umd/react.production.min.js`,
         global: 'React',
@@ -25,8 +24,7 @@ const externals = [
     },
 ];
 
-const vendors = [
-    {
+const vendors = [{
         entry: 'icomoon.woff2',
     },
     {
@@ -80,8 +78,7 @@ module.exports = (env) => {
         entry: './src/index.tsx',
         mode: env || 'development',
         module: {
-            rules: [
-                {
+            rules: [{
                     test: /\.tsx?/,
                     use: 'awesome-typescript-loader'
                 },
@@ -117,7 +114,7 @@ module.exports = (env) => {
             }), {})
         } : {},
         output: {
-            path: path.resolve(__dirname, '..', 'dist'),
+            path: path.resolve(__dirname, 'dist'),
             publicPath: '/',
         },
         optimization: isProd ? {
