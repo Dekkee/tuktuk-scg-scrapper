@@ -52,7 +52,7 @@ export class UpdateLabel extends React.PureComponent<Props> {
                 }
                 {
                     !isHidden &&
-                    <div className="update-label update-label__close"
+                    <div className="update-label__close"
                          onClick={ onUpdateCancelled }>&times;</div>
                 }
             </div>

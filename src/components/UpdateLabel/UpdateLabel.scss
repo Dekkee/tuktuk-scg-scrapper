@@ -7,21 +7,16 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    min-height: 70px;
     background: tuktuk-color('primary');
-    transition: 0.2s;
-    padding: 10px;
-    box-sizing: border-box;
+
+    transition-property: all;
+    transition-duration: .5s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    overflow-y: hidden;
+    max-height: 90px;
 
     &--hidden {
-        min-height: 0;
-        height: 0;
-        visibility: collapse;
-        .update-label {
-            display: none;
-            margin: 0;
-            height: 0;
-        }
+        max-height: 0;
     }
     &--failed {
         background: tuktuk-color('error');
@@ -33,6 +28,7 @@
     box-sizing: border-box;
     margin: auto;
     text-align: center;
+    padding: 10px;
     &__close {
         position: absolute;
         top: 0;
