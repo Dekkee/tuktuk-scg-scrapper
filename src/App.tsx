@@ -40,7 +40,7 @@ export class App extends React.Component<Props, State> {
     render () {
         const { updateStatus } = this.state;
         return (
-            <div className="main-container">
+            <main className="main-container" role="main">
                 <ErrorTrap>
                     <Switch>
                         <Route exact path="/" component={SearchList}/>
@@ -51,7 +51,7 @@ export class App extends React.Component<Props, State> {
                                  onRequestUpdate={ () => this.pwaUpdater.performUpdate() }
                                  onUpdateCancelled={ () => this.onUpdateCancelled() }/>
                 </ErrorTrap>
-            </div>
+            </main>
         );
     }
 }

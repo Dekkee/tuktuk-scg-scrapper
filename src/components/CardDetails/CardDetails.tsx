@@ -12,7 +12,7 @@ export class CardDetails extends React.PureComponent<Props> {
     render () {
         const { card } = this.props;
 
-        return (<div className="card-details">
+        return (<article className="card-details">
             <div className="card-details__header">
                 <div className="card-details__title">{ card.name.value }</div>
                 <a className="card-details__set" href={ card.set.href }>{ card.set.value }</a>
@@ -80,6 +80,6 @@ export class CardDetails extends React.PureComponent<Props> {
                     </div>
                 }
             </div>
-        </div>);
+        </article>);
     }
 }

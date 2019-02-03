@@ -44,7 +44,7 @@ export class SearchList extends React.Component<Props, State> {
             ...config,
             isFetching: false,
             isAutocompletion: false,
-            searchText: queryName || (config && config.searchText),
+            searchText: queryName || (config && config.searchText) || '',
             shouldUpdate: Boolean(queryName) && queryName !== config.searchText
         };
     }
@@ -148,10 +148,10 @@ export class SearchList extends React.Component<Props, State> {
                          onTextChanged={ this.onTextChanged.bind(this) }
                          autocompletion={ autocompletion }
                          text={ searchText }/>
-            <div className="content-container">
+            <article className="content-container">
                 { (!isFetching || rows) && <CardsTable rows={ rows }/> }
                 { isFetching && <LoadingLabel/> }
-            </div>
+            </article>
             { page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={ this.onMore.bind(this) }/> }
         </>);
     }
