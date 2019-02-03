@@ -12,14 +12,16 @@ const webpack = require('webpack');
 const path = require('path');
 const manifest = require('./src/pwa/manifest');
 
+const getVersion = (versionString) => (versionString.match(/(\d+?(\.\d+)?(\.\d+))/) || [])[1];
+
 const externals = [{
         module: 'react',
-        entry: `https://unpkg.com/react@${require('./package').dependencies.react}/umd/react.production.min.js`,
+        entry: `https://unpkg.com/react@${getVersion(require('./package').dependencies.react)}/umd/react.production.min.js`,
         global: 'React',
     },
     {
         module: 'react-dom',
-        entry: `https://unpkg.com/react-dom@${require('./package').dependencies['react-dom']}/umd/react-dom.production.min.js`,
+        entry: `https://unpkg.com/react-dom@${getVersion(require('./package').dependencies['react-dom'])}/umd/react-dom.production.min.js`,
         global: 'ReactDOM',
     },
 ];
