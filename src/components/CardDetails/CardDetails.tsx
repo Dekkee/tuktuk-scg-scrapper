@@ -58,19 +58,25 @@ export class CardDetails extends React.PureComponent<Props> {
                 }
                 {
                     card.cards &&
-                    <div className="card-details__prices">
-                        {
-                            card.cards.map((card, index) => (
-                                <React.Fragment key={ index }>
-                                    <div className="card__condition">{ card.condition }</div>
-                                    {
-                                        card.price && card.price.slice(0, -1).map((p, i) =>
-                                            <div className={ cn('card__discount') } key={ i }>{ p }</div>)
-                                    }
-                                    <div className="card__price">{ card.price && card.price.pop() }</div>
-                                    { isNaN(Number(card.stock)) && <div className="card__stock">{ card.stock }</div> }
-                                </React.Fragment>))
-                        }
+                    <div className="card-details__prices-container">
+                        <b>Prices:</b>
+                        <div className="card-details__prices">
+                            {
+                                card.cards.map((card, index) => (
+                                    <React.Fragment key={ index }>
+                                        <div className="card__condition">{ card.condition }</div>
+                                        <div className="card__price">
+                                            {
+                                                card.price && card.price.slice(0, -1).map((p, i) =>
+                                                    <div className={ cn('card__discount') } key={ i }>{ p }</div>)
+                                            }
+                                            <div className="card__price-total">{ card.price && card.price.pop() }</div>
+                                            { isNaN(Number(card.stock)) &&
+                                            <div className="card__stock">{ card.stock }</div> }
+                                        </div>
+                                    </React.Fragment>))
+                            }
+                        </div>
                     </div>
                 }
             </div>

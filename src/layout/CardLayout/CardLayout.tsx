@@ -4,9 +4,11 @@ import { ParsedRowDetails } from '../../entities/Row';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { getCard } from '../../api';
 import { LoadingLabel } from '../../components/LoadingLabel';
-import { CardDetails } from '../../components/CardDetails/CardDetails';
+import { CardDetails } from '../../components/CardDetails';
 import { Button } from '../../components/Button';
 import { history } from '../../utils/history';
+
+import './CardLayout.scss';
 
 export interface State {
     card?: ParsedRowDetails,
@@ -44,7 +46,7 @@ export class CardLayout extends React.Component<Props, State> {
     render () {
         const { card, isFetching } = this.state;
         return (<>
-            <Button onClick={this.onBackClick} label="< Back" width={100}/>
+            <Button className="card-layout__back-button" onClick={this.onBackClick} label="< Back" width={100}/>
             { isFetching ? <LoadingLabel/> : <CardDetails card={ card }/> }
         </>);
     }

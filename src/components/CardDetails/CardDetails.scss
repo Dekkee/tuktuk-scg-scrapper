@@ -21,7 +21,6 @@
     }
 
     &__set {
-        align-self: start;
         color: tuktuk-color('secondary');
         font-size: 1.2em;
     }
@@ -41,6 +40,18 @@
     &__prices {
         display: grid;
         grid-row-gap: 10px;
-        grid-template-columns: 1fr 1fr auto;
+        grid-template-columns: auto 1fr;
+        grid-column-gap: 10px;
+    }
+}
+
+.card {
+    &__stock {
+        font-size: 0.9em;
+        color: tuktuk-color('secondary');
+    }
+
+    &__price {
+        text-align: left;
     }
 }
