@@ -11,5 +11,9 @@ export interface Props {
 };
 
 export const Button = ({ onClick, label, className, width = 100 }: Props) => <div className="button__container">
-    <button className={cn("button__button", className)} onClick={ (e) => onClick(e) } style={{width}}>{label}</button>
+    <button className={ cn('button__button', className) }
+            onClick={ (e) => onClick(e) }
+            style={ { width } }
+            aria-label={ label }
+    >{ label }</button>
 </div>;

@@ -85,7 +85,9 @@ export class SearchInput extends React.PureComponent<Props> {
                     </label>
                     { <div className={ cn('search-cross', { 'search-cross--hidden': !Boolean(text) }) }
                            onClick={ () => this.onClear() }>&times;</div> }
-                    <button className="search-button" onClick={ () => this.handleSearchRequest(text) }>
+                    <button className="search-button"
+                            onClick={ () => this.handleSearchRequest(text) }
+                            aria-label="search">
                         <div className="search-button--icon">
                             <i className="icon-search"/>
                         </div>
