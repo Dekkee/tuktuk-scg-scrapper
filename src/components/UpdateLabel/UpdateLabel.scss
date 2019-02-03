@@ -12,6 +12,7 @@
     transition: 0.2s;
     padding: 10px;
     box-sizing: border-box;
+
     &--hidden {
         min-height: 0;
         height: 0;
@@ -41,5 +42,14 @@
         line-height: 20px;
         width: 20px;
         text-align: center;
+    }
+
+    &--ready {
+        display: flex;
+        align-items: center;
+    }
+
+    &__text {
+        padding: 0 20px;
     }
 }
