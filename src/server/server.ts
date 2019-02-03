@@ -28,14 +28,14 @@ app.get('/api/list', async function (req, resp) {
         auto: req.query.auto === 'true' ? 'Y' : 'N'
     });
 
-    const answer = await (await fetch(`http://www.starcitygames.com/results?${query}`)).text();
+    const answer = await (await fetch(`https://www.starcitygames.com/results?${query}`)).text();
     resp.status(200).send(parseScgListAnswer(answer));
 });
 
 app.get('/api/get', async function (req, resp) {
     const id = decodeURIComponent(req.query.name);
 
-    const answer = await (await fetch(`http://www.starcitygames.com/catalog/magic_the_gathering/product/${id}`)).text();
+    const answer = await (await fetch(`https://www.starcitygames.com/catalog/magic_the_gathering/product/${id}`)).text();
     resp.status(200).send(parseScgGetAnswer(answer));
 });
 
