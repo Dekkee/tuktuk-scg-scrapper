@@ -44,7 +44,7 @@ export class SearchList extends React.Component<Props, State> {
             ...config,
             isFetching: false,
             isAutocompletion: false,
-            searchText: queryName || config.searchText,
+            searchText: queryName || (config && config.searchText),
             shouldUpdate: Boolean(queryName) && queryName !== config.searchText
         };
     }
