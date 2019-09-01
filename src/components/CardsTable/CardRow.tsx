@@ -21,18 +21,19 @@ export class CardRow extends React.PureComponent<Props> {
                 <div className="card-layout--set">{ set.value }</div>
             </Link>
             {
-                cards.map((card, i) => <React.Fragment key={ i }>
-                    <span>{ card.condition.value }</span>
-                    <span>{ card.rarity }</span>
-                    <span className="card-layout--price">
+                cards.map(({ condition, rarity, price, stock }, i) => <React.Fragment key={ i }>
+                        <span>{ condition.value }</span>
+                        <span>{ rarity }</span>
+                        <span className="card-layout--price">
                         {
-                            card.price && card.price.slice(0, -1).map((p, i) =>
+                            price && price.slice(0, -1).map((p, i) =>
                                 <div className={ cn('card-layout__discount') } key={ i }>{ p }</div>)
                         }
-                        <div>{ card.price && card.price.pop() }</div>
-                        { isNaN(Number(card.stock)) && <div className="card-layout--stock">{ card.stock }</div> }
+                            <div>{ price && price[price.length - 1] }</div>
+                            { isNaN(Number(stock)) && <div className="card-layout--stock">{ stock }</div> }
                     </span>
-                </React.Fragment>)
+                    </React.Fragment>
+                )
             }
         </>;
     }
