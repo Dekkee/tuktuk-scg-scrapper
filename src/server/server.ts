@@ -7,6 +7,7 @@ import * as querystring from 'querystring';
 import fetch from 'node-fetch';
 import { parseScgListAnswer } from "./html-parser/list";
 import { parseScgGetAnswer } from './html-parser/get';
+import * as path from 'path';
 
 const compression = require('compression');
 const app = express()
@@ -40,11 +41,7 @@ app.get('/api/get', async function (req, resp) {
 });
 
 app.get('*', function (req, resp) {
-    resp.status(404).send({
-        message: 'NOT_FOUND',
-        method: req.method,
-        url: req.url
-    });
+    resp.sendFile(path.join(__dirname, '../../dist/index.html'));
 });
 
 const port = 8081;
