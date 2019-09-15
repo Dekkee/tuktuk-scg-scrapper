@@ -111,7 +111,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
                                required
                                autoComplete="off"/>
                         <div className="search-label">
-                            <div className="search-label--placeholder">Search</div>
+                            <div className="search-label__placeholder">Search</div>
                         </div>
                     </label>
                     {<div className={cn('search-cross', { 'search-cross--hidden': !Boolean(text) })}
@@ -119,7 +119,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
                     <button className="search-button"
                             onClick={() => this.handleSearchRequest(text)}
                             aria-label="search">
-                        <div className="search-button--icon">
+                        <div className="search-button__icon">
                             <i className="icon-search"/>
                         </div>
                     </button>

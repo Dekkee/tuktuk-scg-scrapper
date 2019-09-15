@@ -1,7 +1,7 @@
 @import "../../palette";
 
 .autocompletion {
-    &--card {
+    &__card {
         padding: 10px 16px;
         border-top: 1px solid tuktuk-color('secondary');
         cursor: pointer;
@@ -12,16 +12,16 @@
         }
     }
 
-    &__active {
+    &--active {
         background: tuktuk-color('primary');
         color: tuktuk-color('foreground');
     }
 
-    &--card-name {
+    &__card-name {
         font-size: 18px;
     }
 
-    &--card-text {
+    &__card-text {
         color: tuktuk-color('secondary');
         font-size: 15px;
     }

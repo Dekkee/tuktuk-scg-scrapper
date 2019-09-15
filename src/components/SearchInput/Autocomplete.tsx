@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as cn from 'classnames';
 import { AutocompleteCard } from '../../entities/AutocompleteCard';
 
-import './Autocompletion.scss';
+import './Autocomplete.scss';
 
 export interface Props {
     cards: AutocompleteCard[];
@@ -61,11 +61,11 @@ export class Autocomplete extends React.Component<Props, State> {
             {
                 cards.map((card, i) =>
                     <div
-                        className={ cn('autocompletion--card', { 'autocompletion__active': i === selected }) }
+                        className={ cn('autocompletion__card', { 'autocompletion--active': i === selected }) }
                         key={ i }
                         onClick={ () => onAutocomplete(card.name) }>
-                        <div className="autocompletion--card-name">{ card.name }</div>
-                        <div className="autocompletion--card-text">{ card.text }</div>
+                        <div className="autocompletion__card-name">{ card.name }</div>
+                        <div className="autocompletion__card-text">{ card.text }</div>
                     </div>)
             }
         </div>);
