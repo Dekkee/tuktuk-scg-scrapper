@@ -5,12 +5,10 @@ import { SearchInput } from '../../components/SearchInput';
 import { CardsTable } from '../../components/CardsTable';
 import { LoadingLabel } from '../../components/LoadingLabel';
 import { ParsedRow } from '../../entities/Row';
-import { AutocompleteCard } from '../../entities/AutocompleteCard';
 import { ShowMore } from '../../components/ShowMore';
 import { Paging } from '../../entities/Paging';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { debounce } from '../../utils/debounce';
-import { autocomplete, searchByName } from '../../api';
+import { searchByName } from '../../api';
 
 type Props = Partial<RouteComponentProps>;
 
@@ -19,7 +17,6 @@ interface State extends Paging {
     card?: ParsedRow;
     isFetching: boolean;
     searchText?: string;
-    autocompletion?: Record<string, AutocompleteCard>;
     isAutocompletion: boolean;
     shouldUpdate: boolean;
 }
@@ -65,31 +62,7 @@ export class SearchList extends React.Component<Props, State> {
         }
     }
 
-    private onTextChangedDebounced = debounce(async (value: string) => {
-        if (!value) {
-            this.setState({ ...this.state, autocompletion: undefined });
-        }
-
-        try {
-            const records: Record<string, AutocompleteCard> = await autocomplete(value);
-            this.setState({ ...this.state, autocompletion: records });
-        } catch (e) {
-            if (e.message !== 'no data') {
-                throw e;
-            }
-            this.setState({ ...this.state, autocompletion: undefined });
-        }
-    }, 200);
-
-    private onTextChanged (value: string) {
-        this.setState({ ...this.state, searchText: value });
-        if (!value) {
-            return;
-        }
-        this.onTextChangedDebounced(value);
-    }
-
-    private onSearch (value: string, isAutocompletion?: boolean) {
+    private onSearch = async (value: string, isAutocompletion?: boolean) => {
         if (!value) {
             return;
         }
@@ -99,9 +72,9 @@ export class SearchList extends React.Component<Props, State> {
         if (isAutocompletion) {
             query.auto = true;
         }
+        await this.requestData(value, isAutocompletion);
         history.push(`?${ querystring.stringify(query) }`);
-        this.requestData(value, isAutocompletion);
-    }
+    };
 
     private onMore () {
         const { searchText, page, isAutocompletion } = this.state;
@@ -109,15 +82,12 @@ export class SearchList extends React.Component<Props, State> {
     }
 
     private readonly requestData = async (value: string, isAutocompletion: boolean, newPage: number = 0) => {
-        this.onTextChangedDebounced.cancel();
-
         const { rows: stateRows = [] } = this.state;
         const newStateRows = newPage > 0 ? stateRows : [];
         this.setState({
             ...this.state,
             isFetching: true,
             rows: newStateRows.length > 0 ? newStateRows : undefined,
-            autocompletion: undefined,
             isAutocompletion,
             searchText: value
         });
@@ -142,12 +112,10 @@ export class SearchList extends React.Component<Props, State> {
     };
 
     render () {
-        const { isFetching, rows, searchText, autocompletion, pageCount, page } = this.state;
+        const { isFetching, rows, searchText, pageCount, page } = this.state;
         return (<>
             <SearchInput onSearchRequested={ this.onSearch.bind(this) }
-                         onTextChanged={ this.onTextChanged.bind(this) }
-                         autocompletion={ autocompletion }
-                         text={ searchText }/>
+                         initialText={ searchText }/>
             <article className="content-container">
                 { (!isFetching || rows) && <CardsTable rows={ rows }/> }
                 { isFetching && <LoadingLabel/> }
