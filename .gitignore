@@ -1,6 +1,7 @@
 .idea
 
 node_modules
+generated
 public/bundle.js
 
 yarn-error.log

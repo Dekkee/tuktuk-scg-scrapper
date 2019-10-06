@@ -8,6 +8,7 @@ import fetch from 'node-fetch';
 import { parseScgListAnswer } from "./html-parser/list";
 import { parseScgGetAnswer } from './html-parser/get';
 import * as path from 'path';
+import { suggest } from './suggest';
 
 const compression = require('compression');
 const app = express()
@@ -38,6 +39,11 @@ app.get('/api/get', async function (req, resp) {
 
     const answer = await (await fetch(`https://www.starcitygames.com/catalog/magic_the_gathering/product/${id}`)).text();
     resp.status(200).send(parseScgGetAnswer(answer));
+});
+
+app.get('/api/suggest', async function (req, resp) {
+    const id = decodeURIComponent(req.query.name);
+    resp.status(200).send(suggest(id));
 });
 
 app.get('*', function (req, resp) {
