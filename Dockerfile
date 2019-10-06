@@ -9,5 +9,6 @@ WORKDIR /app
 
 # RUN yarn test:ci
 
+RUN yarn update-index
 RUN yarn build
 ENTRYPOINT [ "yarn", "start" ]

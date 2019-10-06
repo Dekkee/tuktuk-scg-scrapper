@@ -8,6 +8,7 @@
     "build": "webpack --env production",
     "dev:client": "webpack-dev-server",
     "start": "ts-node ./src/server/server.ts",
+    "update-index": "ts-node ./src/server/suggest/generator/index.ts",
     "dev:server": "nodemon",
     "test": "karma start --browsers ChromeCustom --single-run",
     "test:ci": "karma start --reporters teamcity --browsers ChromeCustom --single-run --colors false"
