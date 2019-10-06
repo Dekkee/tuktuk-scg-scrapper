@@ -65,31 +65,8 @@ export const getCard = async (value: string) => {
 };
 
 export const autocomplete = async (text: string): Promise<Record<string, AutocompleteCard> | undefined> => {
-    return new Promise((resolve, reject) => {
-        const callback = `scg${getRandomInt(1000000, 9999999)}`;
-        const url = `//www.starcitygames.com/autocomplete/products.php?callback=${callback}&term=${text}`;
-        let response = null;
-        window[ callback ] = function (object: Record<string, any>) {
-            response = object;
-            if (scr) {
-                document.querySelector('body').removeChild(scr);
-            }
-        };
-        const scr = document.createElement('script');
-        scr.src = url;
-        scr.async = false;
-        scr.onload = () => {
-            if (Boolean(response)) {
-                resolve(response);
-            } else {
-                reject(new Error('no data'));
-                if (scr) {
-                    document.querySelector('body').removeChild(scr);
-                }
-            }
-        };
-        document.querySelector('body').appendChild(scr);
+    const query = stringify({
+        name: text,
     });
+    return await (await fetch(`${url}/api/suggest?${query}`)).json();
 };
-
-const getRandomInt = (min: number, max: number) => Math.floor(Math.random() * (max - min)) + min;
