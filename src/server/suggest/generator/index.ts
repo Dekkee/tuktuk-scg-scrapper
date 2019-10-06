@@ -26,11 +26,14 @@ const initialize = async () => {
         const resp = await fetch(url);
         console.log(`Is OK: ${resp.ok}`);
         const json = await (resp).json();
+        console.log('Store json');
         fs.writeFileSync('./generated/source/AllCards.json', JSON.stringify(json));
         fs.writeFileSync('./generated/source/meta.json', JSON.stringify(meta));
+        console.log('Generate schema');
         generateJson('card', Object.values(json));
+        console.log('Generate typings');
         await generateTypings();
     }
 };
 
-initialize().then(_ => console.log('initialized'));
+initialize().then(_ => console.log('initialization finished'));
