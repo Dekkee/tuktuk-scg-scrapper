@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import * as fs from "fs";
 import { generateJson } from './generateJson';
 import { generateTypings } from './generateTypings';
+import { initializeIndex } from './generateIndex';
 
 const url = 'https://www.mtgjson.com/json/AllCards.json';
 const metaUrl = 'https://www.mtgjson.com/json/version.json';
@@ -34,6 +35,7 @@ const initialize = async () => {
             generateJson('card', Object.values(json));
             console.log('Generate typings');
             await generateTypings();
+            initializeIndex();
         } catch (e) {
             console.error('failed to initialize', e);
         }

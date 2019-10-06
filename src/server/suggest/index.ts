@@ -1,8 +1,6 @@
-import { getIndex } from './index/index';
+import { getIndex } from './flexSearch';
 
-let index;
-
-getIndex().then(s => index = s);
+let index = getIndex();
 
 export const suggest = (name: string) => {
     if (!index) {
