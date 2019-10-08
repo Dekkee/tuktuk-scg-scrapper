@@ -2,7 +2,7 @@
 
 .autocompletion {
     &__card {
-        padding: 10px 16px;
+        padding: 16px 16px;
         border-top: 1px solid tuktuk-color('secondary');
         cursor: pointer;
 
@@ -19,7 +19,7 @@
 
     &__card-name {
         font-size: 18px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
     &__card-secondary-name {
@@ -28,7 +28,6 @@
     }
 
     &__card-text {
-        color: tuktuk-color('secondary');
         font-size: 15px;
     }
 }
