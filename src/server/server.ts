@@ -23,11 +23,13 @@ app.use(express.static('dist'));
 const pageSize = 25;
 
 app.get('/api/list', async function (req, resp) {
+    const preparedName = req.query.name.replace(/[\/\\]/, '');
+    const isNamePrapared = preparedName !== req.query.name;
     const query = querystring.stringify({
-        name: req.query.name,
+        name: preparedName,
         numpage: pageSize,
         startnum: +req.query.page * pageSize || 0,
-        auto: req.query.auto === 'true' ? 'Y' : 'N'
+        auto: req.query.auto === 'true' && !isNamePrapared ? 'Y' : 'N'
     });
 
     const answer = await (await fetch(`https://www.starcitygames.com/results?${query}`)).text();

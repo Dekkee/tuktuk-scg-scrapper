@@ -25,11 +25,18 @@ export const initializeIndex = async (json) => {
         if (card.lang === 'ru' || card.lang === 'en') {
             if (!(card.name in map)) {
                 map[card.name] = {
-                    names: new Set([card.printed_name || card.name]),
-                    text: card.oracle_text
+                    names: new Set([card.printed_name, card.name]),
+                    text: card.oracle_text,
                 }
             } else {
                 map[card.name].names.add(card.printed_name || card.name)
+            }
+            if (Array.isArray(card.card_faces)) {
+                map[card.name].text = '';
+                card.card_faces.forEach((face) => {
+                    map[card.name].names.add(face.printed_name || face.name);
+                    map[card.name].text += `${face.oracle_text} `;
+                })
             }
         }
     });
