@@ -64,7 +64,7 @@ export class Autocomplete extends React.Component<Props, State> {
                         className={ cn('autocompletion__card', { 'autocompletion--active': i === selected }) }
                         key={ i }
                         onClick={ () => onAutocomplete(card.name) }>
-                        <div className="autocompletion__card-name">{ card.name }</div>
+                        <div className="autocompletion__card-name">{ card.name }{ card.localizedName && <span className="autocompletion__card-secondary-name">{` ${card.localizedName}`}</span> }</div>
                         <div className="autocompletion__card-text">{ card.text }</div>
                     </div>)
             }

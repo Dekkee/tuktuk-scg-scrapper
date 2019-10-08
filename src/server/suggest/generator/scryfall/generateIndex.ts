@@ -22,7 +22,12 @@ export const initializeIndex = async (json) => {
 
     const map = {};
     values.forEach((card) => {
-        if (card.lang === 'ru' || card.lang === 'en') {
+        if (card.layout === 'art_series') {
+            return;
+        }
+        const isRu = card.lang === 'ru';
+        const isEn = card.lang === 'en';
+        if (isRu || isEn) {
             if (!(card.name in map)) {
                 map[card.name] = {
                     names: new Set([card.printed_name, card.name]),
@@ -31,11 +36,16 @@ export const initializeIndex = async (json) => {
             } else {
                 map[card.name].names.add(card.printed_name || card.name)
             }
+            if (isRu) {
+                map[card.name].localizedName = card.printed_name || card.name;
+            }
             if (Array.isArray(card.card_faces)) {
                 map[card.name].text = '';
+                map[card.name].localizedName = '';
                 card.card_faces.forEach((face) => {
                     map[card.name].names.add(face.printed_name || face.name);
                     map[card.name].text += `${face.oracle_text} `;
+                    map[card.name].localizedName += `${face.printed_name} `;
                 })
             }
         }
@@ -49,6 +59,7 @@ export const initializeIndex = async (json) => {
             card: {
                 name: key,
                 text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
+                localizedName: value.localizedName,
             },
         });
     });
