@@ -3,6 +3,7 @@
     width: 100%;
     grid-column: span 3;
     border-bottom: 1px solid tuktuk-color('secondary');
+    align-self: center;
 }
 
 .cards-container {
@@ -12,6 +13,6 @@
     grid-column-gap: 10px;
     grid-row-gap: 10px;
     grid-auto-rows: minmax(10px, auto);
-    align-items: center;
+    align-items: start;
     justify-items: start;
 }
