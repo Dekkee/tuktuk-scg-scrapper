@@ -1,8 +1,7 @@
 @import "palette";
 html,
 body,
-#root,
-.main-container {
+#root {
     height: 100%;
 }
 
@@ -17,6 +16,7 @@ body {
 }
 
 .main-container {
+    min-height: 100%;
     background: tuktuk-color(background);
     display: flex;
     position: relative;
@@ -24,10 +24,7 @@ body {
     align-content: center;
     margin: auto;
     max-width: 700px;
-}
-
-.content-container {
-    margin: 0 0 20px 10px;
+    padding-bottom: 50px;
 }
 
 .loading-container,
