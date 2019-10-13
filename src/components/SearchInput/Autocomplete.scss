@@ -18,18 +18,18 @@
 
     &__card {
         padding: 16px 16px;
-        border-top: 1px solid tuktuk-color('secondary');
+        border-top: 1px solid tuktuk-color(secondary);
         cursor: pointer;
 
         &:hover {
-            background: tuktuk-color('primary');
-            color: tuktuk-color('foreground');
+            background: tuktuk-color(primary);
+            color: tuktuk-color(background);
         }
     }
 
     &--active {
-        background: tuktuk-color('primary');
-        color: tuktuk-color('foreground');
+        background: tuktuk-color(primary);
+        color: tuktuk-color(background);
     }
 
     &__card-name {
