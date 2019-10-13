@@ -1,3 +1,20 @@
-.card-layout__back-button {
- margin: 10px 20px;
+@import "../../palette";
+.card-layout {
+    &__header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        background: tuktuk-color('accent');
+        height: 50px;
+    }
+    &__back-button {
+        position: absolute;
+        left: 13px;
+        top: 13px;
+        cursor: pointer;
+    }
+    &__name {
+        color: tuktuk-color('background');
+    }
 }
