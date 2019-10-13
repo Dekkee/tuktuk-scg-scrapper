@@ -1,13 +1,14 @@
 @import "../../palette";
 .row-separator {
     width: 100%;
-    grid-column: span 4;
+    grid-column: span 3;
     border-bottom: 1px solid tuktuk-color('secondary');
 }
 
 .cards-container {
+    padding: 20px 0;
     display: grid;
-    grid-template-columns: 1fr 50px 20px auto;
+    grid-template-columns: 1fr 50px auto;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
     grid-auto-rows: minmax(10px, auto);

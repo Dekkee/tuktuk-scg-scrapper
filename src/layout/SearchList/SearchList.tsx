@@ -9,6 +9,10 @@ import { ShowMore } from '../../components/ShowMore';
 import { Paging } from '../../entities/Paging';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { searchByName } from '../../api';
+import MenuIcon from '../../icons/menu.svg';
+import CameraIcon from '../../icons/camera.svg';
+
+import './SearchList.scss';
 
 type Props = Partial<RouteComponentProps>;
 
@@ -114,6 +118,11 @@ export class SearchList extends React.Component<Props, State> {
     render () {
         const { isFetching, rows, searchText, pageCount, page } = this.state;
         return (<>
+            <header className="header">
+                <MenuIcon fill="#fff"/>
+                <div>TukTuk</div>
+                <CameraIcon fill="#fff"/>
+            </header>
             <SearchInput onSearchRequested={ this.onSearch.bind(this) }
                          initialText={ searchText }/>
             <article className="content-container">

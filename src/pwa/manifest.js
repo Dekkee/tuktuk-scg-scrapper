@@ -10,7 +10,7 @@ module.exports = {
     lang: "en-GB",
     start_url: "/",
     display: "standalone",
-    theme_color: "#ccffcc",
+    theme_color: "#028900",
     background_color: "#FFFFFF",
     ios: true,
     icons: [

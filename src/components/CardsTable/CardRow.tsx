@@ -17,13 +17,12 @@ export class CardRow extends React.PureComponent<Props> {
         return <>
             <Link to={`/card/${cardId}`} className="card-layout__header"
                   style={ { gridRow: `span ${ cards.length }` } }>
-                <div>{ name.value }</div>
+                <div className="card-layout__name">{ name.value }</div>
                 <div className="card-layout__set">{ set.value }</div>
             </Link>
             {
-                cards.map(({ condition, rarity, price, stock }, i) => <React.Fragment key={ i }>
+                cards.map(({ condition, price, stock }, i) => <React.Fragment key={ i }>
                         <span>{ condition.value }</span>
-                        <span>{ rarity }</span>
                         <span className="card-layout__price">
                         {
                             price && price.slice(0, -1).map((p, i) =>
