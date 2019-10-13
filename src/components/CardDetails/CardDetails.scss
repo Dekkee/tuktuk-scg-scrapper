@@ -54,7 +54,8 @@
 
     &__container {
         padding: 20px;
-        background: tuktuk-color(primary);
+        background: tuktuk-color(primary-light);
+        color: tuktuk-color(foreground);
         display: flex;
         justify-content: space-between;
     }
@@ -72,7 +73,8 @@
 
     &__stock {
         font-size: 0.9em;
-        color: tuktuk-color(background);
+        font-weight: 600;
+        color: tuktuk-color(foreground);
     }
 
     &__condition {
@@ -80,7 +82,7 @@
     }
 
     &__price {
-        text-align: left;
+        text-align: right;
     }
 
     &__discount {
