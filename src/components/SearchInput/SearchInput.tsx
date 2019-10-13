@@ -116,7 +116,6 @@ export class SearchInput extends React.PureComponent<Props, State> {
                             <input value={text}
                                    onChange={(e) => this.onInput(e)}
                                    onKeyDown={(e) => this.onKeyPressed(e)}
-                                   type="search"
                                    id="search-input"
                                    ref={this.inputRef}
                                    required

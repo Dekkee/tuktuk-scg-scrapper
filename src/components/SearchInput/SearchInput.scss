@@ -7,7 +7,7 @@
         color: inherit;
         overflow: hidden;
         box-sizing: border-box;
-        background: tuktuk-color('secondary');
+        background: tuktuk-color('secondary-light');
         padding: 12px 16px;
     }
 
@@ -50,14 +50,14 @@
         transition: 0.2s;
         display: flex;
         flex: 0 0 auto;
-        color: tuktuk-color('secondary');
+        color: tuktuk-color('secondary-dark');
     }
 
     &-icon {
         width: 24px;
         height: 24px;
         line-height: 24px;
-        fill: tuktuk-color('secondary');
+        fill: tuktuk-color('secondary-dark');
     }
 
     &-cross {

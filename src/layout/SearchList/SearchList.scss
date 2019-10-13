@@ -24,7 +24,7 @@
 
 .search-layout {
     position: relative;
-
+    min-height: 100%;
     &__backdrop {
         position: absolute;
         background: rgba(0,0,0,0.3);
@@ -45,16 +45,17 @@
     &__menu {
         position: absolute;
         background: tuktuk-color('background');
-        width: 0;
         z-index: 1;
         top: 0;
-        left: 0;
+        left: -300px;
+        width: 300px;
+        bottom: 0;
         overflow-x: hidden;
-        transition: width 0.2s ease-in-out;
-        height: 100%;
+        transition: left 0.2s ease-in-out;
+        min-height: 100vh;
     }
 
     &--menu-open {
-        width: 300px;
+        left: 0;
     }
 }

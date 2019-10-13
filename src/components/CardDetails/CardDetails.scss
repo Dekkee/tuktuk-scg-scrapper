@@ -21,13 +21,14 @@
 
     &__set {
         a {
-            color: tuktuk-color('secondary');
+            color: tuktuk-color(secondary-dark);
         }
     }
 
     &__img {
         display: block;
-        padding: 10px
+        padding: 10px;
+        min-height: 310px;
     }
 
     &__content {
@@ -53,7 +54,7 @@
 
     &__container {
         padding: 20px;
-        background: tuktuk-color('primary');
+        background: tuktuk-color(primary);
         display: flex;
         justify-content: space-between;
     }
@@ -71,7 +72,7 @@
 
     &__stock {
         font-size: 0.9em;
-        color: tuktuk-color('secondary');
+        color: tuktuk-color(background);
     }
 
     &__condition {
@@ -80,5 +81,9 @@
 
     &__price {
         text-align: left;
+    }
+
+    &__discount {
+        text-decoration: line-through;
     }
 }

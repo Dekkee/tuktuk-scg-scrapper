@@ -46,7 +46,7 @@ module.exports = (env) => {
             template: path.join('./src/template/index.html'),
             title: manifest.name,
             meta: {
-                viewport: 'width=device-width, initial-scale=1',
+                viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
                 author: manifest.author,
                 charset: 'utf-8',
                 description: manifest.description,
