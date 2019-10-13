@@ -3,6 +3,8 @@ import * as cn from 'classnames';
 
 import './UpdateLabel.scss';
 import { Button } from '../Button';
+import ErrorIcon from '../../icons/error.svg';
+import SpinnerIcon from '../../icons/spinner.svg';
 
 export enum UpdateStatus {
     Required,
@@ -42,12 +44,11 @@ export class UpdateLabel extends React.PureComponent<Props> {
                 }
                 {
                     status === UpdateStatus.Updating &&
-                    <div className="update-label update-label--updating"><i
-                        className="icon-spinner8 icon-big icon-rotating"/>Loading update!</div>
+                    <div className="update-label update-label--updating"><SpinnerIcon width={50} height={50}/>Loading update!</div>
                 }
                 {
                     status === UpdateStatus.Failed &&
-                    <div className="update-label update-label--failed"><i className="icon-sad icon-big"/>Update
+                    <div className="update-label update-label--failed"><ErrorIcon width={50} height={50}/>Update
                         is failed!</div>
                 }
                 {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button } from '../Button';
+import ErrorIcon from '../../icons/error.svg';
 
 import './ErrorTrap.scss';
 
@@ -33,7 +34,7 @@ export class ErrorTrap extends React.PureComponent<Props, State> {
         return (
             error
                 ? <div className="error-trap error-trap__container">
-                    <i className="icon-sad icon-big"/>
+                    <ErrorIcon width={100} height={100}/>
                     <div className="error-trap__text">Something goes wrong! <br/>
                         Contact <a href="mailto:dekker25@gmail.com">xXx_$@$h@K_xXx</a> <br/>
                         { error.name }: { error.message }</div>

@@ -3,7 +3,7 @@
     position: fixed;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -24,7 +24,8 @@
 }
 
 .update-label {
-    display: block;
+    display: flex;
+    align-items: center;
     box-sizing: border-box;
     margin: auto;
     text-align: center;
