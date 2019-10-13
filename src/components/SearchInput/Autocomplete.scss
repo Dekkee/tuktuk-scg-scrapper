@@ -35,10 +35,11 @@
     &__card-name {
         font-size: 18px;
         margin-bottom: 8px;
+        font-weight: 500;
     }
 
     &__card-secondary-name {
-        color: tuktuk-color('secondary');
+        color: tuktuk-color('secondary-dark');
         font-size: 18px;
     }
 

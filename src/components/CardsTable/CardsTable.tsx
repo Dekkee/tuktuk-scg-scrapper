@@ -24,13 +24,13 @@ const renderCards = (rows: ParsedRow[]) => (
 
 const renderNotFound = () => (
     <div className="empty-container">
-        <div className="empty"><ErrorIcon />Not found</div>
+        <div className="empty"><ErrorIcon width={50} height={50}/>Not found</div>
     </div>
 );
 
 const renderStartSearch = () => (
     <div className="start-search-container">
-        <div className="start-search"><SearchIcon />Start search!!!</div>
+        <div className="start-search"><SearchIcon width={50} height={50}/>Start search!!!</div>
     </div>
 );
 
