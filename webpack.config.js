@@ -50,6 +50,7 @@ module.exports = (env) => {
                 author: manifest.author,
                 charset: 'utf-8',
                 description: manifest.description,
+                'apple-mobile-web-app-status-bar-style': 'black-translucent',
             }
         })
     ];
