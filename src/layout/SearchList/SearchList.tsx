@@ -119,9 +119,9 @@ export class SearchList extends React.Component<Props, State> {
         const { isFetching, rows, searchText, pageCount, page } = this.state;
         return (<>
             <header className="header">
-                <MenuIcon fill="#fff"/>
-                <div>TukTuk</div>
-                <CameraIcon fill="#fff"/>
+                <MenuIcon className="header__menu-button" fill="#fff"/>
+                <div className="header__name">TukTuk</div>
+                <CameraIcon className="header__camera-button" fill="#fff"/>
             </header>
             <SearchInput onSearchRequested={ this.onSearch.bind(this) }
                          initialText={ searchText }/>
