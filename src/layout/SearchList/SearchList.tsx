@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as cn from 'classnames';
 import * as querystring from 'query-string';
 
 import { SearchInput } from '../../components/SearchInput';
@@ -13,6 +14,7 @@ import MenuIcon from '../../icons/menu.svg';
 import CameraIcon from '../../icons/camera.svg';
 
 import './SearchList.scss';
+import { Menu } from '../../components/Menu';
 
 type Props = Partial<RouteComponentProps>;
 
@@ -23,6 +25,7 @@ interface State extends Paging {
     searchText?: string;
     isAutocompletion: boolean;
     shouldUpdate: boolean;
+    isMenuOpen: boolean;
 }
 
 interface Config {
@@ -46,7 +49,8 @@ export class SearchList extends React.Component<Props, State> {
             isFetching: false,
             isAutocompletion: false,
             searchText: queryName as string || (config && config.searchText) || '',
-            shouldUpdate: Boolean(queryName) && queryName !== config.searchText
+            shouldUpdate: Boolean(queryName) && queryName !== config.searchText,
+            isMenuOpen: false,
         };
     }
 
@@ -77,12 +81,20 @@ export class SearchList extends React.Component<Props, State> {
             query.auto = true;
         }
         await this.requestData(value, isAutocompletion);
-        history.push(`?${ querystring.stringify(query) }`);
+        history.push(`?${querystring.stringify(query)}`);
     };
 
     private onMore () {
         const { searchText, page, isAutocompletion } = this.state;
         this.requestData(searchText, isAutocompletion, page + 1);
+    }
+
+    private openMenu () {
+        this.setState({...this.state, isMenuOpen: true});
+    }
+
+    private closeMenu () {
+        this.setState({...this.state, isMenuOpen: false});
     }
 
     private readonly requestData = async (value: string, isAutocompletion: boolean, newPage: number = 0) => {
@@ -101,7 +113,7 @@ export class SearchList extends React.Component<Props, State> {
         }
         const { rows, page, pageCount } = res;
         const config: Config = {
-            rows: [ ...newStateRows, ...rows ],
+            rows: [...newStateRows, ...rows],
             page,
             pageCount,
             searchText: value
@@ -116,20 +128,26 @@ export class SearchList extends React.Component<Props, State> {
     };
 
     render () {
-        const { isFetching, rows, searchText, pageCount, page } = this.state;
-        return (<>
-            <header className="header">
-                <MenuIcon className="header__menu-button" fill="#fff"/>
-                <div className="header__name">TukTuk</div>
-                <CameraIcon className="header__camera-button" fill="#fff"/>
-            </header>
-            <SearchInput onSearchRequested={ this.onSearch.bind(this) }
-                         initialText={ searchText }/>
-            <article className="content-container">
-                { (!isFetching || rows) && <CardsTable rows={ rows }/> }
-                { isFetching && <LoadingLabel/> }
-            </article>
-            { page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={ this.onMore.bind(this) }/> }
-        </>);
+        const { isFetching, rows, searchText, pageCount, page, isMenuOpen } = this.state;
+        return (<div className="search-layout">
+            <div className="search-layout__container">
+                <header className="header">
+                    <MenuIcon className="header__menu-button" onClick={this.openMenu.bind(this)} fill="#fff"/>
+                    <div className="header__name">TukTuk</div>
+                    <CameraIcon className="header__camera-button" fill="#fff"/>
+                </header>
+                <SearchInput onSearchRequested={this.onSearch.bind(this)}
+                             initialText={searchText}/>
+                <article className="content-container">
+                    {(!isFetching || rows) && <CardsTable rows={rows}/>}
+                    {isFetching && <LoadingLabel/>}
+                </article>
+                {page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={this.onMore.bind(this)}/>}
+            </div>
+            <div className={cn('search-layout__backdrop', { 'search-layout--backdrop-visible': isMenuOpen })}/>
+            <div className={cn('search-layout__menu', { 'search-layout--menu-open': isMenuOpen })}>
+                <Menu onClose={this.closeMenu.bind(this)}/>
+            </div>
+        </div>);
     }
 }

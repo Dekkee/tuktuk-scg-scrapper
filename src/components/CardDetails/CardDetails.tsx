@@ -3,6 +3,7 @@ import * as cn from 'classnames';
 import { ParsedRowDetails } from '../../entities/Row';
 
 import './CardDetails.scss';
+import { Price } from '../Price';
 
 interface Props {
     card: ParsedRowDetails;
@@ -29,9 +30,9 @@ export class CardDetails extends React.PureComponent<Props> {
                                         <div className="card__price">
                                             {
                                                 card.price && card.price.slice(0, -1).map((p, i) =>
-                                                    <div className={ cn('card__discount') } key={ i }>{ p }</div>)
+                                                    <div className={ cn('card__discount') } key={ i }><Price value={p} /></div>)
                                             }
-                                            <div className="card__price-total">{ card.price && card.price.pop() }</div>
+                                            { card.price && card.price[card.price.length - 1] ? <Price className="card__price-total" value={card.price[card.price.length - 1]}/> : null }
                                             { isNaN(Number(card.stock)) &&
                                             <div className="card__stock">{ card.stock }</div> }
                                         </div>

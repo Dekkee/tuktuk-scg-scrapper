@@ -1,0 +1,37 @@
+@import "../../palette";
+
+.menu {
+    &__header {
+        position: relative;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__back-button {
+        position: absolute;
+        left: 13px;
+        top: 13px;
+    }
+
+    &__field {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .ruble-course {
+        width: 40px;
+        outline: none;
+        text-align: right;
+        border: 1px solid tuktuk-color(accent);
+        border-radius: 8px;
+        padding: 5px;
+        font-size: 15px;
+    }
+
+    &__settings {
+        padding: 20px;
+    }
+}

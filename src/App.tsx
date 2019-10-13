@@ -7,6 +7,7 @@ import { ErrorTrap } from './components/ErrorTrap';
 import { SearchList } from './layout/SearchList';
 import { Route, RouteComponentProps, Switch, withRouter } from 'react-router';
 import { CardLayout } from './layout/CardLayout';
+import { SettingsProvider } from './layout/SettingsContext';
 
 interface State {
     updateStatus: UpdateStatus;
@@ -40,18 +41,20 @@ export class App extends React.Component<Props, State> {
     render () {
         const { updateStatus } = this.state;
         return (
-            <main className="main-container" role="main">
-                <ErrorTrap>
-                    <Switch>
-                        <Route exact path="/" component={SearchList}/>
-                        <Route path="/card/:id/" component={CardLayout}/>
-                    </Switch>
+            <SettingsProvider>
+                <main className="main-container" role="main">
+                    <ErrorTrap>
+                        <Switch>
+                            <Route exact path="/" component={SearchList}/>
+                            <Route path="/card/:id/" component={CardLayout}/>
+                        </Switch>
 
-                    <UpdateLabel status={ updateStatus }
-                                 onRequestUpdate={ () => this.pwaUpdater.performUpdate() }
-                                 onUpdateCancelled={ () => this.onUpdateCancelled() }/>
-                </ErrorTrap>
-            </main>
+                        <UpdateLabel status={updateStatus}
+                                     onRequestUpdate={() => this.pwaUpdater.performUpdate()}
+                                     onUpdateCancelled={() => this.onUpdateCancelled()}/>
+                    </ErrorTrap>
+                </main>
+            </SettingsProvider>
         );
     }
 }
