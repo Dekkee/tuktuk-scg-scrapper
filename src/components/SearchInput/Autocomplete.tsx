@@ -57,7 +57,8 @@ export class Autocomplete extends React.Component<Props, State> {
         const { cards, onAutocomplete } = this.props;
         const { selected } = this.state;
 
-        return (<div className="autocompletion">
+        return (<div className="autocompletion autocompletion__container">
+            <div className="autocompletion__content">
             {
                 cards.map((card, i) =>
                     <div
@@ -68,6 +69,7 @@ export class Autocomplete extends React.Component<Props, State> {
                         <div className="autocompletion__card-text">{ card.text }</div>
                     </div>)
             }
+            </div>
         </div>);
     }
 }

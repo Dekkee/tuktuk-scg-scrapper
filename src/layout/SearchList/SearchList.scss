@@ -1,0 +1,60 @@
+@import "../../palette";
+.header {
+    height: 50px;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    background: tuktuk-color('accent');
+    color: tuktuk-color('background');
+
+    &__menu-button {
+        position: absolute;
+        top: 13px;
+        left: 10px;
+    }
+
+    &__camera-button {
+        position: absolute;
+        top: 13px;
+        right: 10px;
+        display: none;
+    }
+}
+
+.search-layout {
+    position: relative;
+
+    &__backdrop {
+        position: absolute;
+        background: rgba(0,0,0,0.3);
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    &--backdrop-visible {
+        pointer-events: auto;
+        opacity: 1;
+    }
+
+    &__menu {
+        position: absolute;
+        background: tuktuk-color('background');
+        width: 0;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        overflow-x: hidden;
+        transition: width 0.2s ease-in-out;
+        height: 100%;
+    }
+
+    &--menu-open {
+        width: 300px;
+    }
+}

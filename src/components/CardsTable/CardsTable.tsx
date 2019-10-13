@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as cn from 'classnames';
 import { ParsedRow } from '../../entities/Row';
 import { CardRow } from './CardRow';
+import SearchIcon from '../../icons/search.svg';
+import ErrorIcon from '../../icons/error.svg';
 
 import './CardsTable.scss';
 
@@ -22,13 +24,13 @@ const renderCards = (rows: ParsedRow[]) => (
 
 const renderNotFound = () => (
     <div className="empty-container">
-        <div className="empty"><i className="icon-sad icon-big"/>Not found</div>
+        <div className="empty"><ErrorIcon />Not found</div>
     </div>
 );
 
 const renderStartSearch = () => (
     <div className="start-search-container">
-        <div className="start-search"><i className="icon-search icon-big"/>Start search!!!</div>
+        <div className="start-search"><SearchIcon />Start search!!!</div>
     </div>
 );
 

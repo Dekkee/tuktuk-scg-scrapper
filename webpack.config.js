@@ -15,10 +15,10 @@ const manifest = require('./src/pwa/manifest');
 const getVersion = (versionString) => (versionString.match(/(\d+?(\.\d+)?(\.\d+))/) || [])[1];
 
 const externals = [{
-        module: 'react',
-        entry: `https://unpkg.com/react@${getVersion(require('./package').dependencies.react)}/umd/react.production.min.js`,
-        global: 'React',
-    },
+    module: 'react',
+    entry: `https://unpkg.com/react@${getVersion(require('./package').dependencies.react)}/umd/react.production.min.js`,
+    global: 'React',
+},
     {
         module: 'react-dom',
         entry: `https://unpkg.com/react-dom@${getVersion(require('./package').dependencies['react-dom'])}/umd/react-dom.production.min.js`,
@@ -26,9 +26,7 @@ const externals = [{
     },
 ];
 
-const vendors = [{
-        entry: 'icomoon.woff2',
-    },
+const vendors = [
     {
         entry: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700',
     },
@@ -80,9 +78,13 @@ module.exports = (env) => {
         entry: './src/index.tsx',
         mode: env || 'development',
         module: {
-            rules: [{
+            rules: [
+                {
                     test: /\.tsx?/,
                     use: 'awesome-typescript-loader'
+                }, {
+                    test: /\.svg/,
+                    use: 'react-svg-loader'
                 },
                 {
                     test: /\.scss$/,
@@ -93,14 +95,14 @@ module.exports = (env) => {
                     ]
                 },
                 {
-                    test: /\.jpe?g$|\.gif$|\.svg$|\.woff$|\.woff2$|\.ttf$|\.wav$|\.mp3$/,
+                    test: /\.jpe?g$|\.gif$|\.woff$|\.woff2$|\.ttf$|\.wav$|\.mp3$/,
                     loader: 'file-loader?name=[name].[ext]'
-                }
+                },
             ]
         },
         plugins,
         resolve: {
-            extensions: ['.js', '.ts', '.tsx']
+            extensions: ['.js', '.ts', '.tsx', '.svg']
         },
         devServer: {
             compress: true,

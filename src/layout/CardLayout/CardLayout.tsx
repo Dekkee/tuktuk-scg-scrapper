@@ -5,8 +5,8 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { getCard } from '../../api';
 import { LoadingLabel } from '../../components/LoadingLabel';
 import { CardDetails } from '../../components/CardDetails';
-import { Button } from '../../components/Button';
 import { history } from '../../utils/history';
+import ArrowIcon from '../../icons/arrow_back.svg';
 
 import './CardLayout.scss';
 
@@ -46,7 +46,10 @@ export class CardLayout extends React.Component<Props, State> {
     render () {
         const { card, isFetching } = this.state;
         return (<>
-            <Button className="card-layout__back-button" onClick={this.onBackClick} label="< Back" width={100}/>
+            <div className="card-layout__header">
+                <div className="card-layout__back-button" onClick={this.onBackClick}><ArrowIcon width={24} height={24} fill="#fff"/></div>
+                <div className="card-layout__name">{card && card.name.value}</div>
+            </div>
             { isFetching ? <LoadingLabel/> : <CardDetails card={ card }/> }
         </>);
     }

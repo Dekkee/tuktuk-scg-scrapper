@@ -8,6 +8,8 @@ import { Autocomplete } from './Autocomplete';
 import { debounce } from '../../utils/debounce';
 import { autocomplete } from '../../api';
 
+import SearchIcon from '../../icons/search.svg';
+
 export interface Props {
     onSearchRequested: (text: string, isAutocomplete: boolean) => void;
     initialText?: string;
@@ -89,6 +91,12 @@ export class SearchInput extends React.PureComponent<Props, State> {
         this.inputRef.current.focus();
     };
 
+    private onCancel = (text: string) => {
+        this.onTextChangedDebounced.cancel();
+        this.setState({ ...this.state, text: text, autocompletion: undefined });
+        this.inputRef.current.blur();
+    };
+
     render () {
         const { autocompletion, text } = this.state;
         let aucompleteCards: AutocompleteCard[] = [];
@@ -100,35 +108,38 @@ export class SearchInput extends React.PureComponent<Props, State> {
         }
 
         return (
-            <div className="search-container">
-                <div className="search-panel">
-                    <label className="search-input" htmlFor="search-input">
-                        <input value={text}
-                               onChange={(e) => this.onInput(e)}
-                               onKeyDown={(e) => this.onKeyPressed(e)}
-                               id="search-input"
-                               ref={this.inputRef}
-                               required
-                               autoComplete="off"/>
-                        <div className="search-label">
-                            <div className="search-label__placeholder">Search</div>
-                        </div>
-                    </label>
-                    {<div className={cn('search-cross', { 'search-cross--hidden': !Boolean(text) })}
-                          onClick={() => this.onClear()}>&times;</div>}
-                    <button className="search-button"
-                            onClick={() => this.handleSearchRequest(text)}
-                            aria-label="search">
-                        <div className="search-button__icon">
-                            <i className="icon-search"/>
-                        </div>
+            <>
+                <div className="search-container">
+                    <div className="search-panel">
+                        <label className="search-panel__label" htmlFor="search-input">
+                            <SearchIcon className="search-icon"/>
+                            <input value={text}
+                                   onChange={(e) => this.onInput(e)}
+                                   onKeyDown={(e) => this.onKeyPressed(e)}
+                                   type="search"
+                                   id="search-input"
+                                   ref={this.inputRef}
+                                   required
+                                   autoComplete="off"/>
+                            <div className="search-label">
+                                <div className="search-label__placeholder">Search</div>
+                            </div>
+                        </label>
+                        {<div className={cn('search-cross', { 'search-cross--hidden': !Boolean(text) })}
+                              onClick={() => this.onClear()}>&times;</div>}
+                    </div>
+                    <button
+                        className="search-button"
+                        onClick={() => this.onCancel(text)}
+                        aria-label="search">
+                        Cancel
                     </button>
                 </div>
                 {
                     Boolean(text) && aucompleteCards.length > 0 &&
                     <Autocomplete onAutocomplete={this.onAutocomplete.bind(this)} cards={aucompleteCards}/>
                 }
-            </div>
+            </>
         );
     }
 }

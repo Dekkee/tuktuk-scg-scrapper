@@ -1,8 +1,11 @@
 @import "../../palette";
 
-.card-layout {
+.card-row {
     padding: 4px 2px;
 
+    &__name {
+        font-weight: 500;
+    }
     &__header {
         color: tuktuk-color('foreground');
         text-decoration: none;
@@ -15,6 +18,8 @@
     &__price {
         justify-self: end;
         text-align: right;
+        font-weight: 500;
+        padding-right: 10px;
     }
 
     &__stock {

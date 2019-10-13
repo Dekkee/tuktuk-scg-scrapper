@@ -3,6 +3,7 @@ import * as cn from 'classnames';
 import { ParsedRowDetails } from '../../entities/Row';
 
 import './CardDetails.scss';
+import { Price } from '../Price';
 
 interface Props {
     card: ParsedRowDetails;
@@ -14,11 +15,35 @@ export class CardDetails extends React.PureComponent<Props> {
 
         return (<article className="card-details">
             <div className="card-details__header">
-                <div className="card-details__title">{ card.name.value }</div>
-                <a className="card-details__set" href={ card.set.href }>{ card.set.value }</a>
                 <img className="card-details__img" src={ card.name.img } alt={ card.name.value }/>
             </div>
+            <div className="card-prices">
+                {
+                    card.cards &&
+                    <div className="card-prices__container">
+                        <b>Prices:</b>
+                        <div className="card-prices__content">
+                            {
+                                card.cards.map((card, index) => (
+                                    <div className="card" key={ index }>
+                                        <div className="card__condition">{ card.condition }</div>
+                                        <div className="card__price">
+                                            {
+                                                card.price && card.price.slice(0, -1).map((p, i) =>
+                                                    <div className={ cn('card__discount') } key={ i }><Price value={p} /></div>)
+                                            }
+                                            { card.price && card.price[card.price.length - 1] ? <Price className="card__price-total" value={card.price[card.price.length - 1]}/> : null }
+                                            { isNaN(Number(card.stock)) &&
+                                            <div className="card__stock">{ card.stock }</div> }
+                                        </div>
+                                    </div>))
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
             <div className="card-details__content">
+                <div className="card-details__set" ><b>Set: </b><a href={ card.set.href }>{ card.set.value }</a></div>
                 <div className="card-details__card-type"><b>Card type: </b>{ card.type }</div>
                 {
                     card.creatureType &&
@@ -55,29 +80,6 @@ export class CardDetails extends React.PureComponent<Props> {
                 {
                     card.rarity &&
                     <div className="card-details__artist"><b>Rarity:</b> { card.rarity } </div>
-                }
-                {
-                    card.cards &&
-                    <div className="card-details__prices-container">
-                        <b>Prices:</b>
-                        <div className="card-details__prices">
-                            {
-                                card.cards.map((card, index) => (
-                                    <React.Fragment key={ index }>
-                                        <div className="card__condition">{ card.condition }</div>
-                                        <div className="card__price">
-                                            {
-                                                card.price && card.price.slice(0, -1).map((p, i) =>
-                                                    <div className={ cn('card__discount') } key={ i }>{ p }</div>)
-                                            }
-                                            <div className="card__price-total">{ card.price && card.price.pop() }</div>
-                                            { isNaN(Number(card.stock)) &&
-                                            <div className="card__stock">{ card.stock }</div> }
-                                        </div>
-                                    </React.Fragment>))
-                            }
-                        </div>
-                    </div>
                 }
             </div>
         </article>);
