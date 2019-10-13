@@ -13,6 +13,10 @@
         position: absolute;
         left: 13px;
         top: 13px;
+
+        @media (min-width: 768px) {
+            display: none;
+        }
     }
 
     &__field {

@@ -12,6 +12,10 @@
         position: absolute;
         top: 13px;
         left: 10px;
+
+        @media (min-width: 768px) {
+            display: none;
+        }
     }
 
     &__camera-button {
@@ -35,6 +39,7 @@
         pointer-events: none;
         opacity: 0;
         transition: opacity 0.2s ease-in-out;
+        min-height: 100vh;
     }
 
     &--backdrop-visible {
