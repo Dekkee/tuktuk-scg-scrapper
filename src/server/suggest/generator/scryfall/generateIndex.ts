@@ -16,13 +16,15 @@ if (!fs.existsSync('./data')) {
     fs.mkdirSync('./data');
 }
 
+const filteredLayouts = new Set(['art_series', 'emblem']);
+
 export const initializeIndex = async (json) => {
     let values;
     values = Object.values(json);
 
     const map = {};
     values.forEach((card) => {
-        if (card.layout === 'art_series') {
+        if (filteredLayouts.has(card.layout)) {
             return;
         }
         const isRu = card.lang === 'ru';
