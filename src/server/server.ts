@@ -20,27 +20,22 @@ const app = express()
 app.use(compression({ threshold: 0 }));
 app.use(express.static('dist'));
 
-const pageSize = 25;
-
 app.get('/api/list', async function (req, resp) {
     const preparedName = req.query.name.replace(/[\/\\]/, '');
-    const isNamePrapared = preparedName !== req.query.name;
     const query = querystring.stringify({
-        name: preparedName,
-        numpage: pageSize,
-        startnum: +req.query.page * pageSize || 0,
-        auto: req.query.auto === 'true' && !isNamePrapared ? 'Y' : 'N'
+        search_query: preparedName,
+        page: req.query.page || 1,
     });
 
-    const answer = await (await fetch(`https://www.starcitygames.com/results?${query}`)).text();
-    resp.status(200).send(parseScgListAnswer(answer));
+    const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
+    resp.status(200).send(await parseScgListAnswer(answer));
 });
 
 app.get('/api/get', async function (req, resp) {
     const id = decodeURIComponent(req.query.name);
 
-    const answer = await (await fetch(`https://www.starcitygames.com/catalog/magic_the_gathering/product/${id}`)).text();
-    resp.status(200).send(parseScgGetAnswer(answer));
+    const answer = await (await fetch(`https://www.starcitygames.com/${id}`)).text();
+    resp.status(200).send(await parseScgGetAnswer(answer));
 });
 
 app.get('/api/suggest', async function (req, resp) {

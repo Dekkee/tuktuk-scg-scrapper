@@ -20,6 +20,7 @@
   "private": false,
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "@types/async": "^3.0.3",
     "@types/body-parser": "^1.17.0",
     "@types/cheerio": "^0.22.8",
     "@types/cors": "^2.8.4",
@@ -32,6 +33,7 @@
     "@types/react-router": "^5.0.3",
     "@types/react-router-dom": "^4.3.1",
     "abortcontroller-polyfill": "^1.1.9",
+    "async": "^3.1.0",
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.2",
     "classnames": "^2.2.6",

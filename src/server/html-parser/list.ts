@@ -1,6 +1,8 @@
 import * as cheerio from 'cheerio';
-import omit = require('lodash/omit');
-import { ConditionAndPrice, ParsedRow, RawRow } from '../../entities/Row';
+import { ParsedRow } from '../../entities/Row';
+import fetch from 'node-fetch';
+import * as async from 'async';
+import { fillCardPrices, parseName, parseSet } from './entities';
 
 type ScgPaging = {
     page?: number;
@@ -8,118 +10,42 @@ type ScgPaging = {
 };
 export type ScgListResponse = { rows: ParsedRow[] } & ScgPaging;
 
-export const parseScgListAnswer = (input: string) => {
+export const parseScgListAnswer = async (input: string) => {
     const dom = cheerio.load(input);
-    const rows = dom('#content table table tr');
+    const rows = dom('.productList table tr');
     const parsedRows = [];
     if (rows.length > 1) {
         rows.each((index, row) => {
-            if (!row.attribs[ 'class' ] || !row.attribs[ 'class' ].includes('deckdbbody')) return;
-            let parsedRow = {} as any;
-            dom(row).children().each((columnIndex, column) => {
-                if (!column.attribs || !column.attribs[ 'class' ] || !column.attribs[ 'class' ].includes('search_results_')) return;
-                const index = parseInt(column.attribs[ 'class' ].match(/search_results_(\d+)/i)[ 1 ]);
-                parsedRow = {
-                    ...parsedRow,
-                    ...parseRow(column, index)
-                };
-            });
-            const preparedRow = prepareRow(parsedRow);
-            !!parsedRow.name.value
-                ? parsedRows.push(preparedRow)
-                : parsedRows[ parsedRows.length - 1 ].cards.push(preparedRow.cards[ 0 ]);
+            const id = +row.attribs['data-id'];
+            if (id) {
+                const card = parseRow(row);
+                card.id = id;
+                parsedRows.push(card);
+            }
         });
     }
-    return { rows: parsedRows, ...parsePages(dom('#content table:first-child tr')) };
+    await fillCardPrices(parsedRows);
+    return { rows: parsedRows, ...parsePages(dom('.pagination .pagination-list')) };
 };
 
-const columnMap = {
-    '1': 'name',
-    '2': 'set',
-    '3': 'mana',
-    '4': 'type',
-    '5': 'pt',
-    '6': 'rarity',
-    '7': 'condition',
-    '8': 'stock',
-    '9': 'price',
-};
-
-const prepareRow = (raw: RawRow): ParsedRow => {
-    const name = raw.name;
-    const set = raw.set;
-    const cards = [ omit(raw, [ 'name, set' ]) ] as ConditionAndPrice[];
+const parseRow = (row: CheerioElement): Partial<ParsedRow> => {
+    const $ = cheerio.load(row);
     return {
-        name,
-        set,
-        cards,
+        ...parseName($('.--Name .listItem-title a').text()),
+        ...parseSet($('.--Condition .category-row-name-search').text()),
+        rarity: $('.--Rarity p').children().remove().end().text(),
+        color: $('.--Color p').children().remove().end().text(),
     };
-};
-
-const parseRow = (element: CheerioElement, index: number) => {
-    switch (index) {
-        case 1:
-            return { [ columnMap[ +index ] ]: parseName(element) };
-        case 2:
-        case 7:
-            return { [ columnMap[ +index ] ]: parseLink(element) };
-        case 3:
-        case 4:
-        case 5:
-        case 6:
-        case 8:
-            return { [ columnMap[ +index ] ]: parseText(element) };
-        case 9:
-            return { [ columnMap[ +index ] ]: parsePrice(element) };
-    }
-};
-
-const parseName = (element: CheerioElement) => {
-    const aElement = cheerio.load(element)('a');
-    return {
-        href: aElement.attr('href'),
-        value: ((aElement.text() || '').match(/^\s*(.+)\s*$/i) || [ '' ])[ 1 ],
-        img: ((aElement.attr('rel') || '').match(/src='([.\S]+)'/i) || [ '' ])[ 1 ]
-    };
-};
-
-const parseLink = (element: CheerioElement) => {
-    const aElement = cheerio.load(element)('a');
-    return {
-        href: aElement.attr('href'),
-        value: ((aElement.text() || '').match(/^\s*(.+)\s*$/i) || [ '' ])[ 1 ],
-    };
-};
-
-const parseText = (element: CheerioElement) => cheerio.load(element)('td').text();
-
-const parsePrice = (element: CheerioElement) => {
-    const el = cheerio.load(element);
-    const td = el('td');
-
-    const children = td.children('span');
-    if (children.length > 1) {
-        const arr = [];
-        children.each((i, e) => {
-            arr.push(el(e).text());
-        });
-        return arr;
-    } else {
-        return [ td.text() ];
-    }
 };
 
 const parsePages = (element: Cheerio): ScgPaging => {
-    if (element.length < 2) return { page: 0, pageCount: 1 };
-
-    const row = element[ 1 ];
-    const links = cheerio.load(row)('td div:first-child > a');
+    const links = element.find('.pagination-item');
     let pageCount = 1;
+    let currentPage = 1;
     links.each((index, link) => {
-        const page = parseInt(cheerio.load(link)('a').text());
+        const page = parseInt(cheerio.load(link)('.pagination-link').text());
+        if ((link.attribs['class'] || '').includes('pagination-item--current')) currentPage = page;
         if (page > pageCount) pageCount = page;
     });
-    const pageNumber = cheerio.load(row)('td div:first-child > b > a').text();
-    const page = parseInt(pageNumber) - 1;
-    return { page, pageCount };
+    return { page: currentPage, pageCount };
 };

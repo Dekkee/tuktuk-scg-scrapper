@@ -48,7 +48,7 @@ export class CardLayout extends React.Component<Props, State> {
         return (<div className="card-layout">
             <div className="card-layout__header">
                 <div className="card-layout__back-button" onClick={this.onBackClick}><ArrowIcon width={24} height={24} fill="#fff"/></div>
-                <div className="card-layout__name">{card && card.name.value}</div>
+                <div className="card-layout__name">{card && card.name}</div>
             </div>
             { isFetching ? <LoadingLabel/> : <CardDetails card={ card }/> }
         </div>);

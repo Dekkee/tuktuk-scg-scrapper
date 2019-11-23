@@ -15,7 +15,7 @@ export class CardDetails extends React.PureComponent<Props> {
 
         return (<article className="card-details">
             <div className="card-details__header">
-                <img className="card-details__img" src={ card.name.img } alt={ card.name.value }/>
+                <img className="card-details__img" src={ card.image } alt={ card.name }/>
             </div>
             <div className="card-prices">
                 {
@@ -28,11 +28,12 @@ export class CardDetails extends React.PureComponent<Props> {
                                     <div className="card" key={ index }>
                                         <div className="card__condition">{ card.condition }</div>
                                         <div className="card__price">
-                                            {
-                                                card.price && card.price.slice(0, -1).map((p, i) =>
-                                                    <div className={ cn('card__discount') } key={ i }><Price value={p} /></div>)
-                                            }
-                                            { card.price && card.price[card.price.length - 1] ? <Price className="card__price-total" value={card.price[card.price.length - 1]}/> : null }
+                                            {/* todo: скидка */}
+                                            {/*{*/}
+                                            {/*    card.price && card.price.slice(0, -1).map((p, i) =>*/}
+                                            {/*        <div className={ cn('card__discount') } key={ i }><Price value={p} /></div>)*/}
+                                            {/*}*/}
+                                            { card.price && <Price className="card__price-total" value={card.price}/>  }
                                             { isNaN(Number(card.stock)) &&
                                             <div className="card__stock">{ card.stock }</div> }
                                         </div>
@@ -43,7 +44,7 @@ export class CardDetails extends React.PureComponent<Props> {
                 }
             </div>
             <div className="card-details__content">
-                <div className="card-details__set" ><b>Set: </b><a href={ card.set.href }>{ card.set.value }</a></div>
+                <div className="card-details__set" ><b>Set: </b>{ card.set }</div>
                 <div className="card-details__card-type"><b>Card type: </b>{ card.type }</div>
                 {
                     card.creatureType &&
@@ -56,17 +57,13 @@ export class CardDetails extends React.PureComponent<Props> {
                 {
                     card.cardText && <div className="card-details__text">
                         <b>Card text:</b>
-                        { card.cardText.reminder &&
-                        <div className="card-details__text_reminder">{ card.cardText.reminder }</div> }
-                        { card.cardText.text }
+                        { card.cardText }
                     </div>
                 }
                 {
                     card.oracleText && <div className="card-details__oracle">
                         <b>Oracle text:</b>
-                        { card.oracleText.reminder &&
-                        <div className="card-details__oracle_reminder">{ card.oracleText.reminder }</div> }
-                        { card.oracleText.text }
+                        { card.oracleText }
                     </div>
                 }
                 {

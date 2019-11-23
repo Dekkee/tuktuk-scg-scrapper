@@ -1,46 +1,31 @@
-export interface RowName {
-    href: string;
-    value: string;
-    img: string;
-}
-
-export interface RowLink {
-    href: string;
-    value: string;
-}
-
 export interface RowHeader {
-    name: Partial<RowName>;
-    set: Partial<RowLink>;
-}
-
-export interface ReminableText {
-    reminder?: string;
-    text: string;
+    id: number;
+    name: string;
+    meta: string;
+    set: string;
+    rarity: string;
+    color: string;
 }
 
 export interface ConditionAndPrice {
-    condition: {
-        href: string;
-        value: string;
-    };
-    price: string[];
-    rarity: string;
-    stock: string;
+    condition: string;
+    price: number;
+    stock: number;
 }
 
 export interface RowBody {
     mana: string;
     type: string;
     pt: string;
-    cardText: ReminableText;
-    oracleText: ReminableText;
-    artist: string;
-    loyalty: string;
+    cardText: string;
+    oracleText: string;
+    artist: string
     subtype: string;
     flavorText: string;
     creatureType: string;
     rarity?: string;
+    collectorNumber?: string;
+    image: string;
 }
 
 export type RawRow = Partial<RowHeader> & Partial<RowBody>;
