@@ -5,6 +5,7 @@ export interface RowHeader {
     set: string;
     rarity: string;
     color: string;
+    foil: boolean;
 }
 
 export interface ConditionAndPrice {
