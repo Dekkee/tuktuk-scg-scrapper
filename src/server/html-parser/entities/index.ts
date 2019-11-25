@@ -21,14 +21,16 @@ export type cardSet = {
     'original-set': string;
     set: string;
     'set-meta': string;
+    foil: boolean;
 }
 
 export const parseSet = (originalSet: string): cardSet => {
-    const [, setMeta, set] = originalSet.match(/SHOP\/(?:([\w\/\s]+)\/)?([\w\s&]+)/) || [];
+    const [, setMeta, set, foil] = originalSet.match(/SHOP\/(?:([\w\/\s]+)\/)?([\w\s&]+)\s*(\(Foil\))?/) || [];
     return {
         'original-set': originalSet,
         set: set.trim(),
         'set-meta': setMeta,
+        foil: !!foil,
     };
 };
 

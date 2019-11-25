@@ -11,6 +11,10 @@ export const parseScgGetAnswer = async (input: string): Promise<ScgGetResponse> 
     // id
     const id = +desc.attr('data-entity-id');
 
+    if (!id) {
+        return null;
+    }
+
     // Name
     const nameContainer = dom('.mobile-product-title');
     const name = parseName(nameContainer.text());
