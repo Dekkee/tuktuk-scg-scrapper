@@ -9,7 +9,7 @@ export type cardName = {
 }
 
 export const parseName = (originalName: string): cardName => {
-    const [, name, meta] = originalName.match(/([\w\s-]+)(?:\[([\w-]+)\])?/) || [];
+    const [, name, meta] = originalName.match(/([\w\s-'\/]+)(?:\[([\w-]+)\])?/) || [];
     return {
         'original-name': originalName,
         name: name.trim(),
