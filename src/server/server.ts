@@ -21,7 +21,7 @@ app.use(compression({ threshold: 0 }));
 app.use(express.static('dist'));
 
 app.get('/api/list', async function (req, resp) {
-    const preparedName = req.query.name.replace(/[\/\\]/, '').replace(/\s+/, '+');
+    const preparedName = req.query.name.replace(/[\/\\,\.']/, '').replace(/\s+/, '+');
     const query = querystring.stringify({
         search_query: preparedName,
         page: req.query.page || 1,
@@ -33,8 +33,9 @@ app.get('/api/list', async function (req, resp) {
 
 app.get('/api/get', async function (req, resp) {
     const id = decodeURIComponent(req.query.name);
+    const preparedName = id.replace(/[\/\\,\.']/, '').replace(/\s+/, '+');
 
-    const answer = await (await fetch(`https://www.starcitygames.com/${id}`)).text();
+    const answer = await (await fetch(`https://www.starcitygames.com/${preparedName}`)).text();
     resp.status(200).send(await parseScgGetAnswer(answer));
 });
 
