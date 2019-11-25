@@ -21,7 +21,7 @@ app.use(compression({ threshold: 0 }));
 app.use(express.static('dist'));
 
 app.get('/api/list', async function (req, resp) {
-    const preparedName = req.query.name.replace(/[\/\\]/, '');
+    const preparedName = req.query.name.replace(/[\/\\]/, '').replace(/\s+/, '+');
     const query = querystring.stringify({
         search_query: preparedName,
         page: req.query.page || 1,
