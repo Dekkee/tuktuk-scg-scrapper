@@ -21,7 +21,7 @@ app.use(compression({ threshold: 0 }));
 app.use(express.static('dist'));
 
 app.get('/api/list', async function (req, resp) {
-    const preparedName = req.query.name.replace(/[\/\\,\.']/g, '').replace(/\s+/g, '+');
+    const preparedName = req.query.name.replace(/[\/\\,\.']/g, '').replace(/\s+/, '+');
     const queryObject = {
         search_query: preparedName,
         page: req.query.page || 1,
@@ -29,6 +29,7 @@ app.get('/api/list', async function (req, resp) {
     const query = querystring.stringify(queryObject);
     console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.page}`);
 
+    console.log(`list request: ${req.query.name} -> ${preparedName}`);
     const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
     resp.status(200).send(await parseScgListAnswer(answer));
 });
