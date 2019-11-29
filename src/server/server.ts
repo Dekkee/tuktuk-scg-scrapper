@@ -29,7 +29,6 @@ app.get('/api/list', async function (req, resp) {
     const query = querystring.stringify(queryObject);
     console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.page}`);
 
-    console.log(`list request: ${req.query.name} -> ${preparedName}`);
     const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
     resp.status(200).send(await parseScgListAnswer(answer));
 });
