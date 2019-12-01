@@ -53,6 +53,7 @@ export const fillCardPrices = async (cards: Partial<ParsedRow>[]) => {
             if (card.condition) card.condition = parseCondition(card.condition);
             row.cards.push(card);
         });
+        row.cards.sort((a, b) => (conditionMap[b.condition] || 0) - (conditionMap[a.condition] || 0));
         cb(null, row);
     });
 };
@@ -62,7 +63,16 @@ const parseCondition = (cond: string) => {
         case 'Played': return 'PL';
         case 'Heavily Played': return 'HP';
         case 'Near Mint': return 'NM';
+        case 'Damaged': return 'DM';
         default:
             return cond;
     }
+};
+
+
+const conditionMap = {
+    NM: 4,
+    PL: 3,
+    HP: 2,
+    DM: 1,
 };
