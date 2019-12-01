@@ -3,7 +3,7 @@ version: '3'
 services:
   sosemivigelant-scg:
     build:
-      image: registry.dekker.gdn/tuktuk-scg-scrapper
       context: .
       dockerfile: Dockerfile
+    image: registry.dekker.gdn/tuktuk-scg-scrapper
     restart: always
