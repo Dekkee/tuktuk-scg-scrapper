@@ -26,6 +26,7 @@ app.get('/api/list', async function (req, resp) {
         .replace(/[\/\\,\.']/g, '')
         // the-of-etc
         .replace(/(\s)the|of(\s)/gi, '$1')
+        .replace(/^the|of(\s)/gi, '$1')
         // space into +
         .replace(/\s+/g, '+');
     const queryObject = {
