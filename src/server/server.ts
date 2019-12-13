@@ -25,8 +25,8 @@ app.get('/api/list', async function (req, resp) {
         // bad symbols
         .replace(/[\/\\,\.']/g, '')
         // the-of-etc
-        .replace(/(?:(\s)the|of|a)+(\s)/gi, '$1')
-        .replace(/^the|of|a(\s)/gi, '$1')
+        .replace(/(?:(\s)the|of|a|to)+(\s)/gi, '$1$2')
+        .replace(/^(?:the|of|a|to)(\s)/gi, '$1')
         // space into +
         .replace(/\s+/g, '+');
     const queryObject = {
