@@ -9,6 +9,7 @@ import { parseScgListAnswer } from "./html-parser/list";
 import { parseScgGetAnswer } from './html-parser/get';
 import * as path from 'path';
 import { suggest } from './suggest';
+import { prepareUrl } from './urlPreparation';
 
 const compression = require('compression');
 const app = express()
@@ -21,14 +22,7 @@ app.use(compression({ threshold: 0 }));
 app.use(express.static('dist'));
 
 app.get('/api/list', async function (req, resp) {
-    const preparedName = req.query.name
-        // bad symbols
-        .replace(/[\/\\,\.']/g, '')
-        // the-of-etc
-        .replace(/(?:(\s)the|of|a|to)+(\s)/gi, '$1$2')
-        .replace(/^(?:the|of|a|to)(\s)/gi, '$1')
-        // space into +
-        .replace(/\s+/g, '+');
+    const preparedName = prepareUrl(req.query.name);
     const queryObject = {
         search_query: preparedName,
         page: req.query.page || 1,
