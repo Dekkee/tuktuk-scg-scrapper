@@ -1,7 +1,5 @@
 import * as cheerio from 'cheerio';
 import { ParsedRow } from '../../entities/Row';
-import fetch from 'node-fetch';
-import * as async from 'async';
 import { fillCardPrices, parseName, parseSet } from './entities';
 
 type ScgPaging = {
