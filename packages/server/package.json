@@ -6,7 +6,8 @@
     "update-index": "node --max_old_space_size=8192 -r ts-node/register ./suggest/generator/scryfall",
     "build": "tsc -b",
     "dev": "nodemon",
-    "test": "../../node_modules/.bin/jest --colors"
+    "test": "../../node_modules/.bin/jest --colors",
+    "test:ci": "jest --ci --reporters=default --reporters=jest-github-reporter"
   },
   "dependencies": {
     "@tuktuk-scg-scrapper/common": "0.0.1",
