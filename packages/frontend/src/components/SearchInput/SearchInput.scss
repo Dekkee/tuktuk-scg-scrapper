@@ -1,0 +1,88 @@
+@import "../../palette";
+
+.search {
+    &-container {
+        display: flex;
+        font-size: 15pt;
+        color: inherit;
+        overflow: hidden;
+        box-sizing: border-box;
+        background: tuktuk-color('secondary-light');
+        padding: 12px 16px;
+    }
+
+    &-panel {
+        position: relative;
+        display: flex;
+        flex: 1;
+        cursor: pointer;
+        border-radius: 18px;
+        background: tuktuk-color('background');
+        align-items: center;
+        box-sizing: border-box;
+        padding: 6px 8px;
+
+        &__label {
+            display: contents;
+        }
+
+        input {
+            border: 0;
+            font-size: 16px;
+            line-height: 24px;
+            padding: 0;
+            color: inherit;
+            outline: none;
+            width: 100%;
+            margin-left: 12px;
+
+            &:focus, &:valid {
+                & + .search-label {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
+    &-label {
+        position: absolute;
+        left: 40px;
+        transition: 0.2s;
+        display: flex;
+        flex: 0 0 auto;
+        color: tuktuk-color('secondary-dark');
+    }
+
+    &-icon {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        fill: tuktuk-color('secondary-dark');
+    }
+
+    &-cross {
+        cursor: pointer;
+        width: 30px;
+        line-height: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+
+        &--hidden {
+            visibility: hidden;
+        }
+    }
+
+    &-button {
+        background: none;
+        border: 0;
+        outline: none;
+        font: inherit;
+        font-size: 16px;
+        color: tuktuk-color('background');
+        padding: 0 0 0 20px;
+        cursor: pointer;
+        display: none;
+    }
+}

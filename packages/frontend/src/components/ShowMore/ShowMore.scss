@@ -1,0 +1,11 @@
+@import "../../palette";
+.show-more {
+    &__container {
+        margin: 0 10px 50px 10px;
+        display: flex;
+        justify-content: center;
+    }
+    &__button {
+        width: 50%;
+    }
+}
