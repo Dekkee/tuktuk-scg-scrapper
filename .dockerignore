@@ -1,4 +1,6 @@
- # Sample contents of .dockerignore file
- bin/
- obj/
- node_modules/
+# Sample contents of .dockerignore file
+obj/
+node_modules/
+.idea/
+.git/
+dist/

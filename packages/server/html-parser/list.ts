@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
-import { ParsedRow } from '../../common/Row';
+import { ParsedRow } from '@tuktuk-scg-scrapper/common/Row';
 import { fillCardPrices, parseName, parseSet } from './entities';
-import { Paging } from '../../common/Paging';
+import { Paging } from '@tuktuk-scg-scrapper/common/Paging';
 
 export const parseScgListAnswer = async (input: string) => {
     const dom = cheerio.load(input);

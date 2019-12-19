@@ -1,7 +1,7 @@
 import * as cheerio from 'cheerio';
-import { ParsedRowDetails } from '../../common/Row';
+import { ParsedRowDetails } from '@tuktuk-scg-scrapper/common/Row';
 import { fillCardPrices, parseName } from './entities';
-import { GetResponse } from '../../common/Response';
+import { GetResponse } from '@tuktuk-scg-scrapper/common/Response';
 
 export const parseScgGetAnswer = async (input: string): Promise<GetResponse> => {
     const dom = cheerio.load(input);

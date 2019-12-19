@@ -1,26 +1,30 @@
 {
-    "name": "tuktuk-scg-scrapper",
-    "version": "0.1.0",
-    "description": "The starcitygames.com shop price srapper",
-    "homepage": "https://scg.dekker.gdn",
-    "email": "dekker25@gmail.com",
-    "scripts": {
-        "build": "lerna run build --stream",
-        "dev": "lerna run dev --stream",
-        "test": "lerna run test --stream"
-    },
-    "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
-    "main": "index.js",
-    "author": "Dekker",
-    "license": "MIT",
-    "private": false,
-    "dependencies": {
-        "lerna": "^3.19.0",
-        "typescript": "^3.0.1"
-    },
-    "devDependencies": {
-        "@types/jest": "^24.0.23",
-        "is-docker": "^2.0.0",
-        "jest": "^24.9.0"
-    }
+  "name": "tuktuk-scg-scrapper",
+  "version": "0.1.0",
+  "description": "The starcitygames.com shop price srapper",
+  "homepage": "https://scg.dekker.gdn",
+  "email": "dekker25@gmail.com",
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build --stream",
+    "dev": "lerna run dev --stream",
+    "test": "lerna run test --stream",
+    "docker:build": "docker-compose build",
+    "analyze:node_modules": "cost-of-modules --yarn --less"
+  },
+  "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
+  "main": "index.js",
+  "author": "Dekker",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "is-docker": "^2.0.0",
+    "jest": "^24.9.0",
+    "lerna": "^3.20.2",
+    "typescript": "^3.0.1"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

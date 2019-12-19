@@ -1,6 +1,6 @@
 import * as async from 'async';
 import fetch from 'node-fetch';
-import { ParsedRow } from '../../../common/Row';
+import { ParsedRow } from '@tuktuk-scg-scrapper/common/Row';
 
 export type cardName = {
     'original-name': string;

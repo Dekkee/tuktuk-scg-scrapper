@@ -107,7 +107,7 @@ module.exports = (env) => {
         },
         devServer: {
             compress: true,
-            contentBase: './dist',
+            contentBase: '../../dist',
             hot: true,
             historyApiFallback: true,
         },
@@ -119,7 +119,7 @@ module.exports = (env) => {
             }), {})
         } : {},
         output: {
-            path: path.resolve(__dirname, 'dist'),
+            path: path.resolve(__dirname, '../../dist'),
             publicPath: '/',
         },
         optimization: isProd ? {
