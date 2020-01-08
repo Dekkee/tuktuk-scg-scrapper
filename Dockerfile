@@ -3,6 +3,7 @@ FROM node:12-alpine as front
 
 WORKDIR /home/app
 ENV NODE_ENV=production
+RUN apk update && apk upgrade && apk add --no-cache bash git openssh
 
 COPY package.json yarn.lock lerna.json /home/app/
 COPY packages/frontend/package.json /home/app/packages/frontend/
@@ -23,6 +24,7 @@ FROM node:12-alpine as server
 
 WORKDIR /home/app
 ENV NODE_ENV=production
+RUN apk update && apk upgrade && apk add --no-cache bash git openssh
 
 COPY package.json yarn.lock lerna.json /home/app/
 COPY packages/server/package.json /home/app/packages/server/
@@ -41,6 +43,7 @@ FROM node:12-alpine
 
 WORKDIR /home/app
 ENV NODE_ENV=production
+RUN apk update && apk upgrade && apk add --no-cache bash git openssh
 
 COPY package.json yarn.lock lerna.json /home/app/
 COPY packages/server/package.json /home/app/packages/server/
