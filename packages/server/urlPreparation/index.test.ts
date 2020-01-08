@@ -12,7 +12,7 @@ const testCases = [
     { input: 'Quest for Ancient Secrets', output: 'Quest for Ancient+Secrets' },
     { input: 'Yawgmoth\'s Will', output: 'Yawgmoth\'s Will' },
     { input: 'Nissa\'s Triumph', output: 'Nissa\'s+Triumph' },
-    { input: 'Oona, Queen of the Fae', output: 'Oona, Queen of the+Fae' },
+    { input: 'O1ona, Queen of the Fae', output: 'Oona, Queen of the+Fae' },
 ];
 
 describe('urlPreparation', () => {
