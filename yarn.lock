@@ -6827,9 +6827,9 @@ jest-get-type@^24.9.0:
   resolved "https://registry.yarnpkg.com/jest-get-type/-/jest-get-type-24.9.0.tgz#1684a0c8a50f2e4901b6644ae861f579eed2ef0e"
   integrity sha512-lUseMzAley4LhIcpSP9Jf+fTrQ4a1yHQwLNeeVa2cEmbCGeoZAtYPOIv8JaxLD/sUpKxetKGP+gsHl8f8TSj8Q==
 
-"jest-github-reporter@git+https://github.com/Dekkee/jest-github-reporter.git#forky_fork":
+jest-github-reporter@Dekkee/jest-github-reporter#forky_fork:
   version "0.3.4"
-  resolved "git+https://github.com/Dekkee/jest-github-reporter.git#55994b598435ab0a37cd9b71657ceccad65768e4"
+  resolved "https://codeload.github.com/Dekkee/jest-github-reporter/tar.gz/55994b598435ab0a37cd9b71657ceccad65768e4"
   dependencies:
     "@octokit/rest" "^16.28.7"
     create-check "git+https://github.com/Dekkee/create-check.git#forky_fork"
