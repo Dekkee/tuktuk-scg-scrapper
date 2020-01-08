@@ -5,7 +5,7 @@ import * as colors from 'colors';
 import * as cors from 'cors';
 import * as querystring from 'querystring';
 import fetch from 'node-fetch';
-import { parseScgListAnswer } from "./html-parser/list";
+import { parseScgListAnswer } from './html-parser/list';
 import { parseScgGetAnswer } from './html-parser/get';
 import * as path from 'path';
 import { suggest } from './suggest';
@@ -46,6 +46,13 @@ app.get('/api/get', async function (req, resp) {
 app.get('/api/suggest', async function (req, resp) {
     const id = decodeURIComponent(req.query.name);
     resp.status(200).send(suggest(id));
+});
+
+app.get('/api/version', async function (req, resp) {
+    resp.status(200).send({
+        version: require('./package.json').version,
+        buildNumber: process.env.BUILD_NUMBER,
+    });
 });
 
 app.get('*', function (req, resp) {

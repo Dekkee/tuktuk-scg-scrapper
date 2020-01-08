@@ -1,6 +1,6 @@
 {
   "name": "@tuktuk-scg-scrapper/server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "start": "ts-node ./server.ts",
     "update-index": "node --max_old_space_size=8192 -r ts-node/register ./suggest/generator/scryfall",

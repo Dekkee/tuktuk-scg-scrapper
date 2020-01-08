@@ -52,5 +52,8 @@ COPY --from=front /home/app/dist /home/app/dist/
 COPY --from=server /home/app/packages/server/dist /home/app/
 COPY --from=server /home/app/packages/server/data /home/app/data/
 
+ARG TEAMCITY_BUILD_NUMBER
+ENV BUILD_NUMBER=$TEAMCITY_BUILD_NUMBER
+
 ENTRYPOINT [ "node", "server.js" ]
 EXPOSE 8081

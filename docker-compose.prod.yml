@@ -6,6 +6,4 @@ services:
       - "8081:8081"
     environment:
       - NODE_ENV=production
-    build:
-      args:
-        TEAMCITY_BUILD_NUMBER: ${BUILD_NUMBER}
+    image: registry.dekker.gdn/tuktuk-scg-scrapper:stable
