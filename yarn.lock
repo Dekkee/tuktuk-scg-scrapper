@@ -4758,7 +4758,7 @@ entities@^2.0.0:
   resolved "http://storage.mds.yandex.net/get-npm/1893309/entities-2.0.0.tgz#68d6084cab1b079767540d80e56a39b423e4abf4"
   integrity sha512-D9f7V0JSRwIxlRI2mjMqufDrRDnx8p+eEOz7aUM9SuvF8gsBzra0/6tbjl1m8eQHrZlYj6PxqE00hZ1SAIKPLw==
 
-env-ci@^4.1.1, env-ci@^4.5.2:
+env-ci@^4.1.1:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/env-ci/-/env-ci-4.5.2.tgz#40b08825dcf4ed5b2cddd3d638190571cf96347a"
   integrity sha512-lS+edpNp2+QXEPkx6raEMIjKxKKWnJ4+VWzovYJ2NLYiJAYenSAXotFfVdgaFxdbVnvAbUI8epQDa1u12ERxfQ==
