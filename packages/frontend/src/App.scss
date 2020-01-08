@@ -1,0 +1,49 @@
+@import "palette";
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: tuktuk-color(accent);
+    color: tuktuk-color(foreground);
+    font-family: "Roboto", Arial, Helvetica, sans-serif;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+.main-container {
+    min-height: 100%;
+    background: tuktuk-color(background);
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-content: center;
+    margin: auto;
+    max-width: 768px;
+    padding-bottom: 50px;
+
+    @media (min-width: 768px) {
+        margin: 0;
+        margin-left: 300px;
+    }
+}
+
+.loading-container,
+.empty-container,
+.start-search-container {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.loading,
+.empty,
+.start-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

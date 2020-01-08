@@ -12,5 +12,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true
-  }
+  },
+  "exclude": [
+    "./**/*.test.*"
+  ]
 }

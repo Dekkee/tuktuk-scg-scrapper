@@ -1,0 +1,92 @@
+@import "../../palette";
+
+.card-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    align-items: center;
+    justify-items: center;
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    &__title {
+        font-size: 1.3em;
+    }
+
+    &__set {
+        a {
+            color: tuktuk-color(secondary-dark);
+        }
+    }
+
+    &__img {
+        display: block;
+        padding: 10px;
+        min-height: 310px;
+        max-height: 310px;
+    }
+
+    &__content {
+        display: grid;
+        grid-auto-rows: auto;
+        grid-template-columns: 1fr;
+        grid-row-gap: 20px;
+        padding: 20px;
+        justify-self: start;
+    }
+
+    &__prices {
+        display: grid;
+        grid-row-gap: 10px;
+        grid-template-columns: auto 1fr;
+        grid-column-gap: 10px;
+    }
+}
+
+.card-prices {
+    display: block;
+    width: 100%;
+
+    &__container {
+        padding: 20px;
+        background: tuktuk-color(primary-light);
+        color: tuktuk-color(foreground);
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}
+
+.card {
+    display: flex;
+    justify-content: space-between;
+
+    &__stock {
+        font-size: 0.9em;
+        font-weight: 600;
+        color: tuktuk-color(foreground);
+    }
+
+    &__condition {
+        margin-right: 20px;
+    }
+
+    &__price {
+        text-align: right;
+    }
+
+    &__discount {
+        text-decoration: line-through;
+    }
+}
