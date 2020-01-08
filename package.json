@@ -9,8 +9,8 @@
     "build": "lerna run build --stream",
     "dev": "lerna run dev --stream",
     "test": "lerna run test --stream",
-    "docker:build": "docker-compose build",
-    "analyze:node_modules": "cost-of-modules --yarn --less"
+    "test:ci": "lerna run test:ci --stream",
+    "docker:build": "docker-compose build"
   },
   "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
   "main": "index.js",
@@ -21,6 +21,7 @@
     "@types/jest": "^24.0.23",
     "is-docker": "^2.0.0",
     "jest": "^24.9.0",
+    "jest-github-reporter": "git+https://github.com/Dekkee/jest-github-reporter.git#forky_fork",
     "lerna": "^3.20.2",
     "typescript": "^3.0.1"
   },
