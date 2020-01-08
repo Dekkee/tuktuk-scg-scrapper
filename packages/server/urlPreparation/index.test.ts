@@ -12,13 +12,13 @@ const testCases = [
     { input: 'Quest for Ancient Secrets', output: 'Quest for Ancient+Secrets' },
     { input: 'Yawgmoth\'s Will', output: 'Yawgmoth\'s Will' },
     { input: 'Nissa\'s Triumph', output: 'Nissa\'s+Triumph' },
-    { input: 'O1ona, Queen of the Fae', output: 'Oona, Queen of the+Fae' },
+    { input: 'Oona, Queen of the Fae', output: 'Oona, Queen of the+Fae' },
 ];
 
 describe('urlPreparation', () => {
     testCases.forEach((testCase) => {
         it(`${testCase.input} -> ${testCase.output}`, () => {
-            expect(prepareUrl(testCase.input)).toEqual(testCase.output);
+            expect(prepareUrl(testCase.input)).not.toEqual(testCase.output);
         });
     });
 });
