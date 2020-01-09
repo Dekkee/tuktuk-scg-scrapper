@@ -17,4 +17,7 @@ async function applyTags() {
     console.log(`tag ${version}-${buildNumber} pushed`);
 }
 
-applyTags();
+applyTags().catch(e => {
+    console.error('Failed to push tags', e);
+    process.exit(1);
+});
