@@ -19,6 +19,7 @@
     "private": true,
     "devDependencies": {
         "@types/jest": "^24.0.23",
+        "github-release-notes": "^0.17.1",
         "husky": "^4.0.3",
         "is-docker": "^2.0.0",
         "jest": "^24.9.0",
