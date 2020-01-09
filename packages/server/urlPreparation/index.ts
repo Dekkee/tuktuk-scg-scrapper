@@ -1,8 +1,9 @@
-export const prepareUrl = (input: string) => input
-    // replace last space to +
-    .replace(/\s+(\S+)$/g, '+$1')
-    // hack: for some reason + before 'Will' breaks search query
-    .replace(/\+(will)/gi, ' $1');
+export const prepareUrl = (input: string) =>
+    input
+        // replace last space to +
+        .replace(/\s+(\S+)$/g, '+$1')
+        // hack: for some reason + before 'Will' breaks search query
+        .replace(/\+(will)/gi, ' $1');
 
 // old algorithm
 // bad symbols

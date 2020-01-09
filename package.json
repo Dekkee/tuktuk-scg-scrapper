@@ -1,31 +1,45 @@
 {
-  "name": "tuktuk-scg-scrapper",
-  "version": "0.1.2",
-  "description": "The starcitygames.com shop price srapper",
-  "homepage": "https://scg.dekker.gdn",
-  "email": "dekker25@gmail.com",
-  "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "build": "lerna run build --stream",
-    "dev": "lerna run dev --stream",
-    "test": "lerna run test --stream",
-    "test:ci": "lerna run test:ci --stream",
-    "docker:build": "docker-compose build"
-  },
-  "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
-  "main": "index.js",
-  "author": "Dekker",
-  "license": "MIT",
-  "private": true,
-  "devDependencies": {
-    "@types/jest": "^24.0.23",
-    "is-docker": "^2.0.0",
-    "jest": "^24.9.0",
-    "jest-github-reporter": "Dekkee/jest-github-reporter#forky_fork",
-    "lerna": "^3.20.2",
-    "typescript": "^3.0.1"
-  },
-  "workspaces": [
-    "packages/*"
-  ]
+    "name": "tuktuk-scg-scrapper",
+    "version": "0.1.2",
+    "description": "The starcitygames.com shop price srapper",
+    "homepage": "https://scg.dekker.gdn",
+    "email": "dekker25@gmail.com",
+    "scripts": {
+        "bootstrap": "lerna bootstrap",
+        "build": "lerna run build --stream",
+        "dev": "lerna run dev --stream",
+        "test": "lerna run test --stream",
+        "test:ci": "lerna run test:ci --stream",
+        "docker:build": "docker-compose build"
+    },
+    "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
+    "main": "index.js",
+    "author": "Dekker",
+    "license": "MIT",
+    "private": true,
+    "devDependencies": {
+        "@types/jest": "^24.0.23",
+        "husky": "^4.0.3",
+        "is-docker": "^2.0.0",
+        "jest": "^24.9.0",
+        "jest-github-reporter": "Dekkee/jest-github-reporter#forky_fork",
+        "lerna": "^3.20.2",
+        "lint-staged": "^9.5.0",
+        "prettier": "^1.19.1",
+        "typescript": "^3.0.1"
+    },
+    "workspaces": [
+        "packages/*"
+    ],
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{ts,js,css,json,md}": [
+            "prettier --write",
+            "git add"
+        ]
+    }
 }

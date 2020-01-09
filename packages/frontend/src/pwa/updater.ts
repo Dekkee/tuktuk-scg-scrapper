@@ -5,14 +5,14 @@ export type Params = {
     onUpdateReady: () => void;
     onUpdated: () => void;
     onUpdateFailed: () => void;
-}
+};
 
 export class Updater {
-    constructor (params: Params) {
+    constructor(params: Params) {
         OfflinePluginRuntime.install({ ...params });
     }
 
-    public performUpdate () {
+    public performUpdate() {
         OfflinePluginRuntime.applyUpdate();
     }
 }

@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import * as fs from "fs";
+import * as fs from 'fs';
 import { generateJson } from './generateJson';
 import { generateTypings } from './generateTypings';
 import { initializeIndex } from './generateIndex';
@@ -21,7 +21,9 @@ if (!fs.existsSync('./generated/schema')) {
 }
 
 const initialize = async () => {
-    let scryfall = fs.readFileSync('C:\\Users\\dekke\\Downloads\\scryfall-all-cards.json');
+    let scryfall = fs.readFileSync(
+        'C:\\Users\\dekke\\Downloads\\scryfall-all-cards.json'
+    );
     console.log('Generate schema');
     const json = JSON.parse(scryfall.toString());
     scryfall = null;

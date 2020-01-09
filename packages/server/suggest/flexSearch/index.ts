@@ -1,15 +1,13 @@
 import * as fs from 'fs';
 
-const FlexSearch = require("flexsearch");
+const FlexSearch = require('flexsearch');
 
 const index = new FlexSearch({
     split: /\s+| % /,
     doc: {
         id: 'id',
-        field: [
-            'search'
-        ]
-    }
+        field: ['search'],
+    },
 });
 
 export const getIndex = () => {
