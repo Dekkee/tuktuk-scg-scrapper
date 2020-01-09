@@ -20,7 +20,7 @@ export interface RowBody {
     pt: string;
     cardText: string;
     oracleText: string;
-    artist: string
+    artist: string;
     subtype: string;
     flavorText: string;
     creatureType: string;
@@ -30,5 +30,8 @@ export interface RowBody {
 }
 
 export type RawRow = Partial<RowHeader> & Partial<RowBody>;
-export type ParsedRow = Partial<RowHeader> & { cards: Partial<ConditionAndPrice>[] };
-export type ParsedRowDetails = Partial<RowHeader> & Partial<RowBody> & { cards: Partial<ConditionAndPrice>[] };
+export type ParsedRow = Partial<RowHeader> & {
+    cards: Partial<ConditionAndPrice>[];
+};
+export type ParsedRowDetails = Partial<RowHeader> &
+    Partial<RowBody> & { cards: Partial<ConditionAndPrice>[] };

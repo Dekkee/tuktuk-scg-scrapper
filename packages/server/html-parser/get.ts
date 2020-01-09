@@ -3,7 +3,9 @@ import { ParsedRowDetails } from '@tuktuk-scg-scrapper/common/Row';
 import { fillCardPrices, parseName } from './entities';
 import { GetResponse } from '@tuktuk-scg-scrapper/common/Response';
 
-export const parseScgGetAnswer = async (input: string): Promise<GetResponse> => {
+export const parseScgGetAnswer = async (
+    input: string
+): Promise<GetResponse> => {
     const dom = cheerio.load(input);
     const desc = dom('.productView');
 
@@ -35,11 +37,15 @@ export const parseScgGetAnswer = async (input: string): Promise<GetResponse> => 
     const subtype = subtypeElement.text().trim();
 
     // Oracle Text
-    const oracleTextElement = dom(desc).find("[id='custom-field--Oracle Text']");
+    const oracleTextElement = dom(desc).find(
+        "[id='custom-field--Oracle Text']"
+    );
     const oracleText = oracleTextElement.text().trim();
 
     // Flavor Text
-    const flavorTextElement = dom(desc).find("[id='custom-field--Flavor Text']");
+    const flavorTextElement = dom(desc).find(
+        "[id='custom-field--Flavor Text']"
+    );
     const flavorText = flavorTextElement.text().trim();
 
     // Power / Toughness
@@ -51,7 +57,9 @@ export const parseScgGetAnswer = async (input: string): Promise<GetResponse> => 
     const artist = artistElement.text().trim();
 
     // Collector Number
-    const collectorNumberElement = dom(desc).find("[id='custom-field--Collector Number']");
+    const collectorNumberElement = dom(desc).find(
+        "[id='custom-field--Collector Number']"
+    );
     const collectorNumber = collectorNumberElement.text().trim();
 
     // Rarity

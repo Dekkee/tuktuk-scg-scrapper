@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import * as fs from "fs";
+import * as fs from 'fs';
 import { generateJson } from './generateJson';
 import { generateTypings } from './generateTypings';
 import { initializeIndex } from './generateIndex';
@@ -27,10 +27,16 @@ const initialize = async () => {
         const resp = await fetch(url);
         console.log(`Is OK: ${resp.ok}`);
         try {
-            const json = await (resp).json();
+            const json = await resp.json();
             console.log('Store json');
-            fs.writeFileSync('./generated/source/AllCards.json', JSON.stringify(json));
-            fs.writeFileSync('./generated/source/meta.json', JSON.stringify(meta));
+            fs.writeFileSync(
+                './generated/source/AllCards.json',
+                JSON.stringify(json)
+            );
+            fs.writeFileSync(
+                './generated/source/meta.json',
+                JSON.stringify(meta)
+            );
             console.log('Generate schema');
             generateJson('card', Object.values(json));
             console.log('Generate typings');
@@ -39,7 +45,6 @@ const initialize = async () => {
         } catch (e) {
             console.error('failed to initialize', e);
         }
-
     }
 };
 

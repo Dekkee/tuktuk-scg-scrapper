@@ -1,15 +1,13 @@
-import * as fs from "fs";
+import * as fs from 'fs';
 
-const FlexSearch = require("flexsearch");
+const FlexSearch = require('flexsearch');
 
 const index = new FlexSearch({
     split: /\s+| % /,
     doc: {
         id: 'id',
-        field: [
-            'search'
-        ]
-    }
+        field: ['search'],
+    },
 });
 
 if (!fs.existsSync('./data')) {
@@ -18,12 +16,12 @@ if (!fs.existsSync('./data')) {
 
 const filteredLayouts = new Set(['art_series', 'emblem']);
 
-export const initializeIndex = async (json) => {
+export const initializeIndex = async json => {
     let values;
     values = Object.values(json);
 
     const map = {};
-    values.forEach((card) => {
+    values.forEach(card => {
         if (filteredLayouts.has(card.layout)) {
             return;
         }
@@ -34,9 +32,9 @@ export const initializeIndex = async (json) => {
                 map[card.name] = {
                     names: new Set([card.printed_name, card.name]),
                     text: card.oracle_text,
-                }
+                };
             } else {
-                map[card.name].names.add(card.printed_name || card.name)
+                map[card.name].names.add(card.printed_name || card.name);
             }
             if (isRu) {
                 map[card.name].localizedName = card.printed_name || card.name;
@@ -44,11 +42,11 @@ export const initializeIndex = async (json) => {
             if (Array.isArray(card.card_faces)) {
                 map[card.name].text = '';
                 map[card.name].localizedName = '';
-                card.card_faces.forEach((face) => {
+                card.card_faces.forEach(face => {
                     map[card.name].names.add(face.printed_name || face.name);
                     map[card.name].text += `${face.oracle_text} `;
                     map[card.name].localizedName += `${face.printed_name} `;
-                })
+                });
             }
         }
     });
@@ -60,7 +58,10 @@ export const initializeIndex = async (json) => {
             search: `${[...value.names.values()].reverse().join(' % ')}`,
             card: {
                 name: key,
-                text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
+                text:
+                    value.text && value.text.length > 70
+                        ? `${value.text.slice(0, 70)}...`
+                        : value.text,
                 localizedName: value.localizedName,
             },
         });

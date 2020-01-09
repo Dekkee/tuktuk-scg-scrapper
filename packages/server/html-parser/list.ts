@@ -18,7 +18,10 @@ export const parseScgListAnswer = async (input: string) => {
         });
     }
     await fillCardPrices(parsedRows);
-    return { rows: parsedRows, ...parsePages(dom('.pagination .pagination-list')) };
+    return {
+        rows: parsedRows,
+        ...parsePages(dom('.pagination .pagination-list')),
+    };
 };
 
 const parseRow = (row: CheerioElement): Partial<ParsedRow> => {
@@ -26,8 +29,16 @@ const parseRow = (row: CheerioElement): Partial<ParsedRow> => {
     return {
         ...parseName($('.--Name .listItem-title a').text()),
         ...parseSet($('.--Condition .category-row-name-search').text()),
-        rarity: $('.--Rarity p').children().remove().end().text(),
-        color: $('.--Color p').children().remove().end().text(),
+        rarity: $('.--Rarity p')
+            .children()
+            .remove()
+            .end()
+            .text(),
+        color: $('.--Color p')
+            .children()
+            .remove()
+            .end()
+            .text(),
     };
 };
 
@@ -36,8 +47,13 @@ const parsePages = (element: Cheerio): Paging => {
     let pageCount = 1;
     let currentPage = 1;
     links.each((index, link) => {
-        const page = parseInt(cheerio.load(link)('.pagination-link').text());
-        if ((link.attribs['class'] || '').includes('pagination-item--current')) currentPage = page;
+        const page = parseInt(
+            cheerio
+                .load(link)('.pagination-link')
+                .text()
+        );
+        if ((link.attribs['class'] || '').includes('pagination-item--current'))
+            currentPage = page;
         if (page > pageCount) pageCount = page;
     });
     return { page: currentPage, pageCount };

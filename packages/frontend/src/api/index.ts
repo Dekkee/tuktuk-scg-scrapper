@@ -5,13 +5,15 @@ import 'whatwg-fetch';
 import { AutocompleteCard } from '../../../common/AutocompleteCard';
 import { GetResponse, ListResponse } from '../../../common/Response';
 
-const url = process.env.NODE_ENV === 'production'
-    ? ''
-    : '//localhost:8081';
+const url = process.env.NODE_ENV === 'production' ? '' : '//localhost:8081';
 
 let controller = null;
 
-export const searchByName = async (value: string, isAutocompletion: boolean, page: number = 0) => {
+export const searchByName = async (
+    value: string,
+    isAutocompletion: boolean,
+    page: number = 0
+) => {
     if (!value) {
         return;
     }
@@ -23,9 +25,13 @@ export const searchByName = async (value: string, isAutocompletion: boolean, pag
         const query = stringify({
             name: value,
             page: page || null,
-            auto: isAutocompletion
+            auto: isAutocompletion,
         });
-        return await (await fetch(`${url}/api/list?${query}`, { signal: controller.signal })).json() as ListResponse;
+        return (await (
+            await fetch(`${url}/api/list?${query}`, {
+                signal: controller.signal,
+            })
+        ).json()) as ListResponse;
     } catch (e) {
         const domException = e as DOMException;
         // ignore abortError
@@ -50,7 +56,11 @@ export const getCard = async (value: string) => {
         const query = stringify({
             name: value,
         });
-        return await (await fetch(`${url}/api/get?${query}`, { signal: controller.signal })).json() as GetResponse;
+        return (await (
+            await fetch(`${url}/api/get?${query}`, {
+                signal: controller.signal,
+            })
+        ).json()) as GetResponse;
     } catch (e) {
         const domException = e as DOMException;
         // ignore abortError
@@ -63,7 +73,9 @@ export const getCard = async (value: string) => {
     }
 };
 
-export const autocomplete = async (text: string): Promise<Record<string, AutocompleteCard> | undefined> => {
+export const autocomplete = async (
+    text: string
+): Promise<Record<string, AutocompleteCard> | undefined> => {
     const query = stringify({
         name: text,
     });

@@ -1,19 +1,19 @@
 export type Procedure = (...args: any[]) => void;
 
 export type Options = {
-    isImmediate: boolean,
-}
+    isImmediate: boolean;
+};
 
 export function debounce<F extends Procedure>(
     func: F,
     waitMilliseconds = 50,
     options: Options = {
-        isImmediate: false
-    },
+        isImmediate: false,
+    }
 ): F & { cancel: VoidFunction } {
     let timeoutId: number | undefined;
 
-    const debounced =  function(this: any, ...args: any[]) {
+    const debounced = function(this: any, ...args: any[]) {
         const context = this;
 
         const doLater = function() {
@@ -34,13 +34,13 @@ export function debounce<F extends Procedure>(
         if (shouldCallNow) {
             func.apply(context, args);
         }
-    } as any
+    } as any;
 
     debounced.cancel = () => {
         if (timeoutId) {
             clearTimeout(timeoutId);
-          }
-    }
+        }
+    };
 
     return debounced;
 }
