@@ -10,6 +10,7 @@
         "dev": "lerna run dev --stream",
         "test": "lerna run test --stream",
         "test:ci": "lerna run test:ci --stream",
+        "update-index": "node --max_old_space_size=8192 -r ts-node/register ./tools/generator/scryfall",
         "docker:build": "docker-compose build"
     },
     "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
@@ -19,6 +20,7 @@
     "private": true,
     "devDependencies": {
         "@types/jest": "^24.0.23",
+        "axios": "^0.19.1",
         "github-release-notes": "^0.17.1",
         "husky": "^4.0.3",
         "is-docker": "^2.0.0",
@@ -27,6 +29,8 @@
         "lerna": "^3.20.2",
         "lint-staged": "^9.5.0",
         "prettier": "^1.19.1",
+        "pretty-bytes": "^5.3.0",
+        "progress": "^2.0.3",
         "typescript": "^3.0.1"
     },
     "workspaces": [
@@ -38,7 +42,7 @@
         }
     },
     "lint-staged": {
-        "*.{ts,js,css,json,md}": [
+        "!(*generated).{ts,js,css,json,md}": [
             "prettier --write",
             "git add"
         ]
