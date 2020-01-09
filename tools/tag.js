@@ -10,7 +10,13 @@ async function applyTags() {
     console.log(`setting tag: ${version}-${buildNumber}`);
     // await exec(`git tag ${version}-${buildNumber}`);
     // await exec(`git push origin ${version}-${buildNumber}`);
+    await exec(
+        `docker tag registry.dekker.gdn/tuktuk-scg-scrapper:latest registry.dekker.gdn/tuktuk-scg-scrapper:stable`
+    );
     await exec(`docker push registry.dekker.gdn/tuktuk-scg-scrapper:stable`);
+    await exec(
+        `docker tag registry.dekker.gdn/tuktuk-scg-scrapper:latest registry.dekker.gdn/tuktuk-scg-scrapper:${version}-${buildNumber}`
+    );
     await exec(`docker push registry.dekker.gdn/tuktuk-scg-scrapper:${version}-${buildNumber}`);
     console.log(`tag ${version}-${buildNumber} pushed`);
 }
