@@ -21,6 +21,7 @@
         "lodash": "^4.17.10",
         "morgan": "^1.9.0",
         "node-fetch": "^2.6.0",
+        "prom-client": "^11.5.3",
         "query-string": "^6.2.0",
         "whatwg-fetch": "^3.0.0"
     },
@@ -40,11 +41,11 @@
     },
     "nodemonConfig": {
         "watch": [
-            "src"
+            "."
         ],
         "ext": "ts",
         "ignore": [
-            "src/**/*.spec.ts"
+            "./**/*.spec.ts"
         ],
         "exec": "ts-node ./server.ts"
     }
