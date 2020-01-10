@@ -20,6 +20,12 @@ const suggestTotal = new Counter({
     labelNames: ['card_name'],
 });
 
+const searchTotal = new Counter({
+    name: 'search',
+    help: 'Card search request',
+    labelNames: ['card_name'],
+});
+
 const httpRequestDurationMicroseconds = new Histogram({
     name: 'http_request_duration_ms',
     help: 'Duration of HTTP requests in ms',
@@ -51,6 +57,10 @@ app.get('/api/list', async function(req, resp, next) {
     };
     const query = querystring.stringify(queryObject);
     console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.page}`);
+
+    suggestTotal.inc({
+        card_name: req.query.name,
+    });
 
     const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
     resp.status(200).send(await parseScgListAnswer(answer));
