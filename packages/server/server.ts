@@ -58,7 +58,7 @@ app.get('/api/list', async function(req, resp, next) {
     const query = querystring.stringify(queryObject);
     console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.page}`);
 
-    suggestTotal.inc({
+    searchTotal.inc({
         card_name: req.query.name,
     });
 
