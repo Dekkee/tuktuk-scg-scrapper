@@ -14,12 +14,6 @@ import { Counter, Histogram, register, collectDefaultMetrics } from 'prom-client
 
 const metricsInterval = collectDefaultMetrics();
 
-const suggestTotal = new Counter({
-    name: 'suggest',
-    help: 'Card suggest request',
-    labelNames: ['card_name'],
-});
-
 const searchTotal = new Counter({
     name: 'search',
     help: 'Card search request',
@@ -79,9 +73,6 @@ app.get('/api/get', async function(req, resp, next) {
 
 app.get('/api/suggest', async function(req, resp, next) {
     const id = decodeURIComponent(req.query.name);
-    suggestTotal.inc({
-        card_name: req.query.name,
-    });
     resp.status(200).send(suggest(id));
     next();
 });
