@@ -17,7 +17,7 @@ const index = new FlexSearch({
 
 const updateIndex = async () => {
     if (!fs.existsSync(metaPath)) {
-        console.log('Now index detected. Initializing.');
+        console.log('New index detected. Initializing.');
         const { headers, download } = await downloadFile(s3IndexPath);
         const { etag } = headers;
         fs.writeFileSync(metaPath, JSON.stringify({ etag }));
