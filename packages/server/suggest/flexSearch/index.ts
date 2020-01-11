@@ -29,11 +29,15 @@ const updateIndex = async () => {
             console.log('New index detected. Downloading.');
             fs.writeFileSync(metaPath, JSON.stringify({ etag: headers.etag }));
             await download(fs.createWriteStream(indexPath));
+            return true;
         } else {
             console.log('Index is up to date');
         }
     }
+    return false;
 };
+
+export const shouldUpdateIndex = updateIndex;
 
 export const getIndex = async () => {
     await updateIndex();
