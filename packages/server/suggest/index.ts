@@ -1,6 +1,7 @@
 import { getIndex } from './flexSearch';
 
-let index = getIndex();
+let index;
+getIndex().then(i => index = i);
 
 export const suggest = (name: string) => {
     if (!index) {
