@@ -42,7 +42,7 @@
         }
     },
     "lint-staged": {
-        "!(*generated).{ts,js,css,json,md}": [
+        "!(*generated|*data)/*.{ts,js,css,json,md}": [
             "prettier --write",
             "git add"
         ]
