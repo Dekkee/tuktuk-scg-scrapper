@@ -18,9 +18,14 @@
     "author": "Dekker",
     "license": "MIT",
     "private": true,
+    "dependencies": {
+        "axios": "^0.19.1",
+        "pretty-bytes": "^5.3.0",
+        "progress": "^2.0.3"
+    },
     "devDependencies": {
         "@types/jest": "^24.0.23",
-        "axios": "^0.19.1",
+        "aws-sdk": "^2.601.0",
         "github-release-notes": "^0.17.1",
         "husky": "^4.0.3",
         "is-docker": "^2.0.0",
@@ -29,8 +34,6 @@
         "lerna": "^3.20.2",
         "lint-staged": "^9.5.0",
         "prettier": "^1.19.1",
-        "pretty-bytes": "^5.3.0",
-        "progress": "^2.0.3",
         "typescript": "^3.0.1"
     },
     "workspaces": [
