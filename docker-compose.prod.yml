@@ -7,8 +7,3 @@ services:
     environment:
       - NODE_ENV=production
     image: registry.dekker.gdn/tuktuk-scg-scrapper:stable
-    volumes:
-      - server-data:/home/app/packages/server/data
-
-volumes:
-  server-data:

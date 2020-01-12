@@ -19,26 +19,44 @@ COPY packages/common /home/app/packages/common/
 
 RUN yarn workspace @tuktuk-scg-scrapper/frontend build
 
+# Build server
+FROM node:12-alpine as server
+
+WORKDIR /home/app
+ENV NODE_ENV=production
+RUN apk update && apk upgrade && apk add --no-cache bash git openssh
+
+COPY package.json yarn.lock lerna.json /home/app/
+COPY packages/server/package.json /home/app/packages/server/
+COPY packages/common/package.json /home/app/packages/common/
+
+# install with dev deps
+RUN yarn install --production=false --frozen-lockfile
+
+COPY ./tsconfig.json /home/app/
+COPY packages/server /home/app/packages/server/
+COPY packages/common /home/app/packages/common/
+
+RUN yarn workspace @tuktuk-scg-scrapper/server build
+
 FROM node:12-alpine
 
 WORKDIR /home/app
 ENV NODE_ENV=production
 RUN apk update && apk upgrade && apk add --no-cache bash git openssh
 
-COPY package.json yarn.lock tsconfig.json /home/app/
+COPY package.json yarn.lock lerna.json /home/app/
 COPY packages/server/package.json /home/app/packages/server/
 COPY packages/common/package.json /home/app/packages/common/
 
 RUN yarn install --frozen-lockfile
 
 COPY --from=front /home/app/dist /home/app/dist/
-COPY packages/common/ /home/app/packages/common/
-COPY packages/server/ /home/app/packages/server/
+COPY --from=server /home/app/packages/server/dist /home/app/
+COPY --from=server /home/app/packages/server/data /home/app/data/
 
 ARG TEAMCITY_BUILD_NUMBER
 ENV BUILD_NUMBER=$TEAMCITY_BUILD_NUMBER
 
-WORKDIR /home/app/packages/server
-
-ENTRYPOINT [ "node", "-r", "ts-node/register", "server.ts" ]
+ENTRYPOINT [ "node", "server.js" ]
 EXPOSE 8081

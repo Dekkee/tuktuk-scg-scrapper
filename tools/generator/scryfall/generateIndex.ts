@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import * as AWS from 'aws-sdk';
 
 const FlexSearch = require('flexsearch');
 
@@ -63,22 +62,15 @@ export const initializeIndex = async json => {
             search: `${[...value.names.values()].reverse().join(' % ')}`,
             card: {
                 name: key,
-                text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
+                text:
+                    value.text && value.text.length > 70
+                        ? `${value.text.slice(0, 70)}...`
+                        : value.text,
                 localizedName: value.localizedName,
             },
         });
     });
     index.add(doc);
 
-    console.log('Uploading index to S3');
-    const cred = new AWS.Credentials(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY);
-    const s3 = new AWS.S3({
-        credentials: cred
-    });
-    await s3.upload({
-        Body: index.export(),
-        Key: 'tuktuk/index.json',
-        Bucket: 'dekkee',
-    }).promise();
-    console.log('Success');
+    fs.writeFileSync('./packages/server/data/index.json', index.export());
 };
