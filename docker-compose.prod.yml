@@ -2,8 +2,14 @@ version: '3'
 
 services:
   sosemivigelant-scg:
+    container_name: tuktuk-prod
     ports:
       - "8081:8081"
     environment:
       - NODE_ENV=production
     image: registry.dekker.gdn/tuktuk-scg-scrapper:stable
+    volumes:
+      - server-data:/home/app/packages/server/data
+
+volumes:
+  server-data:

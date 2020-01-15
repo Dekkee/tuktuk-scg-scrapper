@@ -35,7 +35,7 @@ const app = express()
     .use(cors());
 
 app.use(compression({ threshold: 0 }));
-app.use(express.static('dist'));
+app.use(express.static('../../dist'));
 
 // Runs before each requests
 app.use((req, res, next) => {

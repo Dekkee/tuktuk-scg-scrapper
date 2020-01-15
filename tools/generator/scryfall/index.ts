@@ -26,7 +26,7 @@ const initialize = async () => {
     generateJson('card', json);
     console.log('Generate typings');
     await generateTypings();
-    initializeIndex(json);
+    await initializeIndex(json);
     // const meta = await (await fetch(metaUrl)).json();
     // if (!fs.existsSync('./generated/source/meta.json')) {
     //     console.log('download new cards');
