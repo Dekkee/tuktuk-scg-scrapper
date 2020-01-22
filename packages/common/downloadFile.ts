@@ -45,8 +45,11 @@ export const downloadFile = async (url: string) => {
         data.on('error', reject);
     });
 
+    const destroy = () => data.destroy();
+
     return {
         headers,
-        download
+        download,
+        destroy
     }
 };

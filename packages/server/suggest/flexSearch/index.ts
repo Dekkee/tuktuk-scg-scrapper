@@ -28,13 +28,14 @@ const updateIndex = async () => {
         await download(fs.createWriteStream(indexPath));
     } else {
         const { etag } = JSON.parse(fs.readFileSync(metaPath).toString());
-        const { headers, download } = await downloadFile(s3IndexPath);
+        const { headers, download, destroy } = await downloadFile(s3IndexPath);
         if (etag !== headers.etag) {
             console.log('New index detected. Downloading.');
             fs.writeFileSync(metaPath, JSON.stringify({ etag: headers.etag }));
             await download(fs.createWriteStream(indexPath));
             return true;
         } else {
+            destroy();
             console.log('Index is up to date');
         }
     }
