@@ -44,36 +44,49 @@ app.use((req, res, next) => {
 });
 
 app.get('/api/list', async function(req, resp, next) {
-    const preparedName = prepareUrl(req.query.name);
-    const queryObject = {
-        search_query: preparedName,
-        page: req.query.page || 1,
-    };
-    const query = querystring.stringify(queryObject);
-    console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.page}`);
+    try {
+        const preparedName = prepareUrl(req.query.name);
+        const queryObject = {
+            search_query: preparedName,
+            page: req.query.page || 1,
+        };
+        const query = querystring.stringify(queryObject);
+        console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.page}`);
 
-    searchTotal.inc({
-        card_name: req.query.name,
-    });
+        searchTotal.inc({
+            card_name: req.query.name,
+        });
 
-    const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
-    resp.status(200).send(await parseScgListAnswer(answer));
+        const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
+        resp.status(200).send(await parseScgListAnswer(answer));
+    } catch (e) {
+        next(e);
+    }
     next();
 });
 
 app.get('/api/get', async function(req, resp, next) {
-    const id = decodeURIComponent(req.query.name);
-    const preparedName = id.replace(/[\/\\,\.']/g, '').replace(/\s+/g, '-');
-    console.log(`get request: id: ${id}, scg_id: ${preparedName}`);
+    try {
+        const id = decodeURIComponent(req.query.name);
+        const preparedName = id.replace(/[\/\\,\.']/g, '').replace(/\s+/g, '-');
+        console.log(`get request: id: ${id}, scg_id: ${preparedName}`);
 
-    const answer = await (await fetch(`https://www.starcitygames.com/${preparedName}`)).text();
-    resp.status(200).send(await parseScgGetAnswer(answer));
+        const answer = await (await fetch(`https://www.starcitygames.com/${preparedName}`)).text();
+        resp.status(200).send(await parseScgGetAnswer(answer));
+    } catch (e) {
+        next(e);
+    }
+
     next();
 });
 
 app.get('/api/suggest', async function(req, resp, next) {
-    const id = decodeURIComponent(req.query.name);
-    resp.status(200).send(suggest(id));
+    try {
+        const id = decodeURIComponent(req.query.name);
+        resp.status(200).send(suggest(id));
+    } catch (e) {
+        next(e);
+    }
     next();
 });
 
