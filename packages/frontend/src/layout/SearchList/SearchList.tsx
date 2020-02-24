@@ -142,7 +142,7 @@ export class SearchList extends React.Component<Props, State> {
                     {(!isFetching || rows) && <CardsTable rows={rows}/>}
                     {isFetching && <LoadingLabel/>}
                 </article>
-                {page < pageCount - 1 && !isFetching && <ShowMore onMoreRequested={this.onMore.bind(this)}/>}
+                {page < pageCount && !isFetching && <ShowMore onMoreRequested={this.onMore.bind(this)}/>}
             </div>
             <div className={cn('search-layout__backdrop', { 'search-layout--backdrop-visible': isMenuOpen })}/>
             <div className={cn('search-layout__menu', { 'search-layout--menu-open': isMenuOpen })}>
