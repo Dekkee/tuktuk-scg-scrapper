@@ -6,6 +6,7 @@ export interface RowHeader {
     rarity: string;
     color: string;
     foil: boolean;
+    'set-meta'?: string;
 }
 
 export interface ConditionAndPrice {

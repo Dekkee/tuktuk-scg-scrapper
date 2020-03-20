@@ -8,11 +8,13 @@
         color: tuktuk-color('foreground');
         text-decoration: none;
     }
-    &__foil {
+    &__foil,
+    &__lang {
         padding-left: 10px;
     }
     &__set,
-    &__foil {
+    &__foil,
+    &__lang {
         font-weight: 400;
         color: tuktuk-color('secondary-dark');
     }

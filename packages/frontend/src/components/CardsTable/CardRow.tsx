@@ -13,13 +13,15 @@ export interface Props {
 
 export class CardRow extends React.PureComponent<Props> {
     render () {
-        const { name, set, cards, meta, foil } = this.props.card;
+        const { name, set, cards, meta, foil, 'set-meta': setMeta } = this.props.card;
         const cardId = encodeURIComponent(`${name.replace(/[,\.]/g, '').replace(/\s/g, '-')}-${meta}`.toLowerCase());
+        const isForeign = setMeta === 'Singles/Non-English';
         return <>
             <Link to={`/card/${cardId}`} className="card-row__header"
                   style={ { gridRow: `span ${ cards.length }` } }>
                 <div className="card-row__name">
                     { name }
+                    { isForeign && <span className="card-row__lang">Foreign</span> }
                     { foil && <span className="card-row__foil">Foil</span> }
                 </div>
                 <div className="card-row__set">{ set }</div>
