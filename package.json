@@ -30,7 +30,7 @@
         "husky": "^4.0.3",
         "is-docker": "^2.0.0",
         "jest": "^24.9.0",
-        "jest-github-reporter": "Dekkee/jest-github-reporter#forky_fork",
+        "jest-github-reporter": "^0.4.4",
         "lerna": "^3.20.2",
         "lint-staged": "^9.5.0",
         "prettier": "^1.19.1",
