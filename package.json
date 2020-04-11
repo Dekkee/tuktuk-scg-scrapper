@@ -10,7 +10,7 @@
         "dev": "lerna run dev --stream",
         "test": "lerna run test --stream",
         "test:ci": "lerna run test:ci --stream",
-        "update-index": "node --max_old_space_size=8192 -r ts-node/register ./tools/generator/scryfall",
+        "update-index": "cross-env AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY node --max_old_space_size=8192 -r ts-node/register ./tools/generator/scryfall",
         "docker:build": "docker-compose build"
     },
     "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
@@ -26,6 +26,7 @@
     "devDependencies": {
         "@types/jest": "^24.0.23",
         "aws-sdk": "^2.601.0",
+        "cross-env": "^7.0.2",
         "github-release-notes": "^0.17.1",
         "husky": "^4.0.3",
         "is-docker": "^2.0.0",
