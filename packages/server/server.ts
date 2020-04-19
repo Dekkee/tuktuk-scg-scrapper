@@ -133,7 +133,18 @@ const server = app.listen(port, function() {
     console.log(colors.cyan(`Tuktuk server is running at http://localhost:${port}`));
 });
 
-process.on('SIGTERM', () => {
+process.on('SIGINT', function onSigint() {
+    console.log(colors.cyan(`SIGINT received`));
+    shutdown();
+});
+
+process.on('SIGTERM', function onSigterm() {
+    console.log(colors.cyan(`SIGTERM received`));
+    shutdown();
+});
+
+const shutdown = function () {
+    console.log(colors.cyan(`Shutting down server`));
     clearInterval(metricsInterval);
 
     server.close(err => {
@@ -144,4 +155,4 @@ process.on('SIGTERM', () => {
 
         process.exit(0);
     });
-});
+};
