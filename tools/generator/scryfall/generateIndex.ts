@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-import * as AWS from 'aws-sdk';
 
+const { Transform } = require('stream');
 const FlexSearch = require('flexsearch');
 
 const index = new FlexSearch({
@@ -11,22 +11,18 @@ const index = new FlexSearch({
     },
 });
 
-if (!fs.existsSync('./generated')) {
-    fs.mkdirSync('./generated');
-}
+const path = './generated/index';
 
-if (!fs.existsSync('./packages/server/data')) {
-    fs.mkdirSync('./packages/server/data');
+if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
 }
 
 const filteredLayouts = new Set(['art_series', 'emblem']);
 
-export const initializeIndex = async json => {
-    let values;
-    values = Object.values(json);
-
+export const createIndexStream = () => {
     const map = {};
-    values.forEach(card => {
+
+    const parseCard = (card) => {
         if (filteredLayouts.has(card.layout)) {
             return;
         }
@@ -54,31 +50,34 @@ export const initializeIndex = async json => {
                 });
             }
         }
-    });
-    let id = 0;
-    const doc = [];
-    Object.entries(map).forEach(([key, value]: any[]) => {
-        doc.push({
-            id: id++,
-            search: `${[...value.names.values()].reverse().join(' % ')}`,
-            card: {
-                name: key,
-                text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
-                localizedName: value.localizedName,
-            },
-        });
-    });
-    index.add(doc);
+    };
 
-    console.log('Uploading index to S3');
-    const cred = new AWS.Credentials(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY);
-    const s3 = new AWS.S3({
-        credentials: cred
+    return new Transform({
+        writableObjectMode: true,
+        readableObjectMode: true,
+        autoDestroy: true,
+        write: function(chunk, encoding, callback) {
+            parseCard(chunk.value);
+            this.push(chunk);
+            callback();
+        },
+        final: (callback) => {
+            let id = 0;
+            const doc = [];
+            Object.entries(map).forEach(([key, value]: any[]) => {
+                doc.push({
+                    id: id++,
+                    search: `${[...value.names.values()].reverse().join(' % ')}`,
+                    card: {
+                        name: key,
+                        text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
+                        localizedName: value.localizedName,
+                    },
+                });
+            });
+            index.add(doc);
+            fs.writeFileSync(`${path}/index.json`, index.export());
+            callback();
+        },
     });
-    await s3.upload({
-        Body: index.export(),
-        Key: 'tuktuk/index.json',
-        Bucket: 'dekkee',
-    }).promise();
-    console.log('Success');
 };

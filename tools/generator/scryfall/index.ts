@@ -1,52 +1,51 @@
 import * as fs from 'fs';
-import { generateJson } from './generateJson';
-import { generateTypings } from './generateTypings';
-import { initializeIndex } from './generateIndex';
 import { loadJson } from './loadJson';
+import { createProgressStream } from './progress';
+import { createSchemaStream } from './generateSchema';
+import { generateTypings } from './generateTypings';
+import { uploadToS3 } from './uploadToS3';
+import { createIndexStream } from './generateIndex';
+import { readJson } from "./readJson";
+
+const { chain } = require('stream-chain');
+const { parser } = require('stream-json');
+const { streamArray } = require('stream-json/streamers/StreamArray');
 
 if (!fs.existsSync('./generated')) {
     fs.mkdirSync('./generated');
 }
-if (!fs.existsSync('./generated/source')) {
-    fs.mkdirSync('./generated/source');
-}
-if (!fs.existsSync('./generated/typing')) {
-    fs.mkdirSync('./generated/typing');
-}
-if (!fs.existsSync('./generated/schema')) {
-    fs.mkdirSync('./generated/schema');
-}
 
-const initialize = async () => {
-    let scryfall = await loadJson();
-    console.log('Generate schema');
-    const json = JSON.parse(scryfall.toString());
-    scryfall = null;
-    console.log('parsed');
-    generateJson('card', json);
-    console.log('Generate typings');
-    await generateTypings();
-    await initializeIndex(json);
-    // const meta = await (await fetch(metaUrl)).json();
-    // if (!fs.existsSync('./generated/source/meta.json')) {
-    //     console.log('download new cards');
-    //     const resp = await fetch(url);
-    //     console.log(`Is OK: ${resp.ok}`);
-    //     try {
-    //         const json = await (resp).json();
-    //         console.log('Store json');
-    //         fs.writeFileSync('./generated/source/AllCards.json', JSON.stringify(json));
-    //         fs.writeFileSync('./generated/source/meta.json', JSON.stringify(meta));
-    //         console.log('Generate schema');
-    //         generateJson('card', Object.values(json));
-    //         console.log('Generate typings');
-    //         await generateTypings();
-    //         initializeIndex();
-    //     } catch (e) {
-    //         console.error('failed to initialize', e);
-    //     }
-    //
-    // }
+const generate = () => {
+    return new Promise(async (resolve, reject) => {
+        const { stream: dataStream, total } = await loadJson(); // await readJson();
+
+        const pipeline = chain([
+            dataStream,
+            createProgressStream(total),
+            parser(),
+            streamArray(),
+            createSchemaStream('card'),
+            createIndexStream(),
+        ]);
+
+        let counter = 0;
+        pipeline.on('data', () => {
+            ++counter;
+        });
+        pipeline.on('error', e => {
+            console.error(e);
+            reject(e);
+        });
+        pipeline.on('end', async () => {
+            console.log(`Parsed ${counter} cards`);
+            console.log('Generate typings');
+            await generateTypings();
+            console.log('Uploading index to S3');
+            await uploadToS3();
+            console.log('Success');
+            resolve();
+        });
+    });
 };
 
-initialize().then(_ => console.log('initialization finished'));
+generate().then(_ => console.log('Index ready'));

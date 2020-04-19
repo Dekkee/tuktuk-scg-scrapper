@@ -1,5 +1,9 @@
 import * as fs from 'fs';
 
+if (!fs.existsSync('./generated/typing')) {
+    fs.mkdirSync('./generated/typing');
+}
+
 const extractRe = /\((\w+)\)$/;
 
 const toPascalCase = (camelCaseString: string) =>
