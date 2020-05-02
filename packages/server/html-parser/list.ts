@@ -6,7 +6,7 @@ import { Paging } from '@tuktuk-scg-scrapper/common/Paging';
 export const parseScgListAnswer = async (input: string) => {
     const dom = cheerio.load(input);
     const rows = dom('.productList table tr');
-    const parsedRows = [];
+    const parsedRows: Partial<ParsedRow>[] = [];
     if (rows.length > 1) {
         rows.each((index, row) => {
             const id = +row.attribs['data-id'];
@@ -19,7 +19,7 @@ export const parseScgListAnswer = async (input: string) => {
     }
     await fillCardPrices(parsedRows);
     return {
-        rows: parsedRows,
+        rows: parsedRows.filter((c) => c.cards.length),
         ...parsePages(dom('.pagination .pagination-list')),
     };
 };

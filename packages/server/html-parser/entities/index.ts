@@ -47,13 +47,14 @@ export const fillCardPrices = async (cards: Partial<ParsedRow>[]) => {
         ).json();
         row.cards = [];
         (response.data || []).forEach(
-            ({ price, option_values = [], inventory_level }: any) => {
+            ({ price, option_values = [], inventory_level, purchasing_disabled }: any) => {
                 if (!price) {
                     return;
                 }
                 const card = {
                     price,
                     stock: inventory_level,
+                    purchasing_disabled,
                     ...option_values.reduce(
                         (acc, curr) => ({
                             ...acc,
@@ -66,7 +67,10 @@ export const fillCardPrices = async (cards: Partial<ParsedRow>[]) => {
                 };
                 if (card.condition)
                     card.condition = parseCondition(card.condition);
-                row.cards.push(card);
+
+                if (!card.purchasing_disabled){
+                    row.cards.push(card);
+                }
             }
         );
         row.cards.sort(
