@@ -13,6 +13,7 @@ export interface ConditionAndPrice {
     condition: string;
     price: number;
     stock: number;
+    purchasing_disabled: boolean;
 }
 
 export interface RowBody {
