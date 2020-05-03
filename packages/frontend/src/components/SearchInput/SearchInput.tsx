@@ -21,6 +21,8 @@ interface State {
 }
 
 export class SearchInput extends React.PureComponent<Props, State> {
+    private readonly onTextChangedDebounced: ReturnType<typeof debounce>;
+
     private inputRef: React.RefObject<HTMLInputElement>;
 
     constructor (props) {
@@ -31,32 +33,32 @@ export class SearchInput extends React.PureComponent<Props, State> {
         this.state = {
             text: props.initialText,
         };
+
+        this.onTextChangedDebounced = debounce(async (value: string) => {
+            if (!value) {
+                this.setState({ ...this.state, autocompletion: undefined });
+            }
+
+            try {
+                const records: Record<string, AutocompleteCard> = await autocomplete(value);
+                this.setState({ ...this.state, autocompletion: records });
+            } catch (e) {
+                if (e.message !== 'no data') {
+                    throw e;
+                }
+                this.setState({ ...this.state, autocompletion: undefined });
+            }
+        }, 200);
     }
 
-    private onTextChangedDebounced = debounce(async (value: string) => {
-        if (!value) {
-            this.setState({ ...this.state, autocompletion: undefined });
-        }
-
-        try {
-            const records: Record<string, AutocompleteCard> = await autocomplete(value);
-            this.setState({ ...this.state, autocompletion: records });
-        } catch (e) {
-            if (e.message !== 'no data') {
-                throw e;
-            }
-            this.setState({ ...this.state, autocompletion: undefined });
-        }
-    }, 200);
-
-    private onInput = (e: ChangeEvent) => {
+    private onInput(e: ChangeEvent) {
         const { value } = e.target as HTMLInputElement;
         this.setState({ ...this.state, ...{ text: value } });
 
         this.onTextChangedDebounced(value);
     };
 
-    private onKeyPressed = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    private onKeyPressed(e: React.KeyboardEvent<HTMLInputElement>) {
         const { autocompletion, text } = this.state;
 
         switch (e.key) {
@@ -73,25 +75,25 @@ export class SearchInput extends React.PureComponent<Props, State> {
         }
     };
 
-    private handleSearchRequest = (text: string) => {
+    private handleSearchRequest(text: string) {
         this.onTextChangedDebounced.cancel();
         this.setState({ ...this.state, text, autocompletion: undefined });
         this.props.onSearchRequested(text, false);
     };
 
-    private onAutocomplete = (text: string) => {
+    private onAutocomplete(text: string) {
         this.onTextChangedDebounced.cancel();
         this.setState({ ...this.state, text, autocompletion: undefined });
         this.props.onSearchRequested(text, true);
     };
 
-    private onClear = () => {
+    private onClear() {
         this.onTextChangedDebounced.cancel();
         this.setState({ ...this.state, text: '', autocompletion: undefined });
         this.inputRef.current.focus();
     };
 
-    private onCancel = (text: string) => {
+    private onCancel (text: string) {
         this.onTextChangedDebounced.cancel();
         this.setState({ ...this.state, text: text, autocompletion: undefined });
         this.inputRef.current.blur();

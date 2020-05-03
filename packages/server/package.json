@@ -35,8 +35,6 @@
         "whatwg-fetch": "^3.0.0"
     },
     "devDependencies": {
-        "@babel/preset-env": "^7.7.6",
-        "@babel/preset-typescript": "^7.7.4",
         "nodemon": "^1.18.3"
     },
     "nodemonConfig": {

@@ -82,7 +82,7 @@ module.exports = (env) => {
             rules: [
                 {
                     test: /\.tsx?/,
-                    use: 'awesome-typescript-loader'
+                    use: 'babel-loader'
                 }, {
                     test: /\.svg/,
                     use: 'react-svg-loader'

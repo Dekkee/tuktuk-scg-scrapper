@@ -14,10 +14,14 @@ interface State {
 }
 
 export class Autocomplete extends React.Component<Props, State> {
+    private onKeyDownBound;
+
     constructor (props) {
         super(props);
 
         this.state = {};
+
+        this.onKeyDownBound = this.onKeyDown.bind(this);
     }
 
     private onKeyDown (e: KeyboardEvent) {
@@ -43,7 +47,7 @@ export class Autocomplete extends React.Component<Props, State> {
         }
     }
 
-    private onKeyDownBound = this.onKeyDown.bind(this);
+
 
     componentDidMount () {
         document.addEventListener<'keydown'>('keydown', this.onKeyDownBound);
