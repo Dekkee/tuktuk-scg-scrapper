@@ -70,7 +70,7 @@ export class SearchList extends React.Component<Props, State> {
         }
     }
 
-    private onSearch = async (value: string, isAutocompletion?: boolean) => {
+    private async onSearch(value: string, isAutocompletion?: boolean) {
         if (!value) {
             return;
         }
@@ -97,7 +97,7 @@ export class SearchList extends React.Component<Props, State> {
         this.setState({...this.state, isMenuOpen: false});
     }
 
-    private readonly requestData = async (value: string, isAutocompletion: boolean, newPage: number = 0) => {
+    private async requestData(value: string, isAutocompletion: boolean, newPage: number = 0) {
         const { rows: stateRows = [] } = this.state;
         const newStateRows = newPage > 0 ? stateRows : [];
         this.setState({
