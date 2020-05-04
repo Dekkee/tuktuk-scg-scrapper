@@ -61,7 +61,7 @@ module.exports = (env) => {
             new MiniCssExtractPlugin(),
             new OfflinePlugin({
                 ServiceWorker: {
-                    events: true
+                    events: true,
                 },
                 externals: [...vendors.map(value => value.entry), ...externals.map(value => value.entry)]
             }),
@@ -124,11 +124,7 @@ module.exports = (env) => {
         },
         optimization: isProd ? {
             minimizer: [
-                new TerserPlugin({
-                    cache: true,
-                    parallel: true,
-                    sourceMap: true, // set to true if you want JS source maps
-                }),
+                new TerserPlugin(),
                 new OptimizeCSSAssetsPlugin({})
             ]
         } : {},
