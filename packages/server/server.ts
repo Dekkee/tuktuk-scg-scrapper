@@ -10,9 +10,9 @@ import { parseScgListAnswer } from './html-parser/list';
 import { parseScgGetAnswer } from './html-parser/get';
 import { suggest } from './suggest';
 import { prepareUrl } from './urlPreparation';
-import { Counter, Histogram, register, collectDefaultMetrics } from 'prom-client';
+import { collectDefaultMetrics, Counter, Histogram, register } from 'prom-client';
 
-const metricsInterval = collectDefaultMetrics();
+collectDefaultMetrics();
 
 const searchTotal = new Counter({
     name: 'search',
@@ -45,17 +45,17 @@ app.use((req, res, next) => {
 
 app.get('/api/list', async function(req, resp, next) {
     try {
-        const preparedName = prepareUrl(req.query.name);
+        const name = String(req.query.name);
+        const page = parseInt(String(req.query.page) || '', 10);
+        const preparedName = prepareUrl(name);
         const queryObject = {
             search_query: preparedName,
-            page: req.query.page || 1,
+            page: page || 1,
         };
         const query = querystring.stringify(queryObject);
         console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.page}`);
 
-        searchTotal.inc({
-            card_name: req.query.name,
-        });
+        searchTotal.inc({ card_name: name });
 
         const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
         resp.status(200).send(await parseScgListAnswer(answer));
@@ -67,7 +67,8 @@ app.get('/api/list', async function(req, resp, next) {
 
 app.get('/api/get', async function(req, resp, next) {
     try {
-        const id = decodeURIComponent(req.query.name);
+        const name = String(req.query.name);
+        const id = decodeURIComponent(name);
         const preparedName = id.replace(/[\/\\,\.']/g, '').replace(/\s+/g, '-');
         console.log(`get request: id: ${id}, scg_id: ${preparedName}`);
 
@@ -82,7 +83,8 @@ app.get('/api/get', async function(req, resp, next) {
 
 app.get('/api/suggest', async function(req, resp, next) {
     try {
-        const id = decodeURIComponent(req.query.name);
+        const name = String(req.query.name);
+        const id = decodeURIComponent(name);
         resp.status(200).send(suggest(id));
     } catch (e) {
         next(e);
@@ -143,9 +145,8 @@ process.on('SIGTERM', function onSigterm() {
     shutdown();
 });
 
-const shutdown = function () {
+const shutdown = function() {
     console.log(colors.cyan(`Shutting down server`));
-    clearInterval(metricsInterval);
 
     server.close(err => {
         if (err) {
