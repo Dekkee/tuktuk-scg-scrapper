@@ -22,12 +22,11 @@ jobs:
         with:
           node-version: 14.1
 
+      - name: Use latest NPM
+        run: sudo npm i -g yarn@1.22.4
+
       - name: Install dependencies
-        uses: borales/actions-yarn@v2.1.0
-        with:
-          cmd: install --frozen-lockfile --network-concurrency 1
+        run: yarn install --frozen-lockfile --network-concurrency 1
 
       - name: Run tests
-        uses: borales/actions-yarn@v2.1.0
-        with:
-          cmd: test:ci
+        run: yarn test:ci
