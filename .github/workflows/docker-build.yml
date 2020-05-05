@@ -21,6 +21,7 @@ jobs:
       with:
         host: ${{ secrets.DIGITAL_OCEAN_HOST }}
         key: ${{ secrets.DIGITAL_OCEAN_KEY }}
+        user: ${{ secrets.DIGITAL_OCEAN_USER }}
         script: |
           whoami
           ls -al
