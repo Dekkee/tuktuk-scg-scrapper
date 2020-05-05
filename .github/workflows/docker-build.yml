@@ -4,9 +4,6 @@ on:
   push:
     branches:
     - master
-  pull_request:
-    branches:
-    - master
 
 jobs:
   build:
@@ -15,17 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Deploy
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
-        key: ${{ secrets.DIGITAL_OCEAN_KEY }}
-        username: ${{ secrets.DIGITAL_OCEAN_USER }}
-        debug: true
-        script: |
-          whoami
-          ls -al
 
     - name: Build the Docker image
       run: docker-compose build
@@ -43,4 +29,12 @@ jobs:
 
     - name: Push stable
       run: node ./tools/tag.js
-
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+        key: ${{ secrets.DIGITAL_OCEAN_KEY }}
+        username: ${{ secrets.DIGITAL_OCEAN_USER }}
+        script: |
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --no-build -d
