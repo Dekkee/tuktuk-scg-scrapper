@@ -22,11 +22,12 @@ jobs:
         with:
           node-version: 14.1
 
-      - name: Install Yarn
-        run: sudo npm i -g yarn@1.19.1
-
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        uses: borales/actions-yarn@v2.1.0
+        with:
+          cmd: install --frozen-lockfile
 
       - name: Run tests
-        run: yarn test:ci
+        uses: borales/actions-yarn@v2.1.0
+        with:
+          cmd: test:ci
