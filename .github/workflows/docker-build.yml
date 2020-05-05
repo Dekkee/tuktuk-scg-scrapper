@@ -20,9 +20,11 @@ jobs:
     - name: Push latest
       run: docker push registry.dekker.gdn/tuktuk-scg-scrapper:latest
 
-    - name: Push stable
+    - name: Setup node
       uses: actions/setup-node@v1
       with:
         node-version: 14.1
+
+    - name: Push stable
       run: node ./tools/tag.js
 
