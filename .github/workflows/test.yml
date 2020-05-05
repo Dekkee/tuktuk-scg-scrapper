@@ -26,7 +26,7 @@ jobs:
         run: sudo npm i -g yarn@1.22.4
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --verbose
+        run: yarn install --frozen-lockfile
 
       - name: Run tests
         run: yarn test:ci
