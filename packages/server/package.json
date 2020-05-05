@@ -6,7 +6,7 @@
         "build": "tsc -b",
         "dev": "nodemon",
         "test": "../../node_modules/.bin/jest --colors",
-        "test:ci": "jest --ci --reporters=default --reporters=jest-github-reporter"
+        "test:ci": "jest --ci --reporters=default"
     },
     "dependencies": {
         "@tuktuk-scg-scrapper/common": "0.0.1",

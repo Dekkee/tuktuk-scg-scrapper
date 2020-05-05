@@ -13396,9 +13396,9 @@ terser-webpack-plugin@^1.4.3:
     webpack-sources "^1.4.0"
     worker-farm "^1.7.0"
 
-"terser-webpack-plugin@git+https://github.com/Dekkee/terser-webpack-plugin.git":
+"terser-webpack-plugin@git+https://github.com/webpack-contrib/terser-webpack-plugin.git":
   version "3.0.0"
-  resolved "git+https://github.com/Dekkee/terser-webpack-plugin.git#1a1fcb20a6800608170f4a08d0436fefe31897aa"
+  resolved "git+https://github.com/webpack-contrib/terser-webpack-plugin.git#722073494ae708e7cd94cdb9df26fb483e93e8de"
   dependencies:
     cacache "^15.0.3"
     find-cache-dir "^3.3.1"
