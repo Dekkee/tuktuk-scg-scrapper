@@ -25,7 +25,9 @@ jobs:
       - name: Install dependencies
         uses: borales/actions-yarn@v2.1.0
         with:
-          cmd: install --frozen-lockfile --network-concurrency 1
+          cmd: install
+          frozen-lockfile: true
+          network-concurrency: 1
 
       - name: Run tests
         uses: borales/actions-yarn@v2.1.0
