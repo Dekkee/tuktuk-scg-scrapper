@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build the Docker image
+      run: docker-compose build
+
+    - name: Tag stable
+      run: docker tag registry.dekker.gdn/tuktuk-scg-scrapper:latest registry.dekker.gdn/tuktuk-scg-scrapper:stable
+
+    - name: Push latest
+      run: docker push registry.dekker.gdn/tuktuk-scg-scrapper:latest
+
+    - name: Push stable
+      uses: actions/setup-node@v1
+        with:
+          node-version: 14.1.0
+      run: node ./tools/tag.js
+
