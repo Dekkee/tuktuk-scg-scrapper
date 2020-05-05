@@ -1,0 +1,40 @@
+name: Docker
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build the Docker image
+      run: docker-compose build
+
+    - name: Tag stable
+      run: docker tag registry.dekker.gdn/tuktuk-scg-scrapper:latest registry.dekker.gdn/tuktuk-scg-scrapper:stable
+
+    - name: Push latest
+      run: docker push registry.dekker.gdn/tuktuk-scg-scrapper:latest
+
+    - name: Setup node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14.1
+
+    - name: Push stable
+      run: node ./tools/tag.js
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+        key: ${{ secrets.DIGITAL_OCEAN_KEY }}
+        username: ${{ secrets.DIGITAL_OCEAN_USER }}
+        script: |
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --no-build -d
