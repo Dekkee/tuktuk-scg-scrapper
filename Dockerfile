@@ -10,7 +10,7 @@ COPY packages/frontend/package.json /home/app/packages/frontend/
 COPY packages/common/package.json /home/app/packages/common/
 
 # install with dev deps
-RUN yarn install --production=false --frozen-lockfile
+RUN yarn install --production=false --frozen-lockfile --network-concurrency 1
 
 COPY ./svg.d.ts /home/app/
 COPY ./tsconfig.json /home/app/
