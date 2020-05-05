@@ -22,7 +22,7 @@ jobs:
 
     - name: Push stable
       uses: actions/setup-node@v1
-        with:
-          node-version: 14.1.0
+      with:
+        node-version: 14.1
       run: node ./tools/tag.js
 
