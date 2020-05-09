@@ -1,9 +1,10 @@
 {
-  "name": "@tuktuk-scg-scrapper/database",
+  "name": "@tuktuk-scg-scrapper/storage",
   "version": "0.0.1",
-  "main": "index.ts",
+  "main": "server.ts",
   "license": "MIT",
   "scripts": {
+    "mongo": "docker run -v ./data:/data/db -p 27017-27019:27017-27019 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example --name some-mongo -d mongo:4.2.6",
     "dev": "nodemon"
   },
   "dependencies": {
@@ -20,6 +21,6 @@
     "ignore": [
       "./**/*.spec.ts"
     ],
-    "exec": "ts-node ./index.ts"
+    "exec": "ts-node ./server.ts"
   }
 }

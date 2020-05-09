@@ -11,6 +11,7 @@ import { parseScgGetAnswer } from './html-parser/get';
 import { suggest } from './suggest';
 import { prepareUrl } from './urlPreparation';
 import { collectDefaultMetrics, Counter, Histogram, register } from 'prom-client';
+const isDocker = require('is-docker');
 
 collectDefaultMetrics();
 
@@ -43,7 +44,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/api/list', async function(req, resp, next) {
+app.get('/api/list', async function (req, resp, next) {
     try {
         const name = String(req.query.name);
         const page = parseInt(String(req.query.page) || '', 10);
@@ -58,14 +59,26 @@ app.get('/api/list', async function(req, resp, next) {
         searchTotal.inc({ card_name: name });
 
         const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
-        resp.status(200).send(await parseScgListAnswer(answer));
+        const pagedAnswer = await parseScgListAnswer(answer);
+
+        fetch(`http://${isDocker() ? 'storage' : 'localhost'}:8084/storage/card/update-ids`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                rows: pagedAnswer.rows,
+            }),
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+        });
+
+        resp.status(200).send(pagedAnswer);
     } catch (e) {
         next(e);
     }
     next();
 });
 
-app.get('/api/get', async function(req, resp, next) {
+app.get('/api/get', async function (req, resp, next) {
     try {
         const name = String(req.query.name);
         const id = decodeURIComponent(name);
@@ -81,7 +94,7 @@ app.get('/api/get', async function(req, resp, next) {
     next();
 });
 
-app.get('/api/suggest', async function(req, resp, next) {
+app.get('/api/suggest', async function (req, resp, next) {
     try {
         const name = String(req.query.name);
         const id = decodeURIComponent(name);
@@ -92,7 +105,7 @@ app.get('/api/suggest', async function(req, resp, next) {
     next();
 });
 
-app.get('/api/version', async function(req, resp, next) {
+app.get('/api/version', async function (req, resp, next) {
     resp.status(200).send({
         version: require('./package.json').version,
         buildNumber: process.env.BUILD_NUMBER,
@@ -105,7 +118,7 @@ app.get('/metrics', (req, res) => {
     res.end(register.metrics());
 });
 
-app.get(/^(\/card|\/$)/, function(req, resp, next) {
+app.get(/^(\/card|\/$)/, function (req, resp, next) {
     resp.sendFile(path.join(__dirname, '../../dist/index.html'));
     next();
 });
@@ -129,10 +142,10 @@ app.use((req, res) => {
     }
 });
 
-const port = 8081;
+const port = 8082;
 
-const server = app.listen(port, function() {
-    console.log(colors.cyan(`Tuktuk server is running at http://localhost:${port}`));
+const server = app.listen(port, function () {
+    console.log(colors.cyan(`Scg provider is running at http://localhost:${port}`));
 });
 
 process.on('SIGINT', function onSigint() {
@@ -145,10 +158,10 @@ process.on('SIGTERM', function onSigterm() {
     shutdown();
 });
 
-const shutdown = function() {
+const shutdown = function () {
     console.log(colors.cyan(`Shutting down server`));
 
-    server.close(err => {
+    server.close((err) => {
         if (err) {
             console.error(err);
             process.exit(1);

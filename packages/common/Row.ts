@@ -1,3 +1,5 @@
+import { ScgPriceAndCondition } from "@tuktuk-scg-scrapper/storage/types";
+
 export interface RowHeader {
     id: number;
     name: string;
@@ -7,13 +9,6 @@ export interface RowHeader {
     color: string;
     foil: boolean;
     'set-meta'?: string;
-}
-
-export interface ConditionAndPrice {
-    condition: string;
-    price: number;
-    stock: number;
-    purchasing_disabled: boolean;
 }
 
 export interface RowBody {
@@ -33,7 +28,7 @@ export interface RowBody {
 
 export type RawRow = Partial<RowHeader> & Partial<RowBody>;
 export type ParsedRow = Partial<RowHeader> & {
-    cards: Partial<ConditionAndPrice>[];
+    cards: ScgPriceAndCondition[];
 };
 export type ParsedRowDetails = Partial<RowHeader> &
-    Partial<RowBody> & { cards: Partial<ConditionAndPrice>[] };
+    Partial<RowBody> & { cards: ScgPriceAndCondition[] };

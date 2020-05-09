@@ -1,9 +1,49 @@
 version: '3'
 
+volumes:
+  db:
+
 services:
-  sosemivigelant-scg:
+
+  proxy:
     build:
       context: .
-      dockerfile: Dockerfile
-    image: registry.dekker.gdn/tuktuk-scg-scrapper
+      dockerfile: ./packages/proxy/Dockerfile
+    image: registry.dekker.gdn/tuktuk-scg-scrapper-proxy
     restart: always
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./packages/frontend/Dockerfile
+    image: registry.dekker.gdn/tuktuk-scg-scrapper-frontend
+    restart: always
+
+  scg-provider:
+    build:
+      context: .
+      dockerfile: ./packages/server/Dockerfile
+    image: registry.dekker.gdn/tuktuk-scg-scrapper-scg-provider
+    restart: always
+
+  storage:
+    build:
+      context: .
+      dockerfile: ./packages/storage/Dockerfile
+    image: registry.dekker.gdn/tuktuk-scg-scrapper-storage
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWORD-example}
+
+  mongo:
+    image: mongo:4.2.6
+    container_name: mongo
+    restart: always
+    ports:
+      - 27017-27019:27017-27019
+    volumes:
+      - db:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWORD-example}

@@ -1,11 +1,10 @@
 import * as mongoose from 'mongoose';
+const isDocker = require("is-docker")();
 
 export const connect = () => {
     return mongoose
-        .connect('mongodb://root:example@localhost:27017/cards?authSource=admin', {
+        .connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME || 'root'}:${process.env.MONGO_INITDB_ROOT_PASSWORD || 'example'}@${isDocker ? 'mongo' : 'localhost'}:27017/cards?authSource=admin`, {
             useNewUrlParser: true,
-            reconnectTries: Number.MAX_VALUE,
-            reconnectInterval: 500,
             connectTimeoutMS: 10000,
             useFindAndModify: true,
             useUnifiedTopology: true,

@@ -1,24 +1,3 @@
-# Build frontend
-FROM node:12-alpine as front
-
-WORKDIR /home/app
-ENV NODE_ENV=production
-RUN apk update && apk upgrade && apk add --no-cache bash git openssh
-
-COPY package.json yarn.lock lerna.json /home/app/
-COPY packages/frontend/package.json /home/app/packages/frontend/
-COPY packages/common/package.json /home/app/packages/common/
-
-# install with dev deps
-RUN yarn install --production=false --frozen-lockfile --network-concurrency 1
-
-COPY ./svg.d.ts /home/app/
-COPY ./tsconfig.json /home/app/
-COPY packages/frontend /home/app/packages/frontend/
-COPY packages/common /home/app/packages/common/
-
-RUN yarn workspace @tuktuk-scg-scrapper/frontend build
-
 # Install server production deps
 FROM node:12-alpine as server-deps
 
@@ -39,7 +18,6 @@ ENV NODE_ENV=production
 
 COPY package.json tsconfig.json /home/app/
 
-COPY --from=front /home/app/dist /home/app/dist/
 COPY packages/common/ /home/app/packages/common/
 COPY packages/server/ /home/app/packages/server/
 COPY --from=server-deps /home/app/node_modules/ /home/app/node_modules/
@@ -50,4 +28,4 @@ ENV BUILD_NUMBER=$TEAMCITY_BUILD_NUMBER
 WORKDIR /home/app/packages/server
 
 ENTRYPOINT [ "node", "-r", "ts-node/register", "server.ts" ]
-EXPOSE 8081
+EXPOSE 8082
