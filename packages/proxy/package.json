@@ -1,8 +1,21 @@
 {
   "name": "@tuktuk-scg-scrapper/proxy",
   "version": "0.0.1",
+  "scripts": {
+    "dev": "nodemon"
+  },
   "dependencies": {
     "@types/http-proxy": "^1.17.4",
     "http-proxy": "^1.18.0"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "."
+    ],
+    "ext": "ts",
+    "ignore": [
+      "./**/*.spec.ts"
+    ],
+    "exec": "ts-node ./server.ts"
   }
 }

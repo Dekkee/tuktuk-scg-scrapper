@@ -1,5 +1,4 @@
-# Install server production deps
-FROM node:12-alpine as server-deps
+FROM node:12-alpine
 
 WORKDIR /home/app
 ENV NODE_ENV=production
@@ -9,18 +8,10 @@ COPY package.json yarn.lock tsconfig.json /home/app/
 COPY packages/server/package.json /home/app/packages/server/
 COPY packages/common/package.json /home/app/packages/common/
 
-RUN yarn install --frozen-lockfile
-
-FROM node:12-alpine
-
-WORKDIR /home/app
-ENV NODE_ENV=production
-
-COPY package.json tsconfig.json /home/app/
+RUN yarn install --frozen-lockfile && yarn cache clean
 
 COPY packages/common/ /home/app/packages/common/
 COPY packages/server/ /home/app/packages/server/
-COPY --from=server-deps /home/app/node_modules/ /home/app/node_modules/
 
 ARG TEAMCITY_BUILD_NUMBER
 ENV BUILD_NUMBER=$TEAMCITY_BUILD_NUMBER

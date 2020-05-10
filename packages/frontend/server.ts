@@ -3,6 +3,7 @@ import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 import * as colors from 'colors';
 import * as cors from 'cors';
+import { config } from "@tuktuk-scg-scrapper/common/config/frontend";
 
 const compression = require('compression');
 const app = express()
@@ -16,10 +17,10 @@ app.use(compression({ threshold: 0 }));
 app.use(express.static('../../dist'));
 
 
-const port = 8083;
+const port = config.port;
 
 const server = app.listen(port, function () {
-    console.log(colors.cyan(`Frontend http://localhost:${port}`));
+    console.log(colors.cyan(`Frontend http://${config.host}:${port}`));
 });
 
 process.on('SIGINT', function onSigint() {

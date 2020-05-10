@@ -4,6 +4,8 @@ const packageJson = require('../package.json');
 
 const dockerPackageName = 'registry.dekker.gdn/tuktuk-scg-scrapper';
 
+const images = ['frontend', 'proxy', 'scg-provider', 'storage'];
+
 async function applyTags() {
     const { version } = packageJson;
     const commitHash = (await exec(`git rev-parse HEAD`)).stdout.slice(0, 6);
@@ -14,14 +16,17 @@ async function applyTags() {
     console.log(`setting tag: ${fullVersion}`);
     // await exec(`git tag ${fullVersion}`);
     // await exec(`git push origin ${fullVersion}`);
-    await exec(`docker tag ${dockerPackageName}:latest ${dockerPackageName}:stable`);
-    await exec(`docker push ${dockerPackageName}:stable`);
-    await exec(`docker tag ${dockerPackageName}:latest ${dockerPackageName}:${fullVersion}`);
-    await exec(`docker push ${dockerPackageName}:${fullVersion}`);
-    console.log(`tag ${fullVersion} pushed`);
+    images.forEach(async (image) => {
+        const imageName = `${dockerPackageName}-${image}`;
+        await exec(`docker tag ${imageName}:latest ${imageName}:stable`);
+        await exec(`docker push ${imageName}:stable`);
+        await exec(`docker tag ${imageName}:latest ${imageName}:${fullVersion}`);
+        await exec(`docker push ${imageName}:${fullVersion}`);
+        console.log(`tag ${fullVersion} pushed`);
+    });
 }
 
-applyTags().catch(e => {
+applyTags().catch((e) => {
     console.error('Failed to push tags', e);
     process.exit(1);
 });

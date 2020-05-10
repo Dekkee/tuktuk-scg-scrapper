@@ -1,9 +1,9 @@
 import * as mongoose from 'mongoose';
-const isDocker = require("is-docker")();
+import { mongoConnectionString } from '@tuktuk-scg-scrapper/common/config/mongo';
 
 export const connect = () => {
     return mongoose
-        .connect(`mongodb://${process.env.MONGO_INITDB_ROOT_USERNAME || 'root'}:${process.env.MONGO_INITDB_ROOT_PASSWORD || 'example'}@${isDocker ? 'mongo' : 'localhost'}:27017/cards?authSource=admin`, {
+        .connect(mongoConnectionString, {
             useNewUrlParser: true,
             connectTimeoutMS: 10000,
             useFindAndModify: true,
@@ -13,7 +13,7 @@ export const connect = () => {
             // mongoose.connection.on('disconnected', connect);
             return console.info(`Successfully connected to cards`);
         })
-        .catch(error => {
+        .catch((error) => {
             console.error('Error connecting to database: ', error);
             return process.exit(1);
         });
