@@ -6,6 +6,7 @@ import { generateTypings } from './generateTypings';
 import { uploadToS3 } from './uploadToS3';
 import { createIndexStream } from './generateIndex';
 import { readJson } from "./readJson";
+import { createDatabaseStream } from "./updateDatabase";
 
 const { chain } = require('stream-chain');
 const { parser } = require('stream-json');
@@ -17,7 +18,7 @@ if (!fs.existsSync('./generated')) {
 
 const generate = () => {
     return new Promise(async (resolve, reject) => {
-        const { stream: dataStream, total } = await loadJson(); // await readJson();
+        const { stream: dataStream, total } = await readJson(); // await loadJson();
 
         const pipeline = chain([
             dataStream,
@@ -26,6 +27,7 @@ const generate = () => {
             streamArray(),
             createSchemaStream('card'),
             createIndexStream(),
+            await createDatabaseStream(),
         ]);
 
         let counter = 0;
@@ -41,7 +43,7 @@ const generate = () => {
             console.log('Generate typings');
             await generateTypings();
             console.log('Uploading index to S3');
-            await uploadToS3();
+            // await uploadToS3();
             console.log('Success');
             resolve();
         });

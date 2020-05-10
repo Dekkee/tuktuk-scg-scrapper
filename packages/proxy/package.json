@@ -1,0 +1,8 @@
+{
+  "name": "@tuktuk-scg-scrapper/proxy",
+  "version": "0.0.1",
+  "dependencies": {
+    "@types/http-proxy": "^1.17.4",
+    "http-proxy": "^1.18.0"
+  }
+}
