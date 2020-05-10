@@ -11,7 +11,7 @@ services:
       dockerfile: ./packages/proxy/Dockerfile
       cache_from:
         - node:12-alpine
-        - registry.dekker.gdn/tuktuk-scg-scrapper-proxy
+        - registry.dekker.gdn/tuktuk-scg-scrapper-proxy:stable
     image: registry.dekker.gdn/tuktuk-scg-scrapper-proxy
     restart: always
 
@@ -21,7 +21,7 @@ services:
       dockerfile: ./packages/frontend/Dockerfile
       cache_from:
         - node:12-alpine
-        - registry.dekker.gdn/tuktuk-scg-scrapper-frontend
+        - registry.dekker.gdn/tuktuk-scg-scrapper-frontend:stable
     image: registry.dekker.gdn/tuktuk-scg-scrapper-frontend
     restart: always
 
@@ -31,7 +31,7 @@ services:
       dockerfile: ./packages/server/Dockerfile
       cache_from:
         - node:12-alpine
-        - registry.dekker.gdn/tuktuk-scg-scrapper-scg-provider
+        - registry.dekker.gdn/tuktuk-scg-scrapper-scg-provider:stable
     image: registry.dekker.gdn/tuktuk-scg-scrapper-scg-provider
     restart: always
 
@@ -41,7 +41,7 @@ services:
       dockerfile: ./packages/storage/Dockerfile
       cache_from:
         - node:12-alpine
-        - registry.dekker.gdn/tuktuk-scg-scrapper-storage
+        - registry.dekker.gdn/tuktuk-scg-scrapper-storage:stable
     image: registry.dekker.gdn/tuktuk-scg-scrapper-storage
     restart: always
     environment:
