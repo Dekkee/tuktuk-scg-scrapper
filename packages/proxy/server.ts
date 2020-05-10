@@ -4,7 +4,10 @@ import * as morgan from 'morgan';
 import * as colors from 'colors';
 import * as cors from 'cors';
 import * as httpProxy from 'http-proxy';
-const isDocker = require("is-docker")();
+import { config } from '@tuktuk-scg-scrapper/common/config/proxy';
+import { config as scgProviderConfig } from '@tuktuk-scg-scrapper/common/config/scgProvider';
+import { config as frontendConfig } from '@tuktuk-scg-scrapper/common/config/frontend';
+import { config as storageConfig } from '@tuktuk-scg-scrapper/common/config/storage';
 
 const compression = require('compression');
 const app = express()
@@ -13,7 +16,7 @@ const app = express()
     .use(bodyParser.json())
     .use(cors());
 
-const proxy = httpProxy.createProxyServer({ forward: `http://${isDocker ? 'scg-provider' : 'localhost'}:8082` });
+const proxy = httpProxy.createProxyServer();
 
 app.use(compression({ threshold: 0 }));
 app.use(express.static('../../dist'));
@@ -25,21 +28,21 @@ app.use((req, res, next) => {
 });
 
 app.get('/api/*', (req, res) => {
-  proxy.web(req, res, { target: `http://${isDocker ? 'scg-provider' : 'localhost'}:8082` });
+    proxy.web(req, res, { target: `http://${scgProviderConfig.host}:${scgProviderConfig.port}` });
 });
 
 app.get('/storage/*', (req, res) => {
-    proxy.web(req, res, { target: `http://${isDocker ? 'storage' : 'localhost'}:8084` });
+    proxy.web(req, res, { target: `http://${storageConfig.host}:${storageConfig.port}` });
 });
 
 app.get('/*', (req, res) => {
-    proxy.web(req, res, { target: `http://${isDocker ? 'frontend' : 'localhost'}:8083` });
+    proxy.web(req, res, { target: `http://${frontendConfig.host}:${frontendConfig.port}` });
 });
 
-const port = 8081;
+const port = config.port;
 
 const server = app.listen(port, function () {
-    console.log(colors.cyan(`Proxy is running at http://localhost:${port}`));
+    console.log(colors.cyan(`Proxy is running at http://${config.host}:${port}`));
 });
 
 process.on('SIGINT', function onSigint() {

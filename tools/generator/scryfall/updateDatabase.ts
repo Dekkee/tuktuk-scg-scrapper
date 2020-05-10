@@ -1,5 +1,5 @@
 import { connect, disconnect } from '@tuktuk-scg-scrapper/storage/connect';
-import { Card } from '../../../packages/storage/schemas/card';
+import { Card } from '@tuktuk-scg-scrapper/storage/schemas/card';
 
 const { Transform } = require('stream');
 

@@ -11,7 +11,8 @@ import { parseScgGetAnswer } from './html-parser/get';
 import { suggest } from './suggest';
 import { prepareUrl } from './urlPreparation';
 import { collectDefaultMetrics, Counter, Histogram, register } from 'prom-client';
-const isDocker = require('is-docker');
+import { config } from '@tuktuk-scg-scrapper/common/config/scgProvider';
+import { config as storageConfig } from '@tuktuk-scg-scrapper/common/config/storage';
 
 collectDefaultMetrics();
 
@@ -61,13 +62,13 @@ app.get('/api/list', async function (req, resp, next) {
         const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
         const pagedAnswer = await parseScgListAnswer(answer);
 
-        fetch(`http://${isDocker() ? 'storage' : 'localhost'}:8084/storage/card/update-ids`, {
+        fetch(`http://${storageConfig.host}:${storageConfig.port}/storage/card/update-ids`, {
             method: 'PUT',
             body: JSON.stringify({
                 rows: pagedAnswer.rows,
             }),
             headers: {
-                'Content-Type': 'application/json;charset=utf-8'
+                'Content-Type': 'application/json;charset=utf-8',
             },
         });
 
@@ -142,10 +143,10 @@ app.use((req, res) => {
     }
 });
 
-const port = 8082;
+const port = config.port;
 
 const server = app.listen(port, function () {
-    console.log(colors.cyan(`Scg provider is running at http://localhost:${port}`));
+    console.log(colors.cyan(`Scg provider is running at http://${config.host}:${port}`));
 });
 
 process.on('SIGINT', function onSigint() {

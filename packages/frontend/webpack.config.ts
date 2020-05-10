@@ -1,3 +1,5 @@
+import * as webpack from "webpack";
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const OfflinePlugin = require('offline-plugin');
@@ -7,8 +9,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
-
-const webpack = require('webpack');
+const { config } = require('@tuktuk-scg-scrapper/common/config/frontend');
 const path = require('path');
 const manifest = require('./src/pwa/manifest');
 
@@ -32,7 +33,7 @@ const vendors = [
     },
 ];
 
-module.exports = (env) => {
+module.exports = (env): webpack.Configuration => {
     const isProd = env === 'production';
 
     const plugins = [
@@ -110,8 +111,9 @@ module.exports = (env) => {
             contentBase: '../../dist',
             hot: true,
             historyApiFallback: true,
+            port: config.port,
         },
-        devtool: isProd && 'cheap-source-map',
+        devtool: isProd ? 'cheap-source-map' : false,
         externals: isProd ? {
             ...externals.reduce((previousValue, currentValue) => ({
                 ...previousValue,

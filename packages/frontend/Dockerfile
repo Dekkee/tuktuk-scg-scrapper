@@ -28,7 +28,6 @@ COPY package.json tsconfig.json /home/app/
 
 COPY packages/frontend /home/app/packages/frontend/
 COPY packages/common /home/app/packages/common/
-
 RUN yarn install --production=true --frozen-lockfile --network-concurrency 1 && yarn cache clean
 
 COPY --from=front /home/app/dist /home/app/dist/
