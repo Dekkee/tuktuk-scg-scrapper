@@ -11,6 +11,7 @@
         "test": "lerna run test --stream",
         "test:ci": "lerna run test:ci --stream",
         "update-index": "cross-env MONGO_INITDB_ROOT_USERNAME=$MONGO_USER MONGO_INITDB_ROOT_PASSWORD=$MONGO_PWORD AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY node --max_old_space_size=8192 -r ts-node/register ./tools/generator/scryfall",
+        "upsert-database": "cross-env MONGO_INITDB_ROOT_USERNAME=$MONGO_USER MONGO_INITDB_ROOT_PASSWORD=$MONGO_PWORD node --max_old_space_size=8192 -r ts-node/register ./tools/updater/upsert.ts",
         "docker:build": "docker-compose build"
     },
     "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
@@ -30,11 +31,11 @@
         "compression": "^1.7.4",
         "cors": "^2.8.4",
         "express": "^4.16.3",
+        "is-docker": "^2.0.0",
         "morgan": "^1.9.0",
         "pretty-bytes": "^5.3.0",
         "progress": "^2.0.3",
-        "ts-node": "^8.0.2",
-        "is-docker": "^2.0.0"
+        "ts-node": "^8.0.2"
     },
     "devDependencies": {
         "@babel/core": "^7.9.6",
@@ -42,6 +43,7 @@
         "@babel/preset-typescript": "^7.9.0",
         "@types/jest": "^25.2.1",
         "@types/mongoose": "^5.7.13",
+        "async": "^3.2.0",
         "aws-sdk": "^2.601.0",
         "babel-jest": "^25.5.1",
         "cross-env": "^7.0.2",
