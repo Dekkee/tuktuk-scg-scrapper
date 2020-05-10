@@ -5,26 +5,33 @@ import * as queue from 'async/queue';
 import * as Progress from 'progress';
 
 const { chain } = require('stream-chain');
-const { Writable } = require('stream');
+const { Transform } = require('stream');
 
+
+// https://scg.dekker.gdn/storage/card
 const fetchQueue = queue(async (value, callback) => {
-    const a = await fetch('https://scg.dekker.gdn/storage/card', {
+    await fetch('http://localhost:8081/storage/card', {
         method: 'PUT',
         body: JSON.stringify(value),
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+        },
     });
-    console.log('done', value.name, a);
     callback();
 }, 20);
-
-const uploadStream = new Writable({
-    objectMode: true,
+let i =0;
+const uploadStream = new Transform({
+    readableObjectMode: true,
+    writableObjectMode: true,
     autoDestroy: true,
     write: async function (chunk, encoding, callback) {
         try {
             await fetchQueue.push(chunk);
+            console.log("risolv", i++, chunk.name);
         } catch (e) {
             console.error('Failed to update', e);
         } finally {
+            this.push(chunk)
             callback();
         }
     },
@@ -42,11 +49,11 @@ const upsertDatabase = async () => {
     });
     const pipeline = chain([
         Card.find().cursor(),
+        uploadStream,
         (c) => {
             progressBar.tick(1);
             return c;
         },
-        uploadStream,
     ]);
     pipeline.on('end', async () => {
         await disconnect();

@@ -11,14 +11,20 @@ export const cardRoute = ({ app }: TRoutesInput) => {
     app.get('/storage/card', async (req, res) => {
         const now = Date.now();
         const query: any = {};
-        const { name, price } = req.query;
+        const { name, price, limit } = req.query;
         if (name) {
             console.log(`Looking for: ${req.query.name}`);
             query.name = name.toString();
         }
         price !== 'false' && (query.$or = [{ scg_regular_id: { $exists: true } }, { scg_foil_id: { $exists: true } }]);
 
-        const cards = await Card.find(query);
+        const mongoQuery = Card.find(query);
+
+        if (limit) {
+            mongoQuery.limit(parseInt(limit.toString(), 10));
+        }
+
+        const cards = await mongoQuery.exec();
         console.log(`Found: ${cards.length} in ${Date.now() - now}ms`);
         return res.send({
             cards: cards.map(

@@ -13,7 +13,6 @@ const compression = require('compression');
 const app = express()
     .use(morgan(':method :url -> :status'))
     .use(bodyParser.urlencoded({ extended: true }))
-    .use(bodyParser.json())
     .use(cors());
 
 const proxy = httpProxy.createProxyServer();

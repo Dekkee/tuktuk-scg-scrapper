@@ -9,7 +9,7 @@ const images = ['frontend', 'proxy', 'scg-provider', 'storage'];
 async function applyTags() {
     const { version } = packageJson;
     const commitHash = (await exec(`git rev-parse HEAD`)).stdout.slice(0, 6);
-    const buildNumber = process.env.BUILD_NUMBER || commitHash || 'local';
+    const buildNumber = process.env.BUILD_NUMBER || process.env.GITHUB_RUN_NUMBER || commitHash || 'local';
 
     const fullVersion = `${version}-${buildNumber}`;
 
