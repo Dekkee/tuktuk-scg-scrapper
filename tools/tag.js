@@ -22,7 +22,7 @@ async function applyTags() {
         await exec(`docker push ${imageName}:stable`);
         await exec(`docker tag ${imageName}:latest ${imageName}:${fullVersion}`);
         await exec(`docker push ${imageName}:${fullVersion}`);
-        console.log(`tag ${fullVersion} pushed`);
+        console.log(`${imageName} tag ${fullVersion} pushed`);
     });
 }
 

@@ -1,15 +1,33 @@
-version: '3'
+version: '3.2'
 
 services:
-  sosemivigelant-scg:
-    container_name: tuktuk-prod
+  scg-provider:
+    container_name: tuktuk-scg-provider-prod
+    environment:
+      - NODE_ENV=production
+    image: registry.dekker.gdn/tuktuk-scg-scrapper-scg-provider:stable
+    volumes:
+      - server-data:/home/app/packages/server/data
+
+  proxy:
+    container_name: tuktuk-proxy-prod
     ports:
       - "8081:8081"
     environment:
       - NODE_ENV=production
-    image: registry.dekker.gdn/tuktuk-scg-scrapper:stable
-    volumes:
-      - server-data:/home/app/packages/server/data
+    image: registry.dekker.gdn/tuktuk-scg-scrapper-proxy:stable
+
+  storage:
+    container_name: tuktuk-storage-prod
+    environment:
+      - NODE_ENV=production
+    image: registry.dekker.gdn/tuktuk-scg-scrapper-storage:stable
+
+  frontend:
+    container_name: tuktuk-frontend-prod
+    environment:
+      - NODE_ENV=production
+    image: registry.dekker.gdn/tuktuk-scg-scrapper-frontend:stable
 
 volumes:
   server-data:
