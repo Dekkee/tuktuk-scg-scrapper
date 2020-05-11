@@ -30,6 +30,10 @@ app.get('/api/*', (req, res) => {
     proxy.web(req, res, { target: `http://${scgProviderConfig.host}:${scgProviderConfig.port}` });
 });
 
+app.get('/metrics/*', (req, res) => {
+    proxy.web(req, res, { target: `http://${scgProviderConfig.host}:${scgProviderConfig.port}` });
+});
+
 app.get('/storage/*', (req, res) => {
     proxy.web(req, res, { target: `http://${storageConfig.host}:${storageConfig.port}` });
 });
