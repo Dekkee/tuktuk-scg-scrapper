@@ -32,5 +32,5 @@ jobs:
         username: ${{ secrets.DIGITAL_OCEAN_USER }}
         script: |
           cd ~/tuktuk-scg-scrapper
-          docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull --no-parallel
           docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --no-build -d
