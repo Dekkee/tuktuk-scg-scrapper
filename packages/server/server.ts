@@ -74,6 +74,7 @@ app.get('/api/list', async function (req, resp, next) {
 
         resp.status(200).send(pagedAnswer);
     } catch (e) {
+        console.error('/api/list', e);
         next(e);
     }
     next();

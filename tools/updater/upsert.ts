@@ -7,6 +7,8 @@ import * as Progress from 'progress';
 const { chain } = require('stream-chain');
 const { Transform } = require('stream');
 
+const arr = [];
+
 const fetchQueue = queue((value, callback) => {
     fetch('https://scg.dekker.gdn/storage/card', {
         method: 'PUT',
@@ -14,7 +16,8 @@ const fetchQueue = queue((value, callback) => {
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
         },
-    }).then(callback);
+    }).then(callback)
+      .catch((e) => arr.push(value.id));
 }, 50);
 
 const createUploadStream = (tick) => {
@@ -24,7 +27,8 @@ const createUploadStream = (tick) => {
         autoDestroy: true,
         write: async function (chunk, encoding, callback) {
             try {
-                fetchQueue.push(chunk).then(tick);
+                await fetchQueue.push(chunk);
+                tick();
                 this.push(chunk);
             } catch (e) {
                 console.error('Failed to update', e);
@@ -51,6 +55,8 @@ const upsertDatabase = async () => {
     ]);
     pipeline.on('end', async () => {
         await disconnect();
+        console.log('failed ids: ')
+        console.info(JSON.stringify(arr));
     });
 };
 
