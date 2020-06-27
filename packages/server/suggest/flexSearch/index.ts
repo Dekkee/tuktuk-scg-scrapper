@@ -7,14 +7,6 @@ const s3IndexPath = 'https://dekkee.s3.eu-west-2.amazonaws.com/tuktuk/index.json
 const metaPath = './data/index.meta.json';
 const indexPath = './data/index.json';
 
-const index = new FlexSearch({
-    split: /\s+| % /,
-    doc: {
-        id: 'id',
-        field: ['search'],
-    },
-});
-
 if (!fs.existsSync('./data')) {
     fs.mkdirSync('./data');
 }
@@ -51,6 +43,14 @@ const updateIndex = async () => {
 export const shouldUpdateIndex = updateIndex;
 
 export const getIndex = async () => {
+    const index = new FlexSearch({
+        split: /\s+| % /,
+        doc: {
+            id: 'id',
+            field: ['search'],
+        },
+    });
+
     await updateIndex();
     const idx = fs.readFileSync(indexPath);
     index.import(idx);

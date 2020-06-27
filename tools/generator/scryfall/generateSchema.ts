@@ -52,19 +52,21 @@ export const createSchemaStream = initFilename => {
         const currentKeys = countsMap[filename];
         const mapTypes = globalMap[filename];
 
-        Object.keys(chunk).forEach((vk: string) => {
-            if (!(vk in mapTypes)) {
-                mapTypes[vk] = {};
-            }
+        if (chunk) {
+            Object.keys(chunk).forEach((vk: string) => {
+                if (!(vk in mapTypes)) {
+                    mapTypes[vk] = {};
+                }
 
-            if (!(vk in currentKeys)) {
-                currentKeys[vk] = 1;
-            } else {
-                currentKeys[vk]++;
-            }
-        });
+                if (!(vk in currentKeys)) {
+                    currentKeys[vk] = 1;
+                } else {
+                    currentKeys[vk]++;
+                }
+            });
 
-        fillMapWithTypes(mapTypes, Object.entries(chunk));
+            fillMapWithTypes(mapTypes, Object.entries(chunk));
+        }
     };
 
     return new Transform({

@@ -19,36 +19,48 @@ if (!fs.existsSync(path)) {
 
 const filteredLayouts = new Set(['art_series', 'emblem']);
 
+const filteredCards = [];
+const failedCards = [];
+const debugCards = [];
+
 export const createIndexStream = () => {
     const map = {};
 
     const parseCard = (card) => {
-        if (filteredLayouts.has(card.layout)) {
-            return;
-        }
-        const isRu = card.lang === 'ru';
-        const isEn = card.lang === 'en';
-        if (isRu || isEn) {
-            if (!(card.name in map)) {
-                map[card.name] = {
-                    names: new Set([card.printed_name, card.name]),
-                    text: card.oracle_text,
-                };
-            } else {
-                map[card.name].names.add(card.printed_name || card.name);
+        try {
+            if ('Dirge Bat' === card.name) {
+                debugCards.push(card);
             }
-            if (isRu) {
-                map[card.name].localizedName = card.printed_name || card.name;
+            if (filteredLayouts.has(card.layout)) {
+                // filteredCards.push(card);
+                return;
             }
-            if (Array.isArray(card.card_faces)) {
-                map[card.name].text = '';
-                map[card.name].localizedName = '';
-                card.card_faces.forEach(face => {
-                    map[card.name].names.add(face.printed_name || face.name);
-                    map[card.name].text += `${face.oracle_text} `;
-                    map[card.name].localizedName += `${face.printed_name} `;
-                });
+            const isRu = card.lang === 'ru';
+            const isEn = card.lang === 'en';
+            if (isRu || isEn) {
+                if (!(card.name in map)) {
+                    map[card.name] = {
+                        names: new Set([card.printed_name, card.name]),
+                        text: card.oracle_text,
+                    };
+                } else {
+                    map[card.name].names.add(card.printed_name || card.name);
+                }
+                if (isRu) {
+                    map[card.name].localizedName = card.printed_name || card.name;
+                }
+                if (Array.isArray(card.card_faces)) {
+                    map[card.name].text = '';
+                    map[card.name].localizedName = '';
+                    card.card_faces.forEach((face) => {
+                        map[card.name].names.add(face.printed_name || face.name);
+                        map[card.name].text += `${face.oracle_text} `;
+                        map[card.name].localizedName += `${face.printed_name} `;
+                    });
+                }
             }
+        } catch (e) {
+            failedCards.push({ card, error: e });
         }
     };
 
@@ -56,7 +68,7 @@ export const createIndexStream = () => {
         writableObjectMode: true,
         readableObjectMode: true,
         autoDestroy: true,
-        write: function(chunk, encoding, callback) {
+        write: function (chunk, encoding, callback) {
             parseCard(chunk.value);
             this.push(chunk);
             callback();
@@ -65,7 +77,7 @@ export const createIndexStream = () => {
             let id = 0;
             const doc = [];
             Object.entries(map).forEach(([key, value]: any[]) => {
-                doc.push({
+                const c = {
                     id: id++,
                     search: `${[...value.names.values()].reverse().join(' % ')}`,
                     card: {
@@ -73,10 +85,17 @@ export const createIndexStream = () => {
                         text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
                         localizedName: value.localizedName,
                     },
-                });
+                }
+                if (c.card.name === 'Dirge Bat') {
+                    console.log(JSON.stringify(c));
+                }
+                doc.push(c);
             });
             index.add(doc);
             fs.writeFileSync(`${path}/index.json`, index.export());
+            fs.writeFileSync(`${path}/filtered.json`, JSON.stringify(filteredCards));
+            fs.writeFileSync(`${path}/failed.json`, JSON.stringify(failedCards));
+            fs.writeFileSync(`${path}/debug.json`, JSON.stringify(debugCards));
             callback();
         },
     });
