@@ -65,6 +65,17 @@ export const cardRoute = ({ app }: TRoutesInput) => {
         res.sendStatus(200);
     });
 
+    app.put('/storage/card/batch', async (req, res) => {
+        const { body } = req;
+        const upserts = [];
+        (body || []).forEach((card) => {
+            console.log(`Upserting: ${card.name} ${card.id}`);
+            upserts.push(Card.findOneAndUpdate({ id: card.id }, card, { upsert: true }));
+        })
+        await Promise.all(upserts);
+        res.sendStatus(200);
+    });
+
     app.put('/storage/card/update-ids', (req, res) => {
         const { body } = req;
         const { rows } = body as { rows: Partial<ParsedRow>[] };
