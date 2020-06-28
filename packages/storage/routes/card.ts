@@ -41,6 +41,7 @@ export const cardRoute = ({ app }: TRoutesInput) => {
                     scg_regular_prices,
                     scg_foil_prices,
                     set_name,
+                    id,
                 }: CardType) => ({
                     name,
                     set,
@@ -51,6 +52,7 @@ export const cardRoute = ({ app }: TRoutesInput) => {
                     scg_foil_id,
                     scg_regular_prices,
                     scg_foil_prices,
+                    id,
                 })
             ),
         });
