@@ -6,4 +6,6 @@ const cronJobs = [
     new CronJob('0 20 4 * * *', dbAutoBackUp, null, true, 'Europe/Moscow'),
 ];
 
+console.info(`Maintenance: running ${cronJobs.length} jobs`);
+
 export const stopCronJobs = () => cronJobs.forEach((job) => job.stop());
