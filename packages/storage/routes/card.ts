@@ -11,7 +11,7 @@ export const cardRoute = ({ app }: TRoutesInput) => {
     app.get('/storage/card', async (req, res) => {
         const now = Date.now();
         const query: any = {};
-        const { name, price, limit } = req.query;
+        const { name, price, limit, page } = req.query;
         if (name) {
             console.log(`Looking for: ${req.query.name}`);
             query.name = name.toString();
@@ -22,6 +22,9 @@ export const cardRoute = ({ app }: TRoutesInput) => {
 
         if (limit) {
             mongoQuery.limit(parseInt(limit.toString(), 10));
+        }
+        if (page) {
+            mongoQuery.skip(parseInt(page.toString(), 10) * parseInt(limit.toString(), 10));
         }
 
         const cards = await mongoQuery.exec();
@@ -93,7 +96,7 @@ const scgSetsMap = {
 };
 
 const parseScgCard = (card: Partial<ParsedRow>): PreparedScgCard => {
-    const { meta, id, cards } = card;
+    const { meta = '', id, cards } = card;
     const [sgl, mtg, set, numString, langf] = meta.split('-');
     if (sgl !== 'SGL' || mtg !== 'MTG') {
         console.log('not single: ', meta);
