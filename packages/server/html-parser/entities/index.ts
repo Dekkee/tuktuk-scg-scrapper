@@ -27,7 +27,7 @@ export type cardSet = {
 };
 
 export const parseSet = (originalSet: string): cardSet => {
-    const [, setMeta = '', set = '', foil = '', lang = 'english'] =
+    const [, setMeta = '', set = '', foil = '', lang = 'English'] =
         originalSet.match(
           /SHOP\/(?:([\w\s\-()]+)\/)?([\w\s&:\-']+)\/((?:Non\-)?Foil)?(?:\/(\w+))?/i
         ) || [];
