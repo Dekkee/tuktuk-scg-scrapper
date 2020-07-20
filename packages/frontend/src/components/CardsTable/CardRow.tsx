@@ -13,9 +13,9 @@ export interface Props {
 
 export class CardRow extends React.PureComponent<Props> {
     render () {
-        const { name, set, cards, meta, foil, 'set-meta': setMeta } = this.props.card;
+        const { name, set, cards, meta, foil, 'set-meta': setMeta, lang } = this.props.card;
         const cardId = encodeURIComponent(`${name.replace(/[,\.]/g, '').replace(/\s/g, '-')}-${meta}`.toLowerCase());
-        const isForeign = setMeta === 'Singles/Non-English';
+        const isForeign = lang !== 'english';
         return <>
             <Link to={`/card/${cardId}`} className="card-row__header"
                   style={ { gridRow: `span ${ cards.length }` } }>

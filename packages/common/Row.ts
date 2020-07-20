@@ -9,6 +9,7 @@ export interface RowHeader {
     color: string;
     foil: boolean;
     'set-meta'?: string;
+    lang?: string;
 }
 
 export interface RowBody {
