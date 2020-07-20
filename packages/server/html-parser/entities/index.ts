@@ -35,8 +35,8 @@ export const parseSet = (originalSet: string): cardSet => {
         'original-set': originalSet,
         set: set.trim(),
         'set-meta': setMeta,
-        foil: !!foil,
-        lang,
+        foil: foil.toLowerCase() == 'foil',
+        lang: lang.toLowerCase(),
     };
 };
 
