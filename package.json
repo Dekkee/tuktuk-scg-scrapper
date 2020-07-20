@@ -10,7 +10,7 @@
         "dev": "lerna run dev --stream",
         "test": "lerna run test --stream",
         "test:ci": "lerna run test:ci --stream",
-        "update-index": "cross-env MONGO_INITDB_ROOT_USERNAME=$MONGO_USER MONGO_INITDB_ROOT_PASSWORD=$MONGO_PWORD AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY node --max_old_space_size=8192 -r ts-node/register ./tools/generator/scryfall",
+        "update-index": "node --max_old_space_size=8192 -r ts-node/register ./update-index.ts",
         "upsert-database": "cross-env MONGO_INITDB_ROOT_USERNAME=$MONGO_USER MONGO_INITDB_ROOT_PASSWORD=$MONGO_PWORD node --max_old_space_size=8192 -r ts-node/register ./tools/updater/upsert.ts",
         "docker:build": "docker-compose build"
     },

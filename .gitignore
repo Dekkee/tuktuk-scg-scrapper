@@ -8,3 +8,4 @@ yarn-error.log
 dist
 **/data/*
 update-index.ts
+upsert-database.ts
