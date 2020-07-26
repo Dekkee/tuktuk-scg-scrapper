@@ -96,6 +96,7 @@ export type ScgPriceAndCondition = {
     price: number;
     stock: number;
     purchasing_disabled: boolean;
+    language: string;
 };
 
 export type Card_faces = {

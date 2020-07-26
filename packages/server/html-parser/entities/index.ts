@@ -18,28 +18,6 @@ export const parseName = (originalName: string): cardName => {
     };
 };
 
-export type cardSet = {
-    'original-set': string;
-    set: string;
-    'set-meta': string;
-    foil: boolean;
-    lang: string;
-};
-
-export const parseSet = (originalSet: string): cardSet => {
-    const [, setMeta = '', set = '', foil = '', lang = 'English'] =
-        originalSet.match(
-          /SHOP\/(?:([\w\s\-()]+)\/)?([\w\s&:\-']+)\/((?:Non\-)?Foil)?(?:\/(\w+))?/i
-        ) || [];
-    return {
-        'original-set': originalSet,
-        set: set.trim(),
-        'set-meta': setMeta,
-        foil: foil.toLowerCase() == 'foil',
-        lang: lang,
-    };
-};
-
 export const fillCardPrices = async (cards: Partial<ParsedRow>[]) => {
     await async.map(cards, async (row, cb) => {
         const { response } = await (

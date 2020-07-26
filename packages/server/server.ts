@@ -49,17 +49,17 @@ app.get('/api/list', async function (req, resp, next) {
     try {
         const name = String(req.query.name);
         const page = parseInt(String(req.query.page) || '', 10);
-        const preparedName = prepareUrl(name);
         const queryObject = {
-            search_query: preparedName,
-            page: page || 1,
+            search_query: name,
+            pg: page || 1,
+            hawkoutput: 'json',
         };
         const query = querystring.stringify(queryObject);
-        console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.page}`);
+        console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.pg}`);
 
         searchTotal.inc({ card_name: name });
 
-        const answer = await (await fetch(`https://starcitygames.com/search.php?${query}`)).text();
+        const answer = await (await fetch(`http://starcitygames.hawksearch.com/sites/starcitygames/?${query}`)).json();
         const pagedAnswer = await parseScgListAnswer(answer);
 
         fetch(`http://${storageConfig.host}:${storageConfig.port}/storage/card/update-ids`, {

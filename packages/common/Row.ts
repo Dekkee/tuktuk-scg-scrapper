@@ -3,10 +3,11 @@ import { ScgPriceAndCondition } from "@tuktuk-scg-scrapper/storage/types";
 export interface RowHeader {
     id: number;
     name: string;
-    meta: string;
+    subtitle: string;
+    meta?: string;
     set: string;
-    rarity: string;
-    color: string;
+    rarity?: string;
+    color?: string;
     foil: boolean;
     'set-meta'?: string;
     lang?: string;
