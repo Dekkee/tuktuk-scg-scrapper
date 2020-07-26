@@ -47,7 +47,7 @@ app.use((req, res, next) => {
 
 app.get('/api/list', async function (req, resp, next) {
     try {
-        const name = String(req.query.name);
+        const name = String(req.query.name).replace(',', '%c%');
         const page = parseInt(String(req.query.page) || '', 10);
         const auto = req.query.auto === 'true';
         const queryObject: Record<string, string | number> = {
