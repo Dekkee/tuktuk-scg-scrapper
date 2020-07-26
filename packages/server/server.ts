@@ -49,11 +49,17 @@ app.get('/api/list', async function (req, resp, next) {
     try {
         const name = String(req.query.name);
         const page = parseInt(String(req.query.page) || '', 10);
-        const queryObject = {
-            search_query: name,
+        const auto = req.query.auto === 'true';
+        const queryObject: Record<string, string | number> = {
             pg: page || 1,
             hawkoutput: 'json',
         };
+        if (auto) {
+            queryObject.card_name = name;
+        } else {
+            queryObject.search_query = name;
+        }
+        
         const query = querystring.stringify(queryObject);
         console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.pg}`);
 
