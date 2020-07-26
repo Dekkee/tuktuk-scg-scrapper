@@ -8,6 +8,7 @@ type HawkSearchAnswer = {
             primary_category_name: string;
             subtitle: string;
             child_information: string[];
+            url_detail: string;
         };
     }[];
     Pagination: {
@@ -36,6 +37,7 @@ export const parseScgListAnswer = async (input: HawkSearchAnswer) => {
             name: res.Custom.item_display_name,
             subtitle: res.Custom.subtitle,
             set: res.Custom.primary_category_name,
+            url: res.Custom.url_detail,
             cards: [],
         };
 

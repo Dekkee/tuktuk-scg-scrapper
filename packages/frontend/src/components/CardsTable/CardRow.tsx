@@ -13,11 +13,10 @@ export interface Props {
 
 export class CardRow extends React.PureComponent<Props> {
     render() {
-        const { name, set, cards, meta, foil, 'set-meta': setMeta, subtitle } = this.props.card;
-        const cardId = encodeURIComponent(`${name.replace(/[,\.]/g, '').replace(/\s/g, '-')}-${meta}`.toLowerCase());
+        const { name, set, cards, meta, foil, 'set-meta': setMeta, subtitle, url } = this.props.card;
         return (
             <>
-                <Link to={`/card/${cardId}`} className="card-row__header" style={{ gridRow: `span ${cards.length}` }}>
+                <Link to={`/card${url}`} className="card-row__header" style={{ gridRow: `span ${cards.length}` }}>
                     <div className="card-row__name">
                         {name}
                         {subtitle && <span className="card-row__lang">{subtitle}</span>}

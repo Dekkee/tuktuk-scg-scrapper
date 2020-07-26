@@ -11,6 +11,7 @@ export interface RowHeader {
     foil: boolean;
     'set-meta'?: string;
     lang?: string;
+    url: string;
 }
 
 export interface RowBody {
