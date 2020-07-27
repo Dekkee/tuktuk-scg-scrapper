@@ -1,0 +1,372 @@
+@import "../../palette";
+
+.mtg-goldfish-graph {
+
+    padding-right: 40px;
+
+    &__graph {
+        width: 100% !important;
+        height: 200px;
+    }
+
+    &__legend {
+        font-size: 12px;
+        overflow: hidden;
+        height: 18px;
+        text-align: right;
+    }
+}
+
+.dygraph-annotation {
+    position: absolute;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.graph-sprite-m12 {
+    width: 39px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) 0 0 no-repeat
+}
+
+.graph-sprite-m13 {
+    width: 39px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -39px 0 no-repeat
+}
+
+.graph-sprite-m14 {
+    width: 39px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) 0 -21px no-repeat
+}
+
+.graph-sprite-m15 {
+    width: 39px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -39px -21px no-repeat
+}
+
+.graph-sprite-m19 {
+    width: 39px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) 0 -42px no-repeat
+}
+
+.graph-sprite-gtc {
+    width: 33px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -78px 0 no-repeat
+}
+
+.graph-sprite-dgm {
+    width: 29px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -78px -21px no-repeat
+}
+
+.graph-sprite-jou {
+    width: 29px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) 0 -60px no-repeat
+}
+
+.graph-sprite-dka {
+    width: 28px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -29px -60px no-repeat
+}
+
+.graph-sprite-vma {
+    width: 28px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -57px -60px no-repeat
+}
+
+.graph-sprite-mbs {
+    width: 21px;
+    height: 27px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) 0 -81px no-repeat
+}
+
+.graph-sprite-c13 {
+    width: 21px;
+    height: 25px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -21px -81px no-repeat
+}
+
+.graph-sprite-hou {
+    width: 21px;
+    height: 25px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -42px -81px no-repeat
+}
+
+.graph-sprite-ktk {
+    width: 21px;
+    height: 25px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -63px -81px no-repeat
+}
+
+.graph-sprite-war {
+    width: 21px;
+    height: 25px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -84px -81px no-repeat
+}
+
+.graph-sprite-a25 {
+    width: 25px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -85px -60px no-repeat
+}
+
+.graph-sprite-mma {
+    width: 25px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -111px 0 no-repeat
+}
+
+.graph-sprite-eld {
+    width: 21px;
+    height: 23px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -111px -21px no-repeat
+}
+
+.graph-sprite-m20 {
+    width: 21px;
+    height: 23px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -111px -44px no-repeat
+}
+
+.graph-sprite-thb {
+    width: 21px;
+    height: 23px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -111px -67px no-repeat
+}
+
+.graph-sprite-bng {
+    width: 23px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) 0 -108px no-repeat
+}
+
+.graph-sprite-isd {
+    width: 23px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -23px -108px no-repeat
+}
+
+.graph-sprite-thb {
+    width: 21px;
+    height: 22px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -136px 0 no-repeat
+}
+
+.graph-sprite-akh {
+    width: 21px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -136px -22px no-repeat
+}
+
+.graph-sprite-avr {
+    width: 21px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -136px -43px no-repeat
+}
+
+.graph-sprite-cns {
+    width: 21px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -136px -64px no-repeat
+}
+
+.graph-sprite-dds {
+    width: 21px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -136px -85px no-repeat
+}
+
+.graph-sprite-frf {
+    width: 21px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -136px -106px no-repeat
+}
+
+.graph-sprite-ima {
+    width: 21px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -46px -108px no-repeat
+}
+
+.graph-sprite-som {
+    width: 21px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -67px -108px no-repeat
+}
+
+.graph-sprite-ths {
+    width: 21px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -88px -108px no-repeat
+}
+
+.graph-sprite-rtr {
+    width: 20px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -109px -108px no-repeat
+}
+
+.graph-sprite-c20 {
+    width: 21px;
+    height: 20px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) 0 -129px no-repeat
+}
+
+.graph-sprite-ogw {
+    width: 21px;
+    height: 19px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -21px -129px no-repeat
+}
+
+.graph-sprite-dtk {
+    width: 18px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -157px 0 no-repeat
+}
+
+.graph-sprite-aer {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -111px -90px no-repeat
+}
+
+.graph-sprite-bbd {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -78px -42px no-repeat
+}
+
+.graph-sprite-bfz {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -39px -42px no-repeat
+}
+
+.graph-sprite-ddq {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -42px -129px no-repeat
+}
+
+.graph-sprite-dom {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -63px -129px no-repeat
+}
+
+.graph-sprite-ema {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -84px -129px no-repeat
+}
+
+.graph-sprite-emn {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -105px -129px no-repeat
+}
+
+.graph-sprite-kld {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -126px -129px no-repeat
+}
+
+.graph-sprite-ori {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) 0 -149px no-repeat
+}
+
+.graph-sprite-rix {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -21px -149px no-repeat
+}
+
+.graph-sprite-soi {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -42px -149px no-repeat
+}
+
+.graph-sprite-xln {
+    width: 21px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -63px -149px no-repeat
+}
+
+.graph-sprite-ddo {
+    width: 21px;
+    height: 17px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -84px -149px no-repeat
+}
+
+.graph-sprite-mm2 {
+    width: 21px;
+    height: 17px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -105px -149px no-repeat
+}
+
+.graph-sprite-mm3 {
+    width: 21px;
+    height: 16px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -126px -149px no-repeat
+}
+
+.graph-sprite-mh1 {
+    width: 21px;
+    height: 15px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -147px -149px no-repeat
+}
+
+.graph-sprite-grn {
+    width: 21px;
+    height: 14px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -175px 0 no-repeat
+}
+
+.graph-sprite-uma {
+    width: 21px;
+    height: 14px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -175px -14px no-repeat
+}
+
+.graph-sprite-nph {
+    width: 13px;
+    height: 21px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -175px -28px no-repeat
+}
+
+.graph-sprite-tpr {
+    width: 21px;
+    height: 12px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -175px -49px no-repeat
+}
+
+.graph-sprite-jmp {
+    width: 20px;
+    height: 20px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -175px -61px no-repeat
+}
+
+.graph-sprite-iko {
+    width: 20px;
+    height: 18px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -175px -81px no-repeat
+}
+
+.graph-sprite-m21 {
+    width: 20px;
+    height: 10px;
+    background: url(https://assets1.mtggoldfish.com/assets/graph-sprites-16a96c98ba47755855dd0e62738a58eaaec3aaaffc893ebcf32006b5f5434b8b.png) -175px -99px no-repeat
+}

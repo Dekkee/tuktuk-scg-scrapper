@@ -11,7 +11,7 @@ import ArrowIcon from '../../icons/arrow_back.svg';
 import './CardLayout.scss';
 
 export interface State {
-    card?: ParsedRowDetails,
+    card?: ParsedRowDetails;
     isFetching: boolean;
 }
 
@@ -19,7 +19,7 @@ type Props = Partial<RouteComponentProps<{ id: string }>>;
 
 @(withRouter as any)
 export class CardLayout extends React.Component<Props, State> {
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -27,30 +27,34 @@ export class CardLayout extends React.Component<Props, State> {
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         const { match } = this.props;
         const { id } = match.params;
         this.requestCard(id);
-    };
+    }
 
-    async requestCard (value: string) {
+    async requestCard(value: string) {
         this.setState({ ...this.state, card: undefined, isFetching: true });
         const { card } = await getCard(value);
         this.setState({ ...this.state, card, isFetching: false });
-    };
+    }
 
     onBackClick() {
         history.goBack();
     }
 
-    render () {
+    render() {
         const { card, isFetching } = this.state;
-        return (<div className="card-layout">
-            <div className="card-layout__header">
-                <div className="card-layout__back-button" onClick={this.onBackClick}><ArrowIcon width={24} height={24} fill="#fff"/></div>
-                <div className="card-layout__name">{card && card.name}</div>
+        return (
+            <div className="card-layout">
+                <div className="card-layout__header">
+                    <div className="card-layout__back-button" onClick={this.onBackClick}>
+                        <ArrowIcon width={24} height={24} fill="#fff" />
+                    </div>
+                    <div className="card-layout__name">{card && card.name}</div>
+                </div>
+                {isFetching ? <LoadingLabel /> : <CardDetails card={card} />}
             </div>
-            { isFetching ? <LoadingLabel/> : <CardDetails card={ card }/> }
-        </div>);
+        );
     }
 }

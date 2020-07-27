@@ -1,16 +1,29 @@
 import * as async from 'async';
 import fetch from 'node-fetch';
-import { ParsedRow } from '@tuktuk-scg-scrapper/common/Row';
+import { Meta, ParsedRow } from '@tuktuk-scg-scrapper/common/Row';
 
 export type cardName = {
     'original-name': string;
     name: string;
-    meta: string;
+    meta: Meta;
 };
 
 export const parseName = (originalName: string): cardName => {
-    const [, name, meta] =
-        originalName.match(/([\w\s-'\/,\.:]+)(?:\[([\w-]+)\])?/) || [];
+    const [, name, m] = originalName.match(/([\w\s-'\/,\.:]+)(?:\[([\w-]+)\])?/) || [];
+    const [sgl, mtg, set, num, lang] = m.split('-');
+    let meta: Meta = m;
+    if (sgl === 'SGL' && mtg === 'MTG') {
+        const l = lang.slice(0, 2);
+        const f = lang.slice(-1) === 'F';
+
+        meta = {
+            original: m,
+            set,
+            num,
+            lang: l,
+            foil: f,
+        };
+    }
     return {
         'original-name': originalName,
         name: name.trim(),
@@ -21,43 +34,32 @@ export const parseName = (originalName: string): cardName => {
 export const fillCardPrices = async (cards: Partial<ParsedRow>[]) => {
     await async.map(cards, async (row, cb) => {
         const { response } = await (
-            await fetch(
-                `https://newstarcityconnector.herokuapp.com/eyApi/products/${row.id}/variants`
-            )
+            await fetch(`https://newstarcityconnector.herokuapp.com/eyApi/products/${row.id}/variants`)
         ).json();
         row.cards = [];
-        (response.data || []).forEach(
-            ({ price, option_values = [], inventory_level, purchasing_disabled }: any) => {
-                if (!price) {
-                    return;
-                }
-                const card = {
-                    price,
-                    stock: inventory_level,
-                    purchasing_disabled,
-                    ...option_values.reduce(
-                        (acc, curr) => ({
-                            ...acc,
-                            [curr['option_display_name'].toLowerCase()]: curr[
-                                'label'
-                            ],
-                        }),
-                        {}
-                    ),
-                };
-                if (card.condition)
-                    card.condition = parseCondition(card.condition);
-
-                if (!card.purchasing_disabled){
-                    row.cards.push(card);
-                }
+        (response.data || []).forEach(({ price, option_values = [], inventory_level, purchasing_disabled }: any) => {
+            if (!price) {
+                return;
             }
-        );
-        row.cards.sort(
-            (a, b) =>
-                (conditionMap[b.condition] || 0) -
-                (conditionMap[a.condition] || 0)
-        );
+            const card = {
+                price,
+                stock: inventory_level,
+                purchasing_disabled,
+                ...option_values.reduce(
+                    (acc, curr) => ({
+                        ...acc,
+                        [curr['option_display_name'].toLowerCase()]: curr['label'],
+                    }),
+                    {}
+                ),
+            };
+            if (card.condition) card.condition = parseCondition(card.condition);
+
+            if (!card.purchasing_disabled) {
+                row.cards.push(card);
+            }
+        });
+        row.cards.sort((a, b) => (conditionMap[b.condition] || 0) - (conditionMap[a.condition] || 0));
         cb(null, row);
     });
 };
