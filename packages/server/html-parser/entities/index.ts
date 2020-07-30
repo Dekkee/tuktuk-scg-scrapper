@@ -16,9 +16,15 @@ export const parseName = (originalName: string): cardName => {
         const l = lang.slice(0, 2);
         const f = lang.slice(-1) === 'F';
 
+        let fullSet = set;
+        if (set === 'PRM') {
+            const subSet = num.split('_')[0];
+            fullSet = `${set}-${subSet}`;
+        }
+
         meta = {
             original: m,
-            set,
+            set: fullSet,
             num,
             lang: l,
             foil: f,
