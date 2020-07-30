@@ -4,6 +4,10 @@
     height: 220px;
 
     &__graph {
+
+    }
+
+    &__wrapper {
         padding-right: 40px;
         #graph {
             width: 100% !important;
@@ -11,11 +15,16 @@
         }
     }
 
+
     &__legend {
         font-size: 12px;
         overflow: hidden;
         height: 20px;
         text-align: right;
+    }
+
+    &__error {
+        text-align: center;
     }
 }
 

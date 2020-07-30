@@ -20,7 +20,7 @@ type ParserArguments = {
 export const parseGraph = async ({ name, sub, set, foil }: ParserArguments) => {
     try {
         console.log(`Parsing graph for: name: ${name} set ${set} foil: ${foil}`);
-        const praparedName = `${name.replace(' ', '+').replace(/[,\.\:]/, '')}${Boolean(sub) ? `-${sub}` : ''}`;
+        const praparedName = `${name.replace(' ', '+').replace(/[',\.\:]/, '')}${Boolean(sub) ? `-${sub}` : ''}`;
         const praparedSet = `${getMtgGoldfishSet(set).replace(' ', '+')}${foil ? ':Foil' : ''}`;
         const url = `https://www.mtggoldfish.com/price/${praparedSet}/${praparedName}`;
         console.log(`Url: ${url}`);
