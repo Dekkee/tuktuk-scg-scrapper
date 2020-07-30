@@ -26,7 +26,9 @@ export class CardRow extends React.PureComponent<Props> {
                 </Link>
                 {cards.map(({ condition, price, stock, language }, i) => (
                     <React.Fragment key={i}>
-                        <span>{stringToLangShort(language)} {condition}</span>
+                        <span>
+                            {stringToLangShort(language)} {condition}
+                        </span>
                         <span className="card-row__price">
                             {price && <Price value={price} />}
                             {!stock && <div className="card-row__stock">Out of stock</div>}
@@ -65,13 +67,16 @@ const stringToLangShort = (langString: string) => {
         case 'Russian':
             flag = 'ru';
             break;
+        case 'Portuguese':
+            flag = 'pt';
+            break;
         case 'English':
             flag = 'us';
             break;
     }
     if (flag) {
-        return <img src={`https://manage.hawksearch.com/sites/starcitygames/images/${flag.toString()}.png`}/>
+        return <img src={`https://manage.hawksearch.com/sites/starcitygames/images/${flag.toString()}.png`} />;
     } else {
         return `(${langString})`;
     }
-}
+};
