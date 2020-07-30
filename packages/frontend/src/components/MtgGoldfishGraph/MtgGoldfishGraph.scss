@@ -1,18 +1,20 @@
 @import "../../palette";
 
 .mtg-goldfish-graph {
-
-    padding-right: 40px;
+    height: 220px;
 
     &__graph {
-        width: 100% !important;
-        height: 200px;
+        padding-right: 40px;
+        #graph {
+            width: 100% !important;
+            height: 200px;
+        }
     }
 
     &__legend {
         font-size: 12px;
         overflow: hidden;
-        height: 18px;
+        height: 20px;
         text-align: right;
     }
 }
