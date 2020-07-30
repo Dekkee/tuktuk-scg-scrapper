@@ -1,10 +1,12 @@
-import { ScgPriceAndCondition } from "@tuktuk-scg-scrapper/storage/types";
+import { ScgPriceAndCondition } from '@tuktuk-scg-scrapper/storage/types';
+
+export type Meta = string | Record<string, any>;
 
 export interface RowHeader {
     id: number;
     name: string;
     subtitle: string;
-    meta?: string;
+    meta?: Meta;
     set: string;
     rarity?: string;
     color?: string;
@@ -33,5 +35,4 @@ export type RawRow = Partial<RowHeader> & Partial<RowBody>;
 export type ParsedRow = Partial<RowHeader> & {
     cards: ScgPriceAndCondition[];
 };
-export type ParsedRowDetails = Partial<RowHeader> &
-    Partial<RowBody> & { cards: ScgPriceAndCondition[] };
+export type ParsedRowDetails = Partial<RowHeader> & Partial<RowBody> & { cards: ScgPriceAndCondition[] };

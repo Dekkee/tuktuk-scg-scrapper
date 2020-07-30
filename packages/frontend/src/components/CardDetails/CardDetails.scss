@@ -47,6 +47,10 @@
         grid-template-columns: auto 1fr;
         grid-column-gap: 10px;
     }
+
+    &__graph {
+        width: 100%;
+    }
 }
 
 .card-prices {

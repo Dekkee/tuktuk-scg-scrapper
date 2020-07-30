@@ -13,6 +13,7 @@ import { prepareUrl } from './urlPreparation';
 import { collectDefaultMetrics, Counter, Histogram, register } from 'prom-client';
 import { config } from '@tuktuk-scg-scrapper/common/config/scgProvider';
 import { config as storageConfig } from '@tuktuk-scg-scrapper/common/config/storage';
+import { parseGraph } from './html-parser/mtggoldfish';
 
 collectDefaultMetrics();
 
@@ -59,7 +60,7 @@ app.get('/api/list', async function (req, resp, next) {
         } else {
             queryObject.search_query = name;
         }
-        
+
         const query = querystring.stringify(queryObject);
         console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.pg}`);
 
@@ -98,6 +99,22 @@ app.get('/api/get', async function (req, resp, next) {
     } catch (e) {
         next(e);
     }
+
+    next();
+});
+
+app.get('/api/graph', async function (req, resp, next) {
+    const name = decodeURIComponent(String(req.query.name || ''));
+    const set = decodeURIComponent(String(req.query.set || ''));
+    const sub = decodeURIComponent(String(req.query.sub || ''));
+    const foil = req.query.foil === 'true';
+    const res = await parseGraph({
+        name,
+        set,
+        sub,
+        foil,
+    });
+    resp.status(200).send(res);
 
     next();
 });
