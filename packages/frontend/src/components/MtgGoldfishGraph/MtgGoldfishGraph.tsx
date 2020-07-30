@@ -5,7 +5,7 @@ import { stringify } from 'querystring';
 
 import './MtgGoldfishGraph.scss';
 import { LoadingLabel } from '../LoadingLabel';
-import { CardDetails } from '../CardDetails';
+import ErrorIcon from '../../icons/error.svg';
 
 interface Props {
     card: ParsedRowDetails;
@@ -63,7 +63,7 @@ const requestCard = async (state, setState, props) => {
 };
 
 export const MtgGoldfishGraph = (props: Props) => {
-    const [state, setState] = useState({ isFetching: true });
+    const [state, setState] = useState({ isFetching: true, data: undefined, annotations: undefined });
     useEffect(() => {
         requestCard(state, setState, props);
     }, []);
@@ -77,7 +77,16 @@ export const MtgGoldfishGraph = (props: Props) => {
                     <div className="mtg-goldfish-graph__legend">
                         <div id="graph-legend" />
                     </div>
-                    <div id="graph" />
+                    {!state.isFetching && state.data ? (
+                        <div className="mtg-goldfish-graph__wrapper">
+                            <div id="graph" />
+                        </div>
+                    ) : (
+                        <div className="mtg-goldfish-graph__error">
+                            <ErrorIcon width={50} height={50} />
+                            <div>Graph is not available</div>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
