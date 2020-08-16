@@ -81,7 +81,7 @@ export class CardDetails extends React.PureComponent<Props> {
                     {card.oracleText && (
                         <div className="card-details__oracle">
                             <b>Oracle text:</b>
-                            {card.oracleText}
+                            <span dangerouslySetInnerHTML={{ __html: card.oracleText }} />
                         </div>
                     )}
                     {card.flavorText && (

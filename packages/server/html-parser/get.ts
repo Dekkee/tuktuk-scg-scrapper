@@ -3,9 +3,22 @@ import { ParsedRowDetails } from '@tuktuk-scg-scrapper/common/Row';
 import { fillCardPrices, parseName } from './entities';
 import { GetResponse } from '@tuktuk-scg-scrapper/common/Response';
 
-export const parseScgGetAnswer = async (
-    input: string
-): Promise<GetResponse> => {
+const productRegex = /scg\.product\.customFields\s=\s\{\};\s+(.*)\.forEach\(\(cf\)=>\{scg\.product\.customFields/;
+
+export const parseScgGetAnswer = async (input: string): Promise<GetResponse> => {
+    const [, productString] = input.match(productRegex) || [];
+    const product = JSON.parse(productString.trim());
+
+    const parsed: Record<string, string> = {};
+
+    product.forEach((field) => {
+        if (field.name.trim()) {
+            parsed[field.name] = field.value;
+        } else {
+            parsed['Oracle Text'] += field.value;
+        }
+    });
+
     const dom = cheerio.load(input);
     const desc = dom('.productView');
 
@@ -20,52 +33,6 @@ export const parseScgGetAnswer = async (
     const nameContainer = dom('.mobile-product-title');
     const name = parseName(nameContainer.text());
 
-    // Set
-    const setLink = dom(desc).find("[id='custom-field--Set']");
-    const set = setLink.text().trim();
-
-    // Mana Cost
-    const manaCostElement = dom(desc).find("[id='custom-field--Mana Cost']");
-    const manaCost = manaCostElement.text().trim();
-
-    // Card Type
-    const cardTypeElement = dom(desc).find("[id='custom-field--Card Type']");
-    const cardType = cardTypeElement.text().trim();
-
-    // Subtype
-    const subtypeElement = dom(desc).find("[id='custom-field--Subtype']");
-    const subtype = subtypeElement.text().trim();
-
-    // Oracle Text
-    const oracleTextElement = dom(desc).find(
-        "[id='custom-field--Oracle Text']"
-    );
-    const oracleText = oracleTextElement.text().trim();
-
-    // Flavor Text
-    const flavorTextElement = dom(desc).find(
-        "[id='custom-field--Flavor Text']"
-    );
-    const flavorText = flavorTextElement.text().trim();
-
-    // Power / Toughness
-    const ptElement = dom(desc).find("[id='custom-field--P/T']");
-    const pt = ptElement.text().trim();
-
-    // Artist
-    const artistElement = dom(desc).find("[id='custom-field--Artist']");
-    const artist = artistElement.text().trim();
-
-    // Collector Number
-    const collectorNumberElement = dom(desc).find(
-        "[id='custom-field--Collector Number']"
-    );
-    const collectorNumber = collectorNumberElement.text().trim();
-
-    // Rarity
-    const rarityElement = dom(desc).find("[id='custom-field--Rarity']");
-    const rarity = rarityElement.text().trim();
-
     // Image
     const imageContainer = dom(desc).find('.productView-image--default');
     const image = imageContainer.attr('data-src');
@@ -73,16 +40,16 @@ export const parseScgGetAnswer = async (
     const card: Partial<ParsedRowDetails> = {
         id,
         ...name,
-        set,
-        mana: manaCost,
-        type: cardType,
-        artist,
-        oracleText,
-        subtype,
-        rarity,
-        collectorNumber,
-        pt,
-        flavorText,
+        set: parsed.Set,
+        mana: parsed['Mana Cost'],
+        type: parsed['Card Type'],
+        artist: parsed.Artist,
+        oracleText: parsed['Oracle Text'],
+        subtype: parsed.Subtype,
+        rarity: parsed.Rarity,
+        collectorNumber: parsed['Collector Number'],
+        pt: parsed['P/T'],
+        flavorText: parsed['Flavor Text'],
         image,
     };
 
