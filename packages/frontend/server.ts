@@ -2,8 +2,9 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 import * as colors from 'colors';
+import * as path from 'path';
 import * as cors from 'cors';
-import { config } from "@tuktuk-scg-scrapper/common/config/frontend";
+import { config } from '@tuktuk-scg-scrapper/common/config/frontend';
 
 const compression = require('compression');
 const app = express()
@@ -12,10 +13,13 @@ const app = express()
     .use(bodyParser.json())
     .use(cors());
 
-
 app.use(compression({ threshold: 0 }));
 app.use(express.static('../../dist'));
 
+app.get(/^(\/card|\/$)/, function (req, resp, next) {
+    resp.sendFile(path.join(__dirname, '../../dist/index.html'));
+    next();
+});
 
 const port = config.port;
 
