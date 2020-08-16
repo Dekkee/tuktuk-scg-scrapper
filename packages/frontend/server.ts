@@ -16,10 +16,9 @@ const app = express()
 app.use(compression({ threshold: 0 }));
 app.use(express.static('../../dist'));
 
-// app.get(/^(\/card|\/$)/, function (req, resp, next) {
-//     resp.sendFile(path.join(__dirname, '../../dist/index.html'));
-//     next();
-// });
+app.get(/^(\/card|\/$)/, function (req, resp) {
+    resp.sendFile(path.join(__dirname, '../../dist/index.html'));
+});
 
 const port = config.port;
 
