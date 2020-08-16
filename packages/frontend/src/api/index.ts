@@ -1,41 +1,30 @@
-import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only';
 import { stringify } from 'querystring';
 
-import 'whatwg-fetch';
 import { AutocompleteCard } from '../../../common/AutocompleteCard';
 import { GetResponse, ListResponse } from '../../../common/Response';
+import { abortableFetch } from '../utils/abortableFetch';
 
 const url = process.env.NODE_ENV === 'production' ? '' : '//localhost:8081';
 
-let controller = null;
+let controller: AbortController = null;
 
-export const searchByName = async (
-    value: string,
-    isAutocompletion: boolean,
-    page: number = 0
-) => {
+export const searchByName = async (value: string, isAutocompletion: boolean, page: number = 0) => {
     if (!value) {
         return;
     }
-    if (controller) {
-        controller.abort();
-    }
-    controller = new AbortController();
     try {
         const query = stringify({
             name: value,
             page: page || null,
             auto: isAutocompletion,
         });
-        return (await (
-            await fetch(`${url}/api/list?${query}`, {
-                signal: controller.signal,
-            })
-        ).json()) as ListResponse;
+        controller?.abort();
+        const response = abortableFetch(`${url}/api/list?${query}`);
+        controller = response.controller;
+        return (await (await response).json()) as ListResponse;
     } catch (e) {
-        const domException = e as DOMException;
         // ignore abortError
-        if (domException.code === 20) {
+        if (e.name === 'AbortError') {
             return;
         }
         throw e;
@@ -56,16 +45,14 @@ export const getCard = async (value: string) => {
         const query = stringify({
             name: value,
         });
-        return (await (
-            await fetch(`${url}/api/get?${query}`, {
-                signal: controller.signal,
-            })
-        ).json()) as GetResponse;
+        controller?.abort();
+        const response = abortableFetch(`${url}/api/get?${query}`);
+        controller = response.controller;
+        return (await (await response).json()) as GetResponse;
     } catch (e) {
-        const domException = e as DOMException;
         // ignore abortError
-        if (domException.code === 20) {
-            return;
+        if (e.name === 'AbortError') {
+            return { card: undefined };
         }
         throw e;
     } finally {
@@ -73,9 +60,7 @@ export const getCard = async (value: string) => {
     }
 };
 
-export const autocomplete = async (
-    text: string
-): Promise<Record<string, AutocompleteCard> | undefined> => {
+export const autocomplete = async (text: string): Promise<Record<string, AutocompleteCard> | undefined> => {
     const query = stringify({
         name: text,
     });

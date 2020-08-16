@@ -38,7 +38,7 @@ export const parseName = (originalName: string): cardName => {
 };
 
 export const fillCardPrices = async (cards: Partial<ParsedRow>[]) => {
-    await async.map(cards, async (row, cb) => {
+    await async.map(cards, async (row) => {
         const { response } = await (
             await fetch(`https://newstarcityconnector.herokuapp.com/eyApi/products/${row.id}/variants`)
         ).json();
@@ -66,7 +66,7 @@ export const fillCardPrices = async (cards: Partial<ParsedRow>[]) => {
             }
         });
         row.cards.sort((a, b) => (conditionMap[b.condition] || 0) - (conditionMap[a.condition] || 0));
-        cb(null, row);
+        return row;
     });
 };
 

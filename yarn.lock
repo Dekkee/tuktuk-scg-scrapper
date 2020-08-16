@@ -14778,6 +14778,11 @@ yargs@^8.0.2:
     y18n "^3.2.1"
     yargs-parser "^7.0.0"
 
+yet-another-abortcontroller-polyfill@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/yet-another-abortcontroller-polyfill/-/yet-another-abortcontroller-polyfill-0.0.3.tgz#bbbdb1e7fcfdb1f028baf87778f9fa27ccf63595"
+  integrity sha512-B4O92xxxZP6QhNMVYKv4qZcFbTB1txXQT2lUPq38e9TMuGQhGl2Ow+NN/XflY7aT4v4H/NZI1VTJT7B6YHc5iw==
+
 yn@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/yn/-/yn-3.1.1.tgz#1e87401a09d767c1d5eab26a6e4c185182d2eb50"

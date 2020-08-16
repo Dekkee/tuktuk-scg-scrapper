@@ -36,6 +36,7 @@ export class CardLayout extends React.Component<Props, State> {
     async requestCard(value: string) {
         this.setState({ ...this.state, card: undefined, isFetching: true });
         const { card } = await getCard(value);
+        if (!card) return;
         this.setState({ ...this.state, card, isFetching: false });
     }
 
