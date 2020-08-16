@@ -3,37 +3,41 @@ import * as cn from 'classnames';
 
 import './CardRow.scss';
 import { ParsedRow } from '../../../../common/Row';
-import { Link } from 'react-router-dom';
 import { Price } from '../Price';
+import { RouteComponentProps, withRouter } from 'react-router';
 
-export interface Props {
+export interface Props extends Partial<RouteComponentProps> {
     card: ParsedRow;
     className?: string;
 }
 
+@(withRouter as any)
 export class CardRow extends React.PureComponent<Props> {
     render() {
+        const { history } = this.props;
         const { name, set, cards, meta, foil, 'set-meta': setMeta, subtitle, url } = this.props.card;
         return (
             <>
-                <Link to={`/card${url}`} className="card-row__header" style={{ gridRow: `span ${cards.length}` }}>
-                    <div className="card-row__name">
-                        {name}
-                        {subtitle && <span className="card-row__lang">{subtitle}</span>}
-                        {/*{foil && <span className="card-row__foil">Foil</span>}*/}
-                    </div>
-                    <div className="card-row__set">{set}</div>
-                </Link>
                 {cards.map(({ condition, price, stock, language }, i) => (
-                    <React.Fragment key={i}>
-                        <span>
+                    <tr key={i} onClick={() => history.push(`/card${url}`)}>
+                        {i === 0 && (
+                            <td rowSpan={cards.length} className="card-row__header">
+                                <div className="card-row__name">
+                                    {name}
+                                    {subtitle && <span className="card-row__lang">{subtitle}</span>}
+                                    {/*{foil && <span className="card-row__foil">Foil</span>}*/}
+                                </div>
+                                <div className="card-row__set">{set}</div>
+                            </td>
+                        )}
+                        <td>
                             {stringToLangShort(language)} {condition}
-                        </span>
-                        <span className="card-row__price">
+                        </td>
+                        <td className="card-row__price">
                             {price && <Price value={price} />}
                             {!stock && <div className="card-row__stock">Out of stock</div>}
-                        </span>
-                    </React.Fragment>
+                        </td>
+                    </tr>
                 ))}
             </>
         );

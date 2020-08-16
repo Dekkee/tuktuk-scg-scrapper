@@ -1,20 +1,21 @@
 @import "../../palette";
-.row-separator {
+.row-separator td {
     width: 100%;
-    grid-column: span 3;
     border-bottom: 1px solid tuktuk-color('secondary');
-    align-self: center;
 }
 
 .cards-container {
-    padding: 20px 0 20px 10px;
-    display: grid;
-    grid-template-columns: 1fr 50px auto;
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
-    grid-auto-rows: minmax(10px, auto);
-    align-items: start;
-    justify-items: start;
+    padding: 10px 0 10px 10px;
+    width: 100%;
+    & tbody {
+        vertical-align: top;
+    }
+    & tr {
+        cursor: pointer;
+    }
+    & td {
+        padding-top: 10px;
+    }
 }
 
 .empty-container {

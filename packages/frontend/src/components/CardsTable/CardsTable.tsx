@@ -8,36 +8,41 @@ import ErrorIcon from '../../icons/error.svg';
 import './CardsTable.scss';
 
 export interface Props {
-    rows: ParsedRow[]
+    rows: ParsedRow[];
 }
 
 const renderCards = (rows: ParsedRow[]) => (
-    <div className="cards-container"> {
-        rows.map((row, i) => <React.Fragment key={i}>
-            { i > 0 && <div className="row-separator"/> }
-            <CardRow
-                className={ cn({ 'card-layout--dark': i % 2 }) }
-                card={ row } />
-        </React.Fragment>) }
-    </div>
+    <table className="cards-container">
+        {rows.map((row, i) => (
+            <tbody key={i}>
+                <CardRow className={cn({ 'card-layout--dark': i % 2 })} card={row} />
+                {i < rows.length - 1 && (
+                    <tr className="row-separator">
+                        <td colSpan={3} />
+                    </tr>
+                )}
+            </tbody>
+        ))}
+    </table>
 );
 
 const renderNotFound = () => (
     <div className="empty-container">
-        <div className="empty"><ErrorIcon width={50} height={50}/>Not found</div>
+        <div className="empty">
+            <ErrorIcon width={50} height={50} />
+            Not found
+        </div>
     </div>
 );
 
 const renderStartSearch = () => (
     <div className="start-search-container">
-        <div className="start-search"><SearchIcon width={50} height={50}/>Start search!!!</div>
+        <div className="start-search">
+            <SearchIcon width={50} height={50} />
+            Start search!!!
+        </div>
     </div>
 );
 
-export const CardsTable = ({ rows }: Props) => (
-    rows
-    ? rows.length
-        ? renderCards(rows)
-        : renderNotFound()
-    : renderStartSearch()
-);
+export const CardsTable = ({ rows }: Props) =>
+    rows ? (rows.length ? renderCards(rows) : renderNotFound()) : renderStartSearch();
