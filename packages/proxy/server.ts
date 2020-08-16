@@ -42,14 +42,18 @@ app.get('/storage/*', (req, res) => {
     proxy.web(req, res, { target: `http://${storageConfig.host}:${storageConfig.port}` });
 });
 
-app.put('/storage/*', (req, res, next) => {
-    // todo: check cookie
-    next();
-},(req, res) => {
-    proxy.web(req, res, { target: `http://${storageConfig.host}:${storageConfig.port}` });
-});
+app.put(
+    '/storage/*',
+    (req, res, next) => {
+        // todo: check cookie
+        next();
+    },
+    (req, res) => {
+        proxy.web(req, res, { target: `http://${storageConfig.host}:${storageConfig.port}` });
+    }
+);
 
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
     proxy.web(req, res, { target: `http://${frontendConfig.host}:${frontendConfig.port}` });
 });
 
