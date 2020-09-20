@@ -21,18 +21,14 @@ const filteredLayouts = new Set(['art_series', 'emblem']);
 
 const filteredCards = [];
 const failedCards = [];
-const debugCards = [];
 
 export const createIndexStream = () => {
     const map = {};
 
     const parseCard = (card) => {
         try {
-            if ('Dirge Bat' === card.name) {
-                debugCards.push(card);
-            }
             if (filteredLayouts.has(card.layout)) {
-                // filteredCards.push(card);
+                filteredCards.push(card);
                 return;
             }
             const isRu = card.lang === 'ru';
@@ -85,17 +81,13 @@ export const createIndexStream = () => {
                         text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
                         localizedName: value.localizedName,
                     },
-                }
-                if (c.card.name === 'Dirge Bat') {
-                    console.log(JSON.stringify(c));
-                }
+                };
                 doc.push(c);
             });
             index.add(doc);
             fs.writeFileSync(`${path}/index.json`, index.export());
             fs.writeFileSync(`${path}/filtered.json`, JSON.stringify(filteredCards));
             fs.writeFileSync(`${path}/failed.json`, JSON.stringify(failedCards));
-            fs.writeFileSync(`${path}/debug.json`, JSON.stringify(debugCards));
             callback();
         },
     });
