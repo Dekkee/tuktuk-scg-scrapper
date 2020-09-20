@@ -15,12 +15,6 @@ url: https://scg.dekker.gdn
 git clone https://github.com/Dekkee/tuktuk-scg-scrapper.git tuktuk-scg-scrapper
 cd tuktuk-scg-scrapper
 
-# install dependencies
-yarn
-
-# generate suggest index
-yarn update-index
-
 # build
 docker-compose up -d
 ```
