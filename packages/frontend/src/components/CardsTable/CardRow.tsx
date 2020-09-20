@@ -62,6 +62,9 @@ const stringToLangShort = (langString: string) => {
         case 'Italian':
             flag = 'it';
             break;
+        case 'Spanish':
+            flag = 'es';
+            break;
         case 'French':
             flag = 'fr';
             break;
