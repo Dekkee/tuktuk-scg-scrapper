@@ -1,6 +1,7 @@
 import * as async from 'async';
-import fetch from 'node-fetch';
+import fetch, { Headers } from 'node-fetch';
 import { Meta, ParsedRow } from '@tuktuk-scg-scrapper/common/Row';
+import { URLSearchParams } from 'url';
 
 export type cardName = {
     'original-name': string;
@@ -37,58 +38,56 @@ export const parseName = (originalName: string): cardName => {
     };
 };
 
-export const fillCardPrices = async (cards: Partial<ParsedRow>[]) => {
+export const fillCardPrices = async (
+    cards: Partial<ParsedRow>[],
+    csrfToken: string,
+    cookie: string,
+    attribute: number
+) => {
+    const headers = new Headers({
+        'x-xsrf-token': csrfToken,
+        cookie,
+        credentials: 'include',
+    });
     await async.map(cards, async (row) => {
-        const {
-            response,
-        } = await // await fetch(`https://newstarcityconnector.herokuapp.com/eyApi/products/${row.id}/variants`)
-        (await fetch(`https://starcitygames.com/remote/v1/product-attributes/${row.id}`)).json();
         row.cards = [];
-        (response.data || []).forEach(({ price, option_values = [], inventory_level, purchasing_disabled }: any) => {
-            if (!price) {
-                return;
-            }
-            const card = {
-                price,
-                stock: inventory_level,
-                purchasing_disabled,
-                ...option_values.reduce(
-                    (acc, curr) => ({
-                        ...acc,
-                        [curr['option_display_name'].toLowerCase()]: curr['label'],
-                    }),
-                    {}
-                ),
-            };
-            if (card.condition) card.condition = parseCondition(card.condition);
+        await async.map(conditions, async (condition) => {
+            const fd = new URLSearchParams();
+            fd.append(`attribute[${attribute}]`, condition.toString());
+            const response = await fetch(`https://starcitygames.com/remote/v1/product-attributes/${row.id}`, {
+                headers,
+                method: 'POST',
+                body: fd,
+            });
+            const { data } = await response.json();
+            parsePrice(data, row.cards);
 
-            if (!card.purchasing_disabled) {
-                row.cards.push(card);
-            }
+            return row;
         });
-        row.cards.sort((a, b) => (conditionMap[b.condition] || 0) - (conditionMap[a.condition] || 0));
-        return row;
     });
 };
 
-const parseCondition = (cond: string) => {
-    switch (cond) {
-        case 'Played':
-            return 'PL';
-        case 'Heavily Played':
-            return 'HP';
-        case 'Near Mint':
-            return 'NM';
-        case 'Damaged':
-            return 'DM';
-        default:
-            return cond;
+const parsePrice = ({ price, stock, purchasable, selected_attributes }: any, arr: any[]) => {
+    if (!price) {
+        return;
+    }
+    const card = {
+        price: price?.without_tax?.value,
+        stock,
+        purchasing_disabled: !purchasable,
+        condition: conditionMap[`${Object.values<number>(selected_attributes)[0]}`],
+    };
+
+    if (!card.purchasing_disabled) {
+        arr.push(card);
     }
 };
 
+const conditions = [114, 115, 116];
+
 const conditionMap = {
-    NM: 4,
-    PL: 3,
-    HP: 2,
-    DM: 1,
+    114: 'NM',
+    115: 'PL',
+    116: 'HP',
+    // 117: 'DM',
 };

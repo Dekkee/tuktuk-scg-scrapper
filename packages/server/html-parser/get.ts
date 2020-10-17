@@ -4,8 +4,9 @@ import { fillCardPrices, parseName } from './entities';
 import { GetResponse } from '@tuktuk-scg-scrapper/common/Response';
 
 const productRegex = /scg\.product\.customFields\s=\s\{\};\s+(.*)\.forEach\(\(cf\)=>\{scg\.product\.customFields/;
+const csrfRegex = /var\sBCData\s=\s\{\"csrf_token\":\"(\w+)\".*\"selected_attributes\":\{\"(\d+)\"/;
 
-export const parseScgGetAnswer = async (input: string): Promise<GetResponse> => {
+export const parseScgGetAnswer = async (input: string, cookies: string): Promise<GetResponse> => {
     const [, productString] = input.match(productRegex) || [];
     const product = JSON.parse(productString.trim());
 
@@ -37,6 +38,8 @@ export const parseScgGetAnswer = async (input: string): Promise<GetResponse> => 
     const imageContainer = dom(desc).find('.productView-image--default');
     const image = imageContainer.attr('data-src');
 
+    const [, csrfToken, attribute] = input.match(csrfRegex) || [];
+
     const card: Partial<ParsedRowDetails> = {
         id,
         ...name,
@@ -53,7 +56,7 @@ export const parseScgGetAnswer = async (input: string): Promise<GetResponse> => 
         image,
     };
 
-    // await fillCardPrices([card]);
+    await fillCardPrices([card], csrfToken, cookies, parseInt(attribute, 10));
 
     return { card: card as ParsedRowDetails };
 };

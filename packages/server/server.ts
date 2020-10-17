@@ -94,8 +94,10 @@ app.get('/api/get', async function (req, resp, next) {
         const preparedName = id.replace(/[\/\\,\.']/g, '').replace(/\s+/g, '-');
         console.log(`get request: id: ${id}, scg_id: ${preparedName}`);
 
-        const answer = await (await fetch(`https://www.starcitygames.com/${preparedName}`)).text();
-        resp.status(200).send(await parseScgGetAnswer(answer));
+        const response = await fetch(`https://www.starcitygames.com/${preparedName}`);
+        const cookies = response.headers.raw()['set-cookie'].join(';');
+        const answer = await response.text();
+        resp.status(200).send(await parseScgGetAnswer(answer, cookies));
     } catch (e) {
         console.error('/api/get', e);
         next(e);
