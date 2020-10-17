@@ -97,6 +97,7 @@ app.get('/api/get', async function (req, resp, next) {
         const answer = await (await fetch(`https://www.starcitygames.com/${preparedName}`)).text();
         resp.status(200).send(await parseScgGetAnswer(answer));
     } catch (e) {
+        console.error('/api/get', e);
         next(e);
     }
 

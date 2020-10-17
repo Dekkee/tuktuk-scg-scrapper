@@ -39,9 +39,10 @@ export const parseName = (originalName: string): cardName => {
 
 export const fillCardPrices = async (cards: Partial<ParsedRow>[]) => {
     await async.map(cards, async (row) => {
-        const { response } = await (
-            await fetch(`https://newstarcityconnector.herokuapp.com/eyApi/products/${row.id}/variants`)
-        ).json();
+        const {
+            response,
+        } = await // await fetch(`https://newstarcityconnector.herokuapp.com/eyApi/products/${row.id}/variants`)
+        (await fetch(`https://starcitygames.com/remote/v1/product-attributes/${row.id}`)).json();
         row.cards = [];
         (response.data || []).forEach(({ price, option_values = [], inventory_level, purchasing_disabled }: any) => {
             if (!price) {

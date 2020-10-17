@@ -53,7 +53,7 @@ export const parseScgGetAnswer = async (input: string): Promise<GetResponse> => 
         image,
     };
 
-    await fillCardPrices([card]);
+    // await fillCardPrices([card]);
 
     return { card: card as ParsedRowDetails };
 };
