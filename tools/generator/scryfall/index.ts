@@ -18,7 +18,7 @@ if (!fs.existsSync('./generated')) {
 
 const generate = () => {
     return new Promise(async (resolve, reject) => {
-        const { stream: dataStream, total } = await readJson(); // await loadJson();
+        const { stream: dataStream, total } = await loadJson(); // await readJson();
 
         const pipeline = chain([
             dataStream,

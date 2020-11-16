@@ -45,6 +45,7 @@ const MtgGoldfishMap = {
     CNS: 'Conspiracy',
     CON: 'Conflux',
     CSP: 'Coldsnap',
+    CMR: 'Commander Legends',
     DD2: 'Duel Decks Jace vs Chandra',
     DDC: 'Duel Decks Divine vs Demonic',
     DDD: 'Duel Decks Garruk vs Liliana',
@@ -235,6 +236,7 @@ const MtgGoldfishMap = {
     WWK: 'Worldwake',
     XLN: 'Ixalan',
     ZEN: 'Zendikar',
+    ZNR: 'Zendikar Rising',
 };
 
 export const getMtgGoldfishSet = (set: string) => {
