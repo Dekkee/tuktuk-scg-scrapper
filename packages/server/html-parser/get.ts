@@ -3,7 +3,7 @@ import { ParsedRowDetails } from '@tuktuk-scg-scrapper/common/Row';
 import { fillCardPrices, parseName } from './entities';
 import { GetResponse } from '@tuktuk-scg-scrapper/common/Response';
 
-const productRegex = /scg\.product\.customFields\s=\s\{\};\s+(.*)\.forEach\(\(cf\)=>\{scg\.product\.customFields/;
+const productRegex = /scg\.product\.customFields\s?=\s?\{\};\s+(.*)\.forEach\(\(cf\)\s?=>\s?\{\s?scg\.product\.customFields/;
 const csrfRegex = /var\sBCData\s=\s\{\"csrf_token\":\"(\w+)\".*\"selected_attributes\":\{\"(\d+)\"/;
 
 export const parseScgGetAnswer = async (input: string, cookies: string): Promise<GetResponse> => {
