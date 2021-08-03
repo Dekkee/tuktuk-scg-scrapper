@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 
 app.get('/api/list', async function (req, resp, next) {
     try {
-        const name = String(req.query.name).replace(',', '%c%');
+        const name = String(req.query.name).replace(/,/g, "%c%")
         const page = parseInt(String(req.query.page) || '', 10);
         const auto = req.query.auto === 'true';
         const queryObject: Record<string, string | number> = {
@@ -63,7 +63,6 @@ app.get('/api/list', async function (req, resp, next) {
 
         const query = querystring.stringify(queryObject);
         console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.pg}`);
-
         searchTotal.inc({ card_name: name });
 
         const answer = await (await fetch(`http://starcitygames.hawksearch.com/sites/starcitygames/?${query}`)).json();
