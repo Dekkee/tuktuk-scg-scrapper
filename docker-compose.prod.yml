@@ -27,7 +27,7 @@ services:
     container_name: tuktuk-frontend-prod
     environment:
       - NODE_ENV=production
-    image: dekkertuktuk-scg-scrapper-frontend:stable
+    image: dekker/tuktuk-scg-scrapper-frontend:stable
 
 volumes:
   server-data:
