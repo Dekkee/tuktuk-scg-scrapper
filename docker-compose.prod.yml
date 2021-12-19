@@ -5,7 +5,7 @@ services:
     container_name: tuktuk-scg-provider-prod
     environment:
       - NODE_ENV=production
-    image: registry.dekker.gdn/tuktuk-scg-scrapper-scg-provider:stable
+    image: dekker/tuktuk-scg-scrapper-scg-provider:stable
     volumes:
       - server-data:/home/app/packages/server/data
 
@@ -15,19 +15,19 @@ services:
       - "8081:8081"
     environment:
       - NODE_ENV=production
-    image: registry.dekker.gdn/tuktuk-scg-scrapper-proxy:stable
+    image: dekker/tuktuk-scg-scrapper-proxy:stable
 
   storage:
     container_name: tuktuk-storage-prod
     environment:
       - NODE_ENV=production
-    image: registry.dekker.gdn/tuktuk-scg-scrapper-storage:stable
+    image: dekker/tuktuk-scg-scrapper-storage:stable
 
   frontend:
     container_name: tuktuk-frontend-prod
     environment:
       - NODE_ENV=production
-    image: registry.dekker.gdn/tuktuk-scg-scrapper-frontend:stable
+    image: dekkertuktuk-scg-scrapper-frontend:stable
 
 volumes:
   server-data:
