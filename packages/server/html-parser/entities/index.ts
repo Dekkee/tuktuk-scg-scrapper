@@ -4,13 +4,11 @@ import { Meta, ParsedRow } from '@tuktuk-scg-scrapper/common/Row';
 import { URLSearchParams } from 'url';
 
 export type cardName = {
-    'original-name': string;
     name: string;
     meta: Meta;
 };
 
-export const parseName = (originalName: string): cardName => {
-    const [, name, m] = originalName.match(/([\w\s-'\/,\.:]+)(?:\[([\w-]+)\])?/) || [];
+export const parseMeta = (m: string): Meta => {
     const [sgl, mtg, set, num, lang] = m.split('-');
     let meta: Meta = m;
     if (sgl === 'SGL' && mtg === 'MTG') {
@@ -31,11 +29,7 @@ export const parseName = (originalName: string): cardName => {
             foil: f,
         };
     }
-    return {
-        'original-name': originalName,
-        name: name.trim(),
-        meta,
-    };
+    return meta;
 };
 
 export const fillCardPrices = async (

@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 import { ParsedRowDetails } from '@tuktuk-scg-scrapper/common/Row';
-import { fillCardPrices, parseName } from './entities';
+import { fillCardPrices, parseMeta } from './entities';
 import { GetResponse } from '@tuktuk-scg-scrapper/common/Response';
 
 const productRegex = /window\.runScriptManager\((.*)\);/;
@@ -33,7 +33,12 @@ export const parseScgGetAnswer = async (input: string, cookies: string): Promise
 
     // Name
     const nameContainer = dom('.mobile-product-title');
-    const name = parseName(nameContainer.text());
+    const name = nameContainer.text().trim();
+
+    // Meta 
+    const metaContainer = dom('.product-option-container');
+    const dataSelectedSku = metaContainer.attr('data-selected-sku');
+    const meta = parseMeta(dataSelectedSku);
 
     // Image
     const imageContainer = dom(desc).find('.productView-image--default');
@@ -43,7 +48,8 @@ export const parseScgGetAnswer = async (input: string, cookies: string): Promise
 
     const card: Partial<ParsedRowDetails> = {
         id,
-        ...name,
+        name,
+        meta,
         set: parsed.Set,
         mana: parsed['Mana Cost'],
         type: parsed['Card Type'],

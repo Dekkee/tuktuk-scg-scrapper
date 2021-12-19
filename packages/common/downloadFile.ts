@@ -11,7 +11,7 @@ export const downloadFile = async (url: string) => {
         responseType: 'stream',
     });
 
-    const download = (writer: WriteStream) => new Promise(async (resolve, reject) => {
+    const download = (writer: WriteStream) => new Promise<void>(async (resolve, reject) => {
         const totalLength = headers['content-length'];
         if (!totalLength) {
             let currentBytes = 0;

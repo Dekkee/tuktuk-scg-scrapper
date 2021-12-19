@@ -11,7 +11,7 @@
     "dependencies": {
         "@tuktuk-scg-scrapper/common": "0.0.1",
         "@types/async": "^3.0.3",
-        "@types/cheerio": "^0.22.8",
+        "@types/cheerio": "0.22.8",
         "@types/lodash": "^4.14.115",
         "@types/node-fetch": "^2.1.2",
         "async": "^3.1.0",

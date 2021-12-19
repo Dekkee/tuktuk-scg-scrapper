@@ -84,7 +84,7 @@ export const cardRoute = ({ app }: TRoutesInput) => {
             const scgCard = parseScgCard(row);
             if (scgCard) {
                 const doc = await Card.findOne({
-                    set: scgCard.set,
+                    set: scgCard.set as any,
                     collector_number: scgCard.collector_number,
                     lang: scgCard.lang,
                 });
