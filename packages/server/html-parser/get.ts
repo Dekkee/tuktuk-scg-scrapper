@@ -3,7 +3,7 @@ import { ParsedRowDetails } from '@tuktuk-scg-scrapper/common/Row';
 import { fillCardPrices, parseMeta } from './entities';
 import { GetResponse } from '@tuktuk-scg-scrapper/common/Response';
 
-const productRegex = /window\.runScriptManager\((.*)\);/;
+const productRegex = /context\s=\s(.*)/;
 const csrfRegex = /var\sBCData\s=\s\{\"csrf_token\":\"(\w+)\".*\"selected_attributes\":\{\"(\d+)\"/;
 
 export const parseScgGetAnswer = async (input: string, cookies: string): Promise<GetResponse> => {
@@ -42,7 +42,7 @@ export const parseScgGetAnswer = async (input: string, cookies: string): Promise
 
     // Image
     const imageContainer = dom(desc).find('.productView-image--default');
-    const image = imageContainer.attr('data-src');
+    const image = imageContainer.attr('srcset');
 
     const [, csrfToken, attribute] = input.match(csrfRegex) || [];
 

@@ -2,7 +2,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const packageJson = require('../package.json');
 
-const dockerPackageName = 'dekker/tuktuk-scg-scrapper';
+const dockerPackageName = 'cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper';
 
 const images = ['frontend', 'proxy', 'scg-provider', 'storage'];
 
