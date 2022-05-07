@@ -5,12 +5,13 @@ export const uploadToS3 = async () => {
     const cred = new AWS.Credentials(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY);
     const s3 = new AWS.S3({
         credentials: cred,
+        endpoint: 'storage.yandexcloud.net',
     });
     await s3
         .upload({
             Body: fs.readFileSync('./generated/index/index.json'),
-            Key: 'tuktuk/index.json',
-            Bucket: 'dekkee',
+            Key: 'index.json',
+            Bucket: 'tuktuk',
             ACL: 'public-read',
         })
         .promise();

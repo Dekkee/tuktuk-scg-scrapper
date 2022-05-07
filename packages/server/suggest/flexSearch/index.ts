@@ -3,7 +3,7 @@ import { downloadFile } from '@tuktuk-scg-scrapper/common/downloadFile';
 
 const FlexSearch = require('flexsearch');
 
-const s3IndexPath = 'https://dekkee.s3.eu-west-2.amazonaws.com/tuktuk/index.json';
+const s3IndexPath = 'https://storage.yandexcloud.net/tuktuk/index.json';
 const metaPath = './data/index.meta.json';
 const indexPath = './data/index.json';
 
