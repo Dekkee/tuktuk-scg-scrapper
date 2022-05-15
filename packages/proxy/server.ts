@@ -3,7 +3,7 @@ import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 import * as colors from 'colors';
 import * as cors from 'cors';
-import * as httpProxy from 'http-proxy';
+import * as proxy from 'express-http-proxy';
 import { config } from '@tuktuk-scg-scrapper/common/config/proxy';
 import { config as scgProviderConfig } from '@tuktuk-scg-scrapper/common/config/scgProvider';
 import { config as frontendConfig } from '@tuktuk-scg-scrapper/common/config/frontend';
@@ -15,8 +15,6 @@ const app = express()
     .use(bodyParser.urlencoded({ extended: true }))
     .use(cors());
 
-const proxy = httpProxy.createProxyServer();
-
 app.use(compression({ threshold: 0 }));
 app.use(express.static('../../dist'));
 
@@ -26,21 +24,13 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/api/*', (req, res) => {
-    proxy.web(req, res, { target: `http://${scgProviderConfig.host}:${scgProviderConfig.port}` });
-});
+app.get('/api/*', proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
 
-app.get('/metrics/*', (req, res) => {
-    proxy.web(req, res, { target: `http://${scgProviderConfig.host}:${scgProviderConfig.port}` });
-});
+app.get('/metrics/*',  proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
 
-app.get('/metrics', (req, res) => {
-    proxy.web(req, res, { target: `http://${scgProviderConfig.host}:${scgProviderConfig.port}` });
-});
+app.get('/metrics', proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
 
-app.get('/storage/*', (req, res) => {
-    proxy.web(req, res, { target: `http://${storageConfig.host}:${storageConfig.port}` });
-});
+app.get('/storage/*',  proxy(`http://${storageConfig.host}:${storageConfig.port}`));
 
 app.put(
     '/storage/*',
@@ -48,14 +38,10 @@ app.put(
         // todo: check cookie
         next();
     },
-    (req, res) => {
-        proxy.web(req, res, { target: `http://${storageConfig.host}:${storageConfig.port}` });
-    }
+    proxy(`http://${storageConfig.host}:${storageConfig.port}`),
 );
 
-app.get('*', (req, res) => {
-    proxy.web(req, res, { target: `http://${frontendConfig.host}:${frontendConfig.port}` });
-});
+app.get('*', proxy(`http://${frontendConfig.host}:${frontendConfig.port}`));
 
 const port = config.port;
 

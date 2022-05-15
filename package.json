@@ -12,7 +12,7 @@
         "test:ci": "lerna run test:ci --stream",
         "update-index": "node --max_old_space_size=8192 -r ts-node/register ./update-index.ts",
         "upsert-database": "cross-env MONGO_INITDB_ROOT_USERNAME=$MONGO_USER MONGO_INITDB_ROOT_PASSWORD=$MONGO_PWORD node --max_old_space_size=8192 -r ts-node/register ./tools/updater/upsert.ts",
-        "docker:build": "docker-compose build"
+        "docker:build": "docker-compose build && node ./tools/tag.js"
     },
     "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
     "main": "index.js",

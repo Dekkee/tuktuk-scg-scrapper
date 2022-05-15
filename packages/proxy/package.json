@@ -5,8 +5,8 @@
     "dev": "nodemon"
   },
   "dependencies": {
-    "@types/http-proxy": "^1.17.4",
-    "http-proxy": "^1.18.0"
+    "@types/express-http-proxy": "^1.6.3",
+    "express-http-proxy": "^1.6.3"
   },
   "nodemonConfig": {
     "watch": [
