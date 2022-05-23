@@ -65,7 +65,8 @@ app.get('/api/list', async function (req, resp, next) {
         console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.pg}`);
         searchTotal.inc({ card_name: name });
 
-        const answer = await (await fetch(`http://starcitygames.hawksearch.com/sites/starcitygames/?${query}`)).json();
+        const answer = await (await fetch(`https://lusearchapi-na.hawksearch.com/sites/starcitygames/?${query}`)).json(); 
+        
         const pagedAnswer = await parseScgListAnswer(answer);
 
         fetch(`http://${storageConfig.host}:${storageConfig.port}/storage/card/update-ids`, {

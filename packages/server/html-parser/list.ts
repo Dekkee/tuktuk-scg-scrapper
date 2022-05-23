@@ -30,7 +30,7 @@ type ChildInformationObject = {
 
 export const parseScgListAnswer = async (input: HawkSearchAnswer) => {
     const parsedRows: Partial<ParsedRow>[] = [];
-
+    
     input.Results.forEach((res) => {
         const card: ParsedRow = {
             id: parseInt(res.Custom.unique_id, 10),

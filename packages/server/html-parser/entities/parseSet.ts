@@ -237,6 +237,8 @@ const MtgGoldfishMap = {
     XLN: 'Ixalan',
     ZEN: 'Zendikar',
     ZNR: 'Zendikar Rising',
+    NEO: 'Kamigawa Neon Dynasty',
+    SNC: 'Streets of New Capenna',
 };
 
 export const getMtgGoldfishSet = (set: string) => {
