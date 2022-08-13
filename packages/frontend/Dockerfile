@@ -1,5 +1,5 @@
 # Build frontend
-FROM node:12-alpine as front
+FROM node:16-alpine as front
 
 WORKDIR /home/app
 ENV NODE_ENV=production
@@ -19,7 +19,7 @@ COPY packages/common /home/app/packages/common/
 
 RUN yarn workspace @tuktuk-scg-scrapper/frontend build
 
-FROM node:12-alpine
+FROM node:16-alpine
 
 WORKDIR /home/app
 ENV NODE_ENV=production
