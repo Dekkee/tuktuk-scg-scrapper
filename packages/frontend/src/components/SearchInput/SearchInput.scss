@@ -26,20 +26,25 @@
             display: contents;
         }
 
-        input {
-            border: 0;
-            font-size: 16px;
-            line-height: 24px;
-            padding: 0;
-            color: inherit;
-            outline: none;
+        form {
             width: 100%;
-            margin-left: 12px;
 
-            &:focus, &:valid {
-                & + .search-label {
+            &:focus,
+            &:valid {
+                &+.search-label {
                     opacity: 0;
                 }
+            }
+
+            input {
+                width: 100%;
+                border: 0;
+                font-size: 16px;
+                line-height: 24px;
+                padding: 0;
+                color: inherit;
+                outline: none;
+                margin-left: 12px;
             }
         }
     }
@@ -47,6 +52,8 @@
     &-label {
         position: absolute;
         left: 40px;
+
+        line-height: 24px;
         transition: 0.2s;
         display: flex;
         flex: 0 0 auto;
