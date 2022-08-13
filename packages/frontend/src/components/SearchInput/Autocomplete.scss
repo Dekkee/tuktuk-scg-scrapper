@@ -44,7 +44,7 @@
 
     &__thumb {
         overflow-y: clip;
-        width: 146px;
+        min-width: 146px;
     }
 
     &--active {
