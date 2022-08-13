@@ -43,16 +43,20 @@ const updateIndex = async () => {
 export const shouldUpdateIndex = updateIndex;
 
 export const getIndex = async () => {
-    const index = new FlexSearch({
+    const index = new FlexSearch.Document({
         split: /\s+| % /,
         doc: {
             id: 'id',
-            field: ['search'],
+            index: ['search'],
+            store: ['card']
         },
     });
 
     await updateIndex();
-    const idx = fs.readFileSync(indexPath);
-    index.import(idx);
+
+    const storage = JSON.parse(fs.readFileSync(indexPath).toString());
+    Object.entries(storage).forEach(([key, value]) => {
+        index.import(key, value);
+    })
     return index;
 };
