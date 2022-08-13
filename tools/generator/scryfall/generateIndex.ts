@@ -3,11 +3,14 @@ import * as fs from 'fs';
 const { Transform } = require('stream');
 const FlexSearch = require('flexsearch');
 
-const index = new FlexSearch({
+const index = new FlexSearch.Document({
     split: /\s+| % /,
+    preset: "score",
+    tokenize: "forward",
     doc: {
         id: 'id',
-        field: ['search'],
+        index: ['search'],
+        store: ['card'],
     },
 });
 
@@ -38,6 +41,7 @@ export const createIndexStream = () => {
                     map[card.name] = {
                         names: new Set([card.printed_name, card.name]),
                         text: card.oracle_text,
+                        scryfallId: card.id,
                     };
                 } else {
                     map[card.name].names.add(card.printed_name || card.name);
@@ -71,7 +75,6 @@ export const createIndexStream = () => {
         },
         final: (callback) => {
             let id = 0;
-            const doc = [];
             Object.entries(map).forEach(([key, value]: any[]) => {
                 const c = {
                     id: id++,
@@ -80,15 +83,23 @@ export const createIndexStream = () => {
                         name: key,
                         text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
                         localizedName: value.localizedName,
+                        scryfallId: value.scryfallId,
                     },
                 };
-                doc.push(c);
+                index.add(c);
             });
-            index.add(doc);
-            fs.writeFileSync(`${path}/index.json`, index.export());
+            
+            const storage = {};
+            index.export(((key, value) => {
+                storage[key] = value;   
+                callback();
+                if (key === 'store') {
+                    fs.writeFileSync(`${path}/index.json`, JSON.stringify(storage));
+                }
+            }))
+            
             fs.writeFileSync(`${path}/filtered.json`, JSON.stringify(filteredCards));
             fs.writeFileSync(`${path}/failed.json`, JSON.stringify(failedCards));
-            callback();
         },
     });
 };

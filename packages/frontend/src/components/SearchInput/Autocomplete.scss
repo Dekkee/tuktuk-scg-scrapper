@@ -17,14 +17,34 @@
     }
 
     &__card {
-        padding: 16px 16px;
+        padding: 0px;
+        display: flex;
         border-top: 1px solid tuktuk-color(secondary);
         cursor: pointer;
+        height: 100px;
 
         &:hover {
             background: tuktuk-color(primary);
             color: tuktuk-color(background);
         }
+    }
+
+    &__card-text {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__body {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    &__thumb {
+        overflow-y: clip;
+        width: 146px;
     }
 
     &--active {

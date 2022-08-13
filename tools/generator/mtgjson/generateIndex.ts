@@ -2,7 +2,7 @@ import * as fs from 'fs';
 
 const FlexSearch = require('flexsearch');
 
-const index = new FlexSearch({
+const index = new FlexSearch.Document({
     split: /\s+| % /,
     doc: {
         id: 'id',

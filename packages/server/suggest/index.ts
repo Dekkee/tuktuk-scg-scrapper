@@ -5,8 +5,8 @@ getIndex().then(i => (index = i));
 
 setInterval(async () => {
   if (await shouldUpdateIndex()) {
-      console.log('Index update detected');
-      index = await getIndex();
+    console.log('Index update detected');
+    index = await getIndex();
   }
 }, 10 * 60 * 1000);
 
@@ -15,15 +15,16 @@ export const suggest = (name: string) => {
     return null;
   }
 
-  const isRu = /[а-яА-ЯЁё]/.test(name);
-  return index
-    .search(name, {
-      field: "search",
-      limit: 20
-    })
-    .reduce((accumulator, { card }, index) => {
+  const c = index.search({ enrich: true, query: name, field: 'search', limit: 20 });
+  let map = {};
+
+  c.forEach(({ result }) => {
+    result.reduce((accumulator, { doc }, index) => {
+      const { card } = doc;
       accumulator[index + 1] = card;
-      !isRu && delete card.localizedName;
       return accumulator;
-    }, {});
+    }, map);
+  })
+
+  return map;
 };
