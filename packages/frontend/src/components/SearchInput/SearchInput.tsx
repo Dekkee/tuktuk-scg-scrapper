@@ -25,7 +25,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
 
     private inputRef: React.RefObject<HTMLInputElement>;
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.inputRef = React.createRef();
@@ -93,13 +93,13 @@ export class SearchInput extends React.PureComponent<Props, State> {
         this.inputRef.current.focus();
     };
 
-    private onCancel (text: string) {
+    private onCancel(text: string) {
         this.onTextChangedDebounced.cancel();
         this.setState({ ...this.state, text: text, autocompletion: undefined });
         this.inputRef.current.blur();
     };
 
-    render () {
+    render() {
         const { autocompletion, text } = this.state;
         let aucompleteCards: AutocompleteCard[] = [];
         if (autocompletion) {
@@ -114,20 +114,22 @@ export class SearchInput extends React.PureComponent<Props, State> {
                 <div className="search-container">
                     <div className="search-panel">
                         <label className="search-panel__label" htmlFor="search-input">
-                            <SearchIcon className="search-icon"/>
-                            <input value={text}
-                                   onChange={(e) => this.onInput(e)}
-                                   onKeyDown={(e) => this.onKeyPressed(e)}
-                                   id="search-input"
-                                   ref={this.inputRef}
-                                   required
-                                   autoComplete="off"/>
+                            <SearchIcon className="search-icon" />
+                            <form onSubmit={(e) => e.preventDefault()}>
+                                <input value={text}
+                                    onChange={(e) => this.onInput(e)}
+                                    onKeyDown={(e) => this.onKeyPressed(e)}
+                                    id="search-input"
+                                    ref={this.inputRef}
+                                    required
+                                    autoComplete="off" />
+                            </form>
                             <div className="search-label">
                                 <div className="search-label__placeholder">Search</div>
                             </div>
                         </label>
                         {<div className={cn('search-cross', { 'search-cross--hidden': !Boolean(text) })}
-                              onClick={() => this.onClear()}>&times;</div>}
+                            onClick={() => this.onClear()}>&times;</div>}
                     </div>
                     <button
                         className="search-button"
@@ -138,7 +140,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
                 </div>
                 {
                     Boolean(text) && aucompleteCards.length > 0 &&
-                    <Autocomplete onAutocomplete={this.onAutocomplete.bind(this)} cards={aucompleteCards}/>
+                    <Autocomplete onAutocomplete={this.onAutocomplete.bind(this)} cards={aucompleteCards} />
                 }
             </>
         );
