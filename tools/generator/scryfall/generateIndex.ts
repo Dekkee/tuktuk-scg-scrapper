@@ -47,16 +47,22 @@ export const createIndexStream = () => {
                     map[card.name].names.add(card.printed_name || card.name);
                 }
                 if (isRu) {
-                    map[card.name].localizedName = card.printed_name || card.name;
+                    map[card.name].localizedName = card.printed_name || card.name || map[card.name].localizedName;
                 }
                 if (Array.isArray(card.card_faces)) {
                     map[card.name].text = '';
-                    map[card.name].localizedName = '';
+
+                    const faces = [];
                     card.card_faces.forEach((face) => {
                         map[card.name].names.add(face.printed_name || face.name);
                         map[card.name].text += `${face.oracle_text} `;
-                        map[card.name].localizedName += `${face.printed_name} `;
+                        if (face.printed_name) {
+                            faces.push(face.printed_name);
+                        }
                     });
+                    if (faces.length) {
+                        map[card.name].localizedName = faces.join(' // ')
+                    }
                 }
             }
         } catch (e) {
@@ -78,7 +84,7 @@ export const createIndexStream = () => {
             Object.entries(map).forEach(([key, value]: any[]) => {
                 const c = {
                     id: id++,
-                    search: `${[...value.names.values()].reverse().join(' % ')}`,
+                    search: `${[...value.names.values()].filter(Boolean).reverse().join(' % ')}`,
                     card: {
                         name: key,
                         text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
@@ -88,16 +94,16 @@ export const createIndexStream = () => {
                 };
                 index.add(c);
             });
-            
+
             const storage = {};
             index.export(((key, value) => {
-                storage[key] = value;   
+                storage[key] = value;
                 callback();
                 if (key === 'store') {
                     fs.writeFileSync(`${path}/index.json`, JSON.stringify(storage));
                 }
             }))
-            
+
             fs.writeFileSync(`${path}/filtered.json`, JSON.stringify(filteredCards));
             fs.writeFileSync(`${path}/failed.json`, JSON.stringify(failedCards));
         },
