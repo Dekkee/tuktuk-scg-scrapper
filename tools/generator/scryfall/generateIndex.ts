@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 
-const { Transform } = require('stream');
+const { Writable } = require('stream');
 const FlexSearch = require('flexsearch');
 
 const index = new FlexSearch.Document({
@@ -20,17 +20,25 @@ if (!fs.existsSync(path)) {
     fs.mkdirSync(path);
 }
 
-const filteredLayouts = new Set(['art_series', 'emblem']);
+const filteredLayouts = new Set(['art_series', 'emblem', 'token']);
+const filteredSetTypes = new Set(['slu', 'promo']);
 
 const filteredCards = [];
 const failedCards = [];
+let i = 0;
 
 export const createIndexStream = () => {
     const map = {};
 
     const parseCard = (card) => {
+        i++;
+
         try {
-            if (filteredLayouts.has(card.layout)) {
+            if (
+                filteredLayouts.has(card.layout) ||
+                card.digital ||
+                filteredSetTypes.has(card.set_type)
+            ) {
                 filteredCards.push(card);
                 return;
             }
@@ -70,17 +78,16 @@ export const createIndexStream = () => {
         }
     };
 
-    return new Transform({
-        writableObjectMode: true,
-        readableObjectMode: true,
+    return new Writable({
+        objectMode: true,
         autoDestroy: true,
         write: function (chunk, encoding, callback) {
             parseCard(chunk.value);
-            this.push(chunk);
             callback();
         },
         final: (callback) => {
             let id = 0;
+
             Object.entries(map).forEach(([key, value]: any[]) => {
                 const c = {
                     id: id++,
@@ -95,17 +102,31 @@ export const createIndexStream = () => {
                 index.add(c);
             });
 
-            const storage = {};
-            index.export(((key, value) => {
-                storage[key] = value;
-                callback();
-                if (key === 'store') {
-                    fs.writeFileSync(`${path}/index.json`, JSON.stringify(storage));
-                }
-            }))
+            console.log(`Cards parsed: ${i}`);
+            console.log(`Cards in index: ${id}`);
+            console.log(`Cards filtered: ${filteredCards.length}`);
+            console.log(`Cards failed: ${failedCards.length}`);
 
-            fs.writeFileSync(`${path}/filtered.json`, JSON.stringify(filteredCards));
-            fs.writeFileSync(`${path}/failed.json`, JSON.stringify(failedCards));
+            const storage = {};
+            return new Promise<void>((resolve) => {
+                index.export(((key, value) => {
+                    storage[key] = value;
+                    if (key === 'store') {
+                        console.log('Save index');
+                        try {
+                            fs.writeFileSync(`${path}/index.json`, JSON.stringify(storage));
+                            fs.writeFileSync(`${path}/filtered.json`, JSON.stringify(filteredCards));
+                            fs.writeFileSync(`${path}/failed.json`, JSON.stringify(failedCards));
+                        }
+                        catch (e) {
+                            console.error(e);
+                        }
+                        finally {
+                            resolve();
+                        }
+                    }
+                }))
+            }).then(callback);
         },
     });
 };

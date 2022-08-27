@@ -18,8 +18,7 @@ if (!fs.existsSync('./generated')) {
 
 const generate = () => {
     return new Promise<void>(async (resolve, reject) => {
-        const { stream: dataStream, total } = await loadJson(); // await readJson();
-
+        const { stream: dataStream, total } = await readJson(); // await loadJson();
         const pipeline = chain([
             dataStream,
             createProgressStream(total),
@@ -30,16 +29,11 @@ const generate = () => {
             // await createDatabaseStream(),
         ]);
 
-        let counter = 0;
-        pipeline.on('data', () => {
-            ++counter;
-        });
         pipeline.on('error', (e) => {
             console.error(e);
             reject(e);
         });
         pipeline.on('end', async () => {
-            console.log(`Parsed ${counter} cards`);
             console.log('Generate typings');
             await generateTypings();
             console.log('Uploading index to S3');
