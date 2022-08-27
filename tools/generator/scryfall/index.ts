@@ -7,7 +7,9 @@ import { uploadToS3 } from './uploadToS3';
 import { createIndexStream } from './generateIndex';
 import { readJson } from './readJson';
 import { createDatabaseStream } from './updateDatabase';
+import yargs from 'yargs';
 
+const { PassThrough } = require('stream');
 const { chain } = require('stream-chain');
 const { parser } = require('stream-json');
 const { streamArray } = require('stream-json/streamers/StreamArray');
@@ -16,9 +18,34 @@ if (!fs.existsSync('./generated')) {
     fs.mkdirSync('./generated');
 }
 
+
+const { argv } = yargs(process.argv.slice(2))
+    .option('local', {
+        boolean: true,
+        describe: 'read local file',
+    })
+    .option('slim', {
+        boolean: true,
+        describe: 'read slim local file',
+    })
+    .option('upload', {
+        boolean: true,
+        describe: 'upload index to S3',
+    })
+    .option('store', {
+        boolean: true,
+        describe: 'store data in Mongo',
+    });
+
 const generate = () => {
     return new Promise<void>(async (resolve, reject) => {
-        const { stream: dataStream, total } = await readJson(); // await loadJson();
+        const shouldReadData = argv.slim || argv.local;
+        const localPath = argv.slim ? './generated/data.json' : './generated/data.json';
+        const { stream: dataStream, total } = await (shouldReadData ?  readJson(localPath) : loadJson());
+        shouldReadData ? console.log(`Reading ${localPath}`) : console.log('Downloading')
+
+        const rawDataStream = new PassThrough({allowHalfOpen: false});
+
         const pipeline = chain([
             dataStream,
             createProgressStream(total),
@@ -26,8 +53,12 @@ const generate = () => {
             streamArray(),
             createSchemaStream('card'),
             createIndexStream(),
-            // await createDatabaseStream(),
-        ]);
+            // argv.store && await createDatabaseStream(),
+        ].filter(Boolean));
+
+        // if (!shouldReadData) {
+        //     rawDataStream.pipe(fs.createWriteStream(localPath))
+        // }
 
         pipeline.on('error', (e) => {
             console.error(e);
@@ -36,9 +67,11 @@ const generate = () => {
         pipeline.on('end', async () => {
             console.log('Generate typings');
             await generateTypings();
-            console.log('Uploading index to S3');
-            await uploadToS3();
-            console.log('Success');
+            if (argv.upload) {
+                console.log('Uploading index to S3');
+                await uploadToS3();
+                console.log('Success');
+            }
             resolve();
         });
     });

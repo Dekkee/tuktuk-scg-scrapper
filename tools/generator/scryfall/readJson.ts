@@ -1,8 +1,6 @@
 import * as fs from "fs";
 
-export const readJson = async () => {
-    const path = './generated/data.json';
-    // const path = './generated/slimIndex.json';
+export const readJson = async (path) => {
     const stat = fs.statSync(path);
     const stream = fs.createReadStream(path);
 
