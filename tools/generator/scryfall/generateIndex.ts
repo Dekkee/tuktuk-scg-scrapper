@@ -10,7 +10,7 @@ const index = new FlexSearch.Document({
     doc: {
         id: 'id',
         index: ['search'],
-        store: ['card'],
+        store: ['en', 'ru', 'text'],
     },
 });
 
@@ -37,7 +37,8 @@ export const createIndexStream = () => {
             if (
                 filteredLayouts.has(card.layout) ||
                 card.digital ||
-                filteredSetTypes.has(card.set_type)
+                filteredSetTypes.has(card.set_type) || 
+                (card.border_color === 'borderless' && map[card.name]?.[card.lang])
             ) {
                 filteredCards.push(card);
                 return;
@@ -45,35 +46,50 @@ export const createIndexStream = () => {
             const isRu = card.lang === 'ru';
             const isEn = card.lang === 'en';
             if (isRu || isEn) {
+                // if (card.name.includes('Cragcrown Pathway') && card.set != 'slu') {
+                //     console.log(`==========`);
+                //     console.log(card.lang);
+                //     console.log(card.set);
+                //     console.log(card.name);
+                //     console.log(card.printed_name);
+                //     console.log(card.card_faces?.map(({ printed_name, name }) => `${printed_name} || ${name}`));
+                //     console.log(card.border_color);
+                // }
+
                 if (!(card.name in map)) {
                     map[card.name] = {
-                        names: new Set([card.printed_name, card.name]),
-                        text: card.oracle_text,
-                        scryfallId: card.id,
+                        names: new Set(),
                     };
-                } else {
-                    map[card.name].names.add(card.printed_name || card.name);
                 }
-                if (isRu) {
-                    map[card.name].localizedName = card.printed_name || card.name || map[card.name].localizedName;
-                }
-                if (Array.isArray(card.card_faces)) {
-                    map[card.name].text = '';
 
+                if (Array.isArray(card.card_faces)) {
+                    map[card.name][card.lang] = map[card.name][card.lang] || {};
+                    map[card.name].text = '';
+                    map[card.name][card.lang].scryfallId = card.id;
                     const faces = [];
                     card.card_faces.forEach((face) => {
                         map[card.name].names.add(face.printed_name || face.name);
                         map[card.name].text += `${face.oracle_text} `;
-                        if (face.printed_name) {
-                            faces.push(face.printed_name);
-                        }
+                        faces.push(face.printed_name || face.name);
                     });
                     if (faces.length) {
-                        map[card.name].localizedName = faces.join(' // ')
+                        map[card.name][card.lang].name = faces.join(' // ');
+                    }
+                } else {
+                    map[card.name].names.add(card.printed_name || card.name);
+                    map[card.name].text = card.oracle_text;
+                    map[card.name][card.lang] = {
+                        ...map[card.name][card.lang],
+                        name: card.printed_name || card.name,
+                        scryfallId: card.id,
                     }
                 }
+                // if (card.name.includes('Cragcrown Pathway') && card.set != 'slu') {
+                //     console.log('===', map[card.name])
+                // }
             }
         } catch (e) {
+            console.error(e);
             failedCards.push({ card, error: e });
         }
     };
@@ -92,13 +108,27 @@ export const createIndexStream = () => {
                 const c = {
                     id: id++,
                     search: `${[...value.names.values()].filter(Boolean).reverse().join(' % ')}`,
-                    card: {
-                        name: key,
-                        text: value.text && value.text.length > 70 ? `${value.text.slice(0, 70)}...` : value.text,
-                        localizedName: value.localizedName,
-                        scryfallId: value.scryfallId,
-                    },
+                    text: value.text,
+                    en: {},
+                    ru: {},
                 };
+                let variant = value.en;
+                if (variant) {
+                    c.en = {
+                        name: variant.name,
+                        scryfallId: variant.scryfallId,
+                    }
+                    variant = null;
+                }
+                variant = value.ru;
+                if (variant) {
+                    c.ru = {
+                        name: variant.name,
+                        scryfallId: variant.scryfallId,
+                    }
+                    variant = null;
+                }
+
                 index.add(c);
             });
 

@@ -48,7 +48,7 @@ export const getIndex = async () => {
         doc: {
             id: 'id',
             index: ['search'],
-            store: ['card']
+            store: ['en', 'ru', 'text'],
         },
     });
 

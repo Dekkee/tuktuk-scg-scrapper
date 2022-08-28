@@ -41,13 +41,15 @@ const generate = () => {
     return new Promise<void>(async (resolve, reject) => {
         const shouldReadData = argv.slim || argv.local;
         const localPath = argv.slim ? './generated/data.json' : './generated/data.json';
-        const { stream: dataStream, total } = await (shouldReadData ?  readJson(localPath) : loadJson());
+        const { stream: dataStream, total } = await (shouldReadData ? readJson(localPath) : loadJson());
         shouldReadData ? console.log(`Reading ${localPath}`) : console.log('Downloading')
 
-        const rawDataStream = new PassThrough({allowHalfOpen: false});
+        const rawDataStream = new PassThrough({ allowHalfOpen: false, objectMode: true });
+        const parsedCardStream = new PassThrough({ allowHalfOpen: false, objectMode: true });
 
         const pipeline = chain([
             dataStream,
+            rawDataStream,
             createProgressStream(total),
             parser(),
             streamArray(),
@@ -56,9 +58,9 @@ const generate = () => {
             // argv.store && await createDatabaseStream(),
         ].filter(Boolean));
 
-        // if (!shouldReadData) {
-        //     rawDataStream.pipe(fs.createWriteStream(localPath))
-        // }
+        if (!shouldReadData) {
+            rawDataStream.pipe(fs.createWriteStream(localPath))
+        }
 
         pipeline.on('error', (e) => {
             console.error(e);
