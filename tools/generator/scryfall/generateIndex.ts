@@ -46,7 +46,7 @@ export const createIndexStream = () => {
             const isRu = card.lang === 'ru';
             const isEn = card.lang === 'en';
             if (isRu || isEn) {
-                // if (card.name.includes('Cragcrown Pathway') && card.set != 'slu') {
+                // if (card.name.includes('Myrel') && card.set != 'slu') {
                 //     console.log(`==========`);
                 //     console.log(card.lang);
                 //     console.log(card.set);
@@ -84,7 +84,7 @@ export const createIndexStream = () => {
                         scryfallId: card.id,
                     }
                 }
-                // if (card.name.includes('Cragcrown Pathway') && card.set != 'slu') {
+                // if (card.name.includes('Myrel') && card.set != 'slu') {
                 //     console.log('===', map[card.name])
                 // }
             }

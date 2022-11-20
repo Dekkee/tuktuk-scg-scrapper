@@ -7,7 +7,8 @@ export const uploadToS3 = async () => {
         credentials: cred,
         endpoint: 'storage.yandexcloud.net',
     });
-    await s3
+    try {
+    const data = await s3
         .upload({
             Body: fs.readFileSync('./generated/index/index.json'),
             Key: 'index.json',
@@ -15,4 +16,9 @@ export const uploadToS3 = async () => {
             ACL: 'public-read',
         })
         .promise();
+
+        console.log(`Uploading done: ${JSON.stringify(data)}`)
+    } catch (e) {
+        console.error(`Uploading failed: ${e}`)
+    }
 };

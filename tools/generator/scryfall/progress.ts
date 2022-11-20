@@ -16,7 +16,7 @@ export const createProgressStream = (total: string | number) => {
       return chunk;
     };
   } else {
-    const progressBar = new Progress('-> downloading [:bar] :percent :etas', {
+    const progressBar = new Progress('-> reading [:bar] :percent :etas', {
       width: 40,
       complete: '=',
       incomplete: ' ',
