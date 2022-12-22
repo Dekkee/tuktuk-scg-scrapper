@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
+import { logError } from '../../logger';
 import { getMtgGoldfishSet } from '../entities/parseSet';
 
 const dygraphConstructorArguments = [];
@@ -78,7 +79,7 @@ export const parseGraph = async ({ name, sub, set, foil }: ParserArguments) => {
         const annotations = (MTGGoldfishDygraph as any).annotationsPaper;
         return { data, annotations };
     } catch (e) {
-        console.error('Graph parse fail', e);
+        logError('Graph parse fail', e);
         return {
             data: null,
             annotations: null,

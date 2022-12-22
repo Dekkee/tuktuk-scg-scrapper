@@ -14,6 +14,7 @@ import { collectDefaultMetrics, Counter, Histogram, register } from 'prom-client
 import { config } from '@tuktuk-scg-scrapper/common/config/scgProvider';
 import { config as storageConfig } from '@tuktuk-scg-scrapper/common/config/storage';
 import { parseGraph } from './html-parser/mtggoldfish';
+import { logError } from './logger';
 
 collectDefaultMetrics();
 
@@ -81,7 +82,7 @@ app.get('/api/list', async function (req, resp, next) {
 
         resp.status(200).send(pagedAnswer);
     } catch (e) {
-        console.error('/api/list', e);
+        logError('/api/list request failed', e);
         next(e);
     }
     next();
@@ -99,7 +100,7 @@ app.get('/api/get', async function (req, resp, next) {
         const answer = await response.text();
         resp.status(200).send(await parseScgGetAnswer(answer, cookies));
     } catch (e) {
-        console.error('/api/get', e);
+        logError('/api/get request failed', e);
         next(e);
     }
 
@@ -107,17 +108,22 @@ app.get('/api/get', async function (req, resp, next) {
 });
 
 app.get('/api/graph', async function (req, resp, next) {
-    const name = decodeURIComponent(String(req.query.name || ''));
-    const set = decodeURIComponent(String(req.query.set || ''));
-    const sub = decodeURIComponent(String(req.query.sub || ''));
-    const foil = req.query.foil === 'true';
-    const res = await parseGraph({
-        name,
-        set,
-        sub,
-        foil,
-    });
-    resp.status(200).send(res);
+    try {
+        const name = decodeURIComponent(String(req.query.name || ''));
+        const set = decodeURIComponent(String(req.query.set || ''));
+        const sub = decodeURIComponent(String(req.query.sub || ''));
+        const foil = req.query.foil === 'true';
+        const res = await parseGraph({
+            name,
+            set,
+            sub,
+            foil,
+        });
+        resp.status(200).send(res);
+    } catch (e) {
+        logError('/api/graph request failed', e);
+        next(e);
+    }
 
     next();
 });
@@ -128,6 +134,7 @@ app.get('/api/suggest', async function (req, resp, next) {
         const id = decodeURIComponent(name);
         resp.status(200).send(suggest(id));
     } catch (e) {
+        logError('/api/suggest request failed', e);
         next(e);
     }
     next();
@@ -191,7 +198,7 @@ const shutdown = function () {
 
     server.close((err) => {
         if (err) {
-            console.error(err);
+            logError('', err);
             process.exit(1);
         }
 
