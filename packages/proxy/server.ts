@@ -11,7 +11,7 @@ import { config as storageConfig } from '@tuktuk-scg-scrapper/common/config/stor
 
 const compression = require('compression');
 const app = express()
-    .use(morgan(':method :url -> :status'))
+    .use(morgan(':method :url -> :status ":referrer" :remote-addr'))
     .use(bodyParser.urlencoded({ extended: true }))
     .use(cors());
 
