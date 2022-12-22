@@ -25,7 +25,6 @@ export const suggest = (name: string) => {
   c.forEach(({ result }) => {
 
     result.reduce((accumulator, { doc }, index) => {
-      console.log('===', doc);
       accumulator[index + 1] = {
         ...doc[secondLang],
         ...doc[firstLang],
