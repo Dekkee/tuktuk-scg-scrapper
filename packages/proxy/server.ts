@@ -15,6 +15,8 @@ const app = express()
     .use(bodyParser.urlencoded({ extended: true }))
     .use(cors());
 
+app.enable("trust proxy");
+
 app.use(compression({ threshold: 0 }));
 app.use(express.static('../../dist'));
 
