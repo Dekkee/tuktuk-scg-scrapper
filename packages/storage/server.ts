@@ -7,6 +7,7 @@ import * as morgan from 'morgan';
 import * as colors from 'colors';
 import { config } from '@tuktuk-scg-scrapper/common/config/storage';
 import { stopCronJobs } from './maintenance/scheduler';
+import { logError } from '../server/logger';
 
 let server;
 const port = config.port;
@@ -42,7 +43,7 @@ const shutdown = function (server) {
 
     server.close((err) => {
         if (err) {
-            console.error(err);
+            logError('', err);
             process.exit(1);
         }
 

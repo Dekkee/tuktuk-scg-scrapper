@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import { mongoConnectionString } from '@tuktuk-scg-scrapper/common/config/mongo';
+import { logError } from '../server/logger';
 
 export const connect = () => {
     return mongoose
@@ -14,7 +15,7 @@ export const connect = () => {
             return console.info(`Successfully connected to cards`);
         })
         .catch((error) => {
-            console.error('Error connecting to database: ', error);
+            logError('Error connecting to database: ', error);
             return process.exit(1);
         });
 };

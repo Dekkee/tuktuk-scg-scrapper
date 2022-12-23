@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import { downloadFile } from '@tuktuk-scg-scrapper/common/downloadFile';
+import { logError } from '../../logger';
 
 const FlexSearch = require('flexsearch');
 
@@ -34,7 +35,7 @@ const updateIndex = async () => {
                 console.log('Index is up to date');
             }
         } catch (e) {
-            console.error('Failed to update index: ', e);
+            logError('Failed to update index: ', e);
         }
     }
     return false;
