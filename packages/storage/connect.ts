@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { mongoConnectionString } from '@tuktuk-scg-scrapper/common/config/mongo';
-import { logError } from '../server/logger';
+import { logError } from '@tuktuk-scg-scrapper/common/logger';
 
 export const connect = () => {
     return mongoose
@@ -16,7 +16,7 @@ export const connect = () => {
         })
         .catch((error) => {
             logError('Error connecting to database: ', error);
-            return process.exit(1);
+            // return process.exit(1)
         });
 };
 

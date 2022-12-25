@@ -1,12 +1,10 @@
-import * as webpack from "webpack";
+import { DefinePlugin, Configuration as WebpackConfiguration, ProvidePlugin, WebpackOptionsNormalized } from "webpack";
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
-const OfflinePlugin = require('offline-plugin');
+// const OfflinePlugin = require('offline-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
 const { config } = require('@tuktuk-scg-scrapper/common/config/frontend');
@@ -20,11 +18,11 @@ const externals = [{
     entry: `https://unpkg.com/react@${getVersion(require('./package').dependencies.react)}/umd/react.production.min.js`,
     global: 'React',
 },
-    {
-        module: 'react-dom',
-        entry: `https://unpkg.com/react-dom@${getVersion(require('./package').dependencies['react-dom'])}/umd/react-dom.production.min.js`,
-        global: 'ReactDOM',
-    },
+{
+    module: 'react-dom',
+    entry: `https://unpkg.com/react-dom@${getVersion(require('./package').dependencies['react-dom'])}/umd/react-dom.production.min.js`,
+    global: 'ReactDOM',
+},
 ];
 
 const vendors = [
@@ -33,13 +31,17 @@ const vendors = [
     },
 ];
 
-module.exports = (env): webpack.Configuration => {
-    const isProd = env === 'production';
+type Configuration = WebpackConfiguration & {
+    devServer: WebpackOptionsNormalized['devServer'];
+};
+
+module.exports = (_, argv): Configuration => {
+    const isProd = argv.mode === 'production';
 
     const plugins = [
         new CleanWebpackPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(env)
+        new DefinePlugin({
+            __dev__: !isProd,
         }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
@@ -53,32 +55,33 @@ module.exports = (env): webpack.Configuration => {
                 description: manifest.description,
                 'apple-mobile-web-app-status-bar-style': 'black-translucent',
             }
-        })
-    ];
+        }),
+        !isProd && new ProvidePlugin({
+            "React": "react",
+         }),
+    ].filter(Boolean);
+    
     if (isProd) {
         plugins.push(
             new WebpackPwaManifest(manifest),
             new HtmlWebpackExternalsPlugin({ externals }),
             new MiniCssExtractPlugin(),
-            new OfflinePlugin({
-                ServiceWorker: {
-                    events: true,
-                },
-                externals: [...vendors.map(value => value.entry), ...externals.map(value => value.entry)]
-            }),
+            // new OfflinePlugin({
+            //     ServiceWorker: {
+            //         events: true,
+            //     },
+            //     externals: [...vendors.map(value => value.entry), ...externals.map(value => value.entry)]
+            // }),
             new PreloadWebpackPlugin({
                 rel: 'preload',
                 include: 'allChunks' // or 'initial'
             }),
         );
     }
-    if (!isProd) {
-        plugins.push(new webpack.HotModuleReplacementPlugin());
-    }
 
     return {
         entry: './src/index.tsx',
-        mode: env || 'development',
+        mode: argv.mode || 'development',
         module: {
             rules: [
                 {
@@ -98,17 +101,20 @@ module.exports = (env): webpack.Configuration => {
                 },
                 {
                     test: /\.jpe?g$|\.gif$|\.woff$|\.woff2$|\.ttf$|\.wav$|\.mp3$/,
-                    loader: 'file-loader?name=[name].[ext]'
-                },
+                    type: 'asset/resource'
+                }
             ]
         },
         plugins,
         resolve: {
             extensions: ['.js', '.ts', '.tsx', '.svg']
         },
+        watch: !isProd,
         devServer: {
             compress: true,
-            contentBase: '../../dist',
+            static: {
+                directory: path.join(__dirname, '../../dist'),
+            },
             hot: true,
             historyApiFallback: true,
             port: config.port,
@@ -124,11 +130,5 @@ module.exports = (env): webpack.Configuration => {
             path: path.resolve(__dirname, '../../dist'),
             publicPath: '/',
         },
-        optimization: isProd ? {
-            minimizer: [
-                new TerserPlugin(),
-                new OptimizeCSSAssetsPlugin({})
-            ]
-        } : {},
     }
 };

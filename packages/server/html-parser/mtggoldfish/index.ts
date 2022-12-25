@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 import fetch from 'node-fetch';
-import { logError } from '../../logger';
+import { logError } from '@tuktuk-scg-scrapper/common/logger';
 import { getMtgGoldfishSet } from '../entities/parseSet';
 
 const dygraphConstructorArguments = [];

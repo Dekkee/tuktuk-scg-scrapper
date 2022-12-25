@@ -1,12 +1,11 @@
-import * as React from 'react';
+import { Component, useCallback, useState, useEffect } from 'react';
 
 import { ParsedRowDetails } from '../../../../common/Row';
-import { RouteComponentProps, withRouter } from 'react-router';
 import { getCard } from '../../api';
 import { LoadingLabel } from '../../components/LoadingLabel';
 import { CardDetails } from '../../components/CardDetails';
-import { history } from '../../utils/history';
 import ArrowIcon from '../../icons/arrow_back.svg';
+import { useMatch, useMatches, useNavigate } from 'react-router';
 
 import './CardLayout.scss';
 
@@ -15,47 +14,40 @@ export interface State {
     isFetching: boolean;
 }
 
-type Props = Partial<RouteComponentProps<{ id: string }>>;
+export const CardLayout = () => {
+    const navigate = useNavigate();
+    const [isFetching, setIsFetching] = useState(true);
+    const [card, setCard] = useState<ParsedRowDetails | undefined>();
 
-@(withRouter as any)
-export class CardLayout extends React.Component<Props, State> {
-    constructor(props) {
-        super(props);
+    const { params } = useMatch('/card/:id/');
+    const { id } = params;
 
-        this.state = {
-            isFetching: true,
-        };
-    }
+    useEffect(() => {
+        setIsFetching(true);
+        setCard(undefined);
 
-    componentDidMount() {
-        const { match } = this.props;
-        const { id } = match.params;
-        this.requestCard(id);
-    }
+        const requestCard = async (value) => {
+            const { card } = await getCard(value);
+            if (!card) return;
+            setIsFetching(false);
+            setCard(card);
+        }
 
-    async requestCard(value: string) {
-        this.setState({ ...this.state, card: undefined, isFetching: true });
-        const { card } = await getCard(value);
-        if (!card) return;
-        this.setState({ ...this.state, card, isFetching: false });
-    }
+        requestCard(id);
+    }, []);
 
-    onBackClick() {
-        history.goBack();
-    }
+    const onBackClick = useCallback(() => navigate(-1), []);
 
-    render() {
-        const { card, isFetching } = this.state;
-        return (
-            <div className="card-layout">
-                <div className="card-layout__header">
-                    <div className="card-layout__back-button" onClick={this.onBackClick}>
-                        <ArrowIcon width={24} height={24} fill="#fff" />
-                    </div>
-                    <div className="card-layout__name">{card && card.name}</div>
+    return (
+        <div className="card-layout">
+            <div className="card-layout__header">
+                <div className="card-layout__back-button" onClick={onBackClick}>
+                    <ArrowIcon width={24} height={24} fill="#fff" />
                 </div>
-                {isFetching ? <LoadingLabel /> : <CardDetails card={card} />}
+                <div className="card-layout__name">{card?.name}</div>
             </div>
-        );
-    }
+            {isFetching ? <LoadingLabel /> : <CardDetails card={card} />}
+        </div>
+    );
+
 }

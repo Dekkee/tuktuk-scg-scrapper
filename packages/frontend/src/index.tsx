@@ -1,12 +1,9 @@
 import * as React from 'react';
-import { render } from 'react-dom';
-
+import { createRoot } from 'react-dom/client';
 import { App } from './App';
-import { Router } from 'react-router-dom';
-import { history } from './utils/history';
 
-render((
-    <Router history={ history }>
-        <App/>
-    </Router>
-), document.getElementById('root'));
+createRoot(document.getElementById("root")).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
+);

@@ -40,6 +40,8 @@ const { argv } = yargs(process.argv.slice(2))
 const generate = () => {
     return new Promise<void>(async (resolve, reject) => {
         const shouldReadData = argv.slim || argv.local;
+        const shouldUpload = argv.upload;
+
         const localPath = argv.slim ? './generated/data.json' : './generated/data.json';
         const { stream: dataStream, total } = await (shouldReadData ? readJson(localPath) : loadJson());
         shouldReadData ? console.log(`Reading ${localPath}`) : console.log('Downloading')
@@ -59,6 +61,7 @@ const generate = () => {
         ].filter(Boolean));
 
         if (!shouldReadData) {
+            console.log(`Writing index on disk: ${localPath}`);
             rawDataStream.pipe(fs.createWriteStream(localPath))
         }
 
@@ -69,7 +72,7 @@ const generate = () => {
         pipeline.on('end', async () => {
             console.log('Generate typings');
             await generateTypings();
-            if (argv.upload) {
+            if (shouldUpload) {
                 console.log('Uploading index to S3');
                 await uploadToS3();
                 console.log('Success');

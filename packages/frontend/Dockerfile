@@ -1,5 +1,5 @@
 # Build frontend
-FROM node:16-alpine as front
+FROM node:14-alpine as front
 
 WORKDIR /home/app
 ENV NODE_ENV=production

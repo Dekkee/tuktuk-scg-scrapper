@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { downloadFile } from '@tuktuk-scg-scrapper/common/downloadFile';
-import { logError } from '../../logger';
+import { logError } from '@tuktuk-scg-scrapper/common/logger';
 
 const FlexSearch = require('flexsearch');
 

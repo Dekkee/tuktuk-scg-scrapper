@@ -4,7 +4,7 @@ import { AutocompleteCard } from '../../../common/AutocompleteCard';
 import { GetResponse, ListResponse } from '../../../common/Response';
 import { abortableFetch } from '../utils/abortableFetch';
 
-const url = process.env.NODE_ENV === 'production' ? '' : '//localhost:8081';
+const url = !__dev__ ? '' : '//localhost:8081';
 
 let controller: AbortController = null;
 

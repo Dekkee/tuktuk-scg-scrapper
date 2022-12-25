@@ -7,16 +7,15 @@ import * as morgan from 'morgan';
 import * as colors from 'colors';
 import { config } from '@tuktuk-scg-scrapper/common/config/storage';
 import { stopCronJobs } from './maintenance/scheduler';
-import { logError } from '../server/logger';
+import { logError } from '@tuktuk-scg-scrapper/common/logger';
 
 let server;
 const port = config.port;
+const app: Application = express();
 
 const runApp = async () => {
     try {
         await connect();
-
-        const app: Application = express();
 
         app.use(bodyParser.json());
         app.use(morgan(':method :url -> :status'));

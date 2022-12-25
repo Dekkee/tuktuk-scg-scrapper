@@ -14,7 +14,7 @@ import { collectDefaultMetrics, Counter, Histogram, register } from 'prom-client
 import { config } from '@tuktuk-scg-scrapper/common/config/scgProvider';
 import { config as storageConfig } from '@tuktuk-scg-scrapper/common/config/storage';
 import { parseGraph } from './html-parser/mtggoldfish';
-import { logError } from './logger';
+import { logError } from '@tuktuk-scg-scrapper/common/logger';
 
 collectDefaultMetrics();
 
@@ -78,7 +78,7 @@ app.get('/api/list', async function (req, resp, next) {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
             },
-        });
+        }).catch((e) => console.error(`Failed to dump: ${e}`));
 
         resp.status(200).send(pagedAnswer);
     } catch (e) {

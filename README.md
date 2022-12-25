@@ -18,3 +18,11 @@ cd tuktuk-scg-scrapper
 # build
 docker-compose up -d
 ```
+
+## Develop
+```bash
+#once
+docker run --name mongo -d mongo:6.0.3
+
+yarn dev
+```
