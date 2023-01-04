@@ -69,7 +69,7 @@ export const parseGraph = async ({ name, sub, set, foil }: ParserArguments) => {
         };
         // Инициализация графиков
         (function () {
-            (MTGGoldfishDygraph as any).bindTabs.apply(this);
+            (MTGGoldfishDygraph as any)?.bindTabs?.apply(this);
         })();
 
         // Получаем точки

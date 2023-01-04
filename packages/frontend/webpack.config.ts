@@ -1,8 +1,8 @@
 import { DefinePlugin, Configuration as WebpackConfiguration, ProvidePlugin, WebpackOptionsNormalized } from "webpack";
 
+const OfflinePlugin = require('@lcdp/offline-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
-// const OfflinePlugin = require('offline-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
@@ -66,12 +66,12 @@ module.exports = (_, argv): Configuration => {
             new WebpackPwaManifest(manifest),
             new HtmlWebpackExternalsPlugin({ externals }),
             new MiniCssExtractPlugin(),
-            // new OfflinePlugin({
-            //     ServiceWorker: {
-            //         events: true,
-            //     },
-            //     externals: [...vendors.map(value => value.entry), ...externals.map(value => value.entry)]
-            // }),
+            new OfflinePlugin({
+                ServiceWorker: {
+                    events: true,
+                },
+                externals: [...vendors.map(value => value.entry), ...externals.map(value => value.entry)]
+            }),
             new PreloadWebpackPlugin({
                 rel: 'preload',
                 include: 'allChunks' // or 'initial'
