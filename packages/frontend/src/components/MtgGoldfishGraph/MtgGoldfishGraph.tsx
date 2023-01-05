@@ -71,6 +71,7 @@ const requestCard = async (state, setState, props) => {
         if (e.name === 'AbortError') {
             return;
         }
+        console.error(`Failed to render graph: ${e}`);
     } finally {
         controller = null;
     }
