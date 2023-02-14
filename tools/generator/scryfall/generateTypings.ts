@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 if (!fs.existsSync('./generated/typing')) {
-    fs.mkdirSync('./generated/typing');
+    fs.mkdirSync('./generated/typing', { recursive: true });
 }
 
 const extractRe = /\((\w+)\)$/;
