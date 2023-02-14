@@ -9,3 +9,5 @@ dist
 **/data/*
 update-index.ts
 upsert-database.ts
+
+.DS_Store
