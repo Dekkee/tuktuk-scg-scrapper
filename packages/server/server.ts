@@ -6,7 +6,7 @@ import * as cors from 'cors';
 import * as querystring from 'querystring';
 import * as path from 'path';
 import fetch from 'node-fetch';
-import { parseScgListAnswer } from './html-parser/list';
+import { parseScgPostAnswer } from './html-parser/list';
 import { parseScgGetAnswer } from './html-parser/get';
 import { suggest } from './suggest';
 import { prepareUrl } from './urlPreparation';
@@ -66,9 +66,23 @@ app.get('/api/list', async function (req, resp, next) {
         console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.pg}`);
         searchTotal.inc({ card_name: name });
 
-        const answer = await (await fetch(`https://lusearchapi-na.hawksearch.com/sites/starcitygames/?${query}`)).json(); 
-        
-        const pagedAnswer = await parseScgListAnswer(answer);
+        const request = {
+            FacetSelections:  {card_name: [name]},
+            Variant : {MaxPerPage: 32},
+            MaxPerPage :  32,
+            clientguid: "cc3be22005ef47d3969c3de28f09571b"
+        };
+
+        // const answer = await (await fetch(`https://essearchapi-na.hawksearch.com/api/v2/search/?${query}`)).json(); 
+        const answer = await (await fetch(`https://essearchapi-na.hawksearch.com/api/v2/search`, {
+            method: 'POST',
+            body: JSON.stringify(request),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })).json(); 
+        console.log('=== re', answer)
+        const pagedAnswer = await parseScgPostAnswer(answer);
 
         fetch(`http://${storageConfig.host}:${storageConfig.port}/storage/card/update-ids`, {
             method: 'PUT',
