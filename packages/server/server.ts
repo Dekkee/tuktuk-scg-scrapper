@@ -49,7 +49,11 @@ app.use((req, res, next) => {
 
 app.get('/api/list', async function (req, resp, next) {
     try {
-        const name = String(req.query.name); //.replace(/,/g, "%c%")
+        const name = String(req.query.name)
+        // ó -> o
+        .replace('ó', 'o')
+        // í -> i
+        .replace('í', 'i'); //.replace(/,/g, "%c%")
         const page = parseInt(String(req.query.page) || '', 10);
         const auto = req.query.auto === 'true';
         const queryObject: Record<string, string | number> = {
@@ -73,7 +77,6 @@ app.get('/api/list', async function (req, resp, next) {
             clientguid: "cc3be22005ef47d3969c3de28f09571b"
         };
 
-        // const answer = await (await fetch(`https://essearchapi-na.hawksearch.com/api/v2/search/?${query}`)).json(); 
         const answer = await (await fetch(`https://essearchapi-na.hawksearch.com/api/v2/search`, {
             method: 'POST',
             body: JSON.stringify(request),
@@ -81,7 +84,6 @@ app.get('/api/list', async function (req, resp, next) {
                 'Content-Type': 'application/json',
             },
         })).json(); 
-        console.log('=== re', answer)
         const pagedAnswer = await parseScgPostAnswer(answer);
 
         fetch(`http://${storageConfig.host}:${storageConfig.port}/storage/card/update-ids`, {

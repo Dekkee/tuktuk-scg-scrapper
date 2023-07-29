@@ -4,10 +4,6 @@ export const prepareUrl = (input: string) =>
         .replace(/\s+(\S+)$/g, '+$1')
         // hack: for some reason + before 'Will' breaks search query
         .replace(/\+(will)/gi, ' $1')
-        // ó -> o
-        .replace('ó', 'o')
-        // í -> i
-        .replace('í', 'i');
         
 
 // old algorithm
