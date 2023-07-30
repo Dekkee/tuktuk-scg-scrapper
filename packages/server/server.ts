@@ -74,6 +74,7 @@ app.get('/api/list', async function (req, resp, next) {
             FacetSelections:  {card_name: [name]},
             Variant : {MaxPerPage: 32},
             MaxPerPage :  32,
+            PageNo: page,
             clientguid: "cc3be22005ef47d3969c3de28f09571b"
         };
 

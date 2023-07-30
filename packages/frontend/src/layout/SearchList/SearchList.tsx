@@ -49,8 +49,18 @@ export const SearchList = () => {
         isMenuOpen: false
     })
 
-    const requestData = async (value: string, isAutocompletion: boolean, newPage: number = 0) => {
-        const { rows: stateRows = [] } = state;
+    const {
+        isFetching,
+        isAutocompletion,
+        searchText,
+        shouldUpdate,
+        isMenuOpen,
+        rows,
+        pageCount,
+        page,
+    } = state;
+
+    const requestData = async (value: string, isAutocompletion: boolean, stateRows: ParsedRow[] = [], newPage: number = 1) => {
         const newStateRows = newPage > 0 ? stateRows : [];
         setState({
             ...state,
@@ -80,20 +90,18 @@ export const SearchList = () => {
     };
 
     useEffect(() => {
-        const { shouldUpdate, searchText, isAutocompletion } = state;
         if (shouldUpdate) {
-            requestData(searchText, isAutocompletion);
+            requestData(searchText, isAutocompletion, rows);
         }
-    }, [])
+    }, [shouldUpdate, searchText, isAutocompletion, rows])
 
     useEffect(() => {
         const { name: queryName, auto } = querystring.parse(document.location.search);
-        const { searchText } = state;
 
         if (queryName !== searchText) {
             setState({ ...state, searchText: queryName as string });
         }
-    }, [])
+    }, [searchText])
 
 
     const openMenu = useCallback(() => {
@@ -116,15 +124,13 @@ export const SearchList = () => {
 
 
     const onMore = useCallback(() => {
-        const { searchText, page, isAutocompletion } = state;
-        requestData(searchText, isAutocompletion, page + 1);
-    }, []);
+        requestData(searchText, isAutocompletion, rows, page + 1);
+    }, [searchText, isAutocompletion, page, rows]);
 
     const closeMenu = useCallback(() => {
         setState({ ...state, isMenuOpen: false });
     }, []);
 
-    const { isFetching, rows, searchText, pageCount, page, isMenuOpen } = state;
     return (<div className="search-layout">
         <div className="search-layout__container">
             <header className="header">
