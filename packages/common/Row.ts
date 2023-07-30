@@ -1,4 +1,4 @@
-import { ScgPriceAndCondition } from '@tuktuk-scg-scrapper/storage/types';
+import { ScgPriceAndCondition } from './Scg';
 
 export type Meta = string | Record<string, any>;
 

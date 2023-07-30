@@ -1,5 +1,5 @@
 import { Schema, Document, model } from 'mongoose';
-import { Card as CardType } from '../types';
+import { Card as CardType } from '@tuktuk-scg-scrapper/common/Scg';
 
 const cardFaceSchema = {
     object: { type: String, required: true },

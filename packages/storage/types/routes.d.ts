@@ -1,4 +1,4 @@
-import { Application } from 'express';
+import { type Application } from 'express';
 export type TRoutesInput = {
   app: Application;
 };

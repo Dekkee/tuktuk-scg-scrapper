@@ -1,5 +1,5 @@
 import { Card } from '../schemas/card';
-import { Card as CardType, ScgCardPrice } from '../types';
+import { Card as CardType, ScgCardPrice } from '@tuktuk-scg-scrapper/common/Scg';
 
 import { TRoutesInput } from '../types/routes';
 import { ParsedRow } from '@tuktuk-scg-scrapper/common/Row';

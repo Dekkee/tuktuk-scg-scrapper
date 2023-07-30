@@ -35,7 +35,7 @@ interface Config {
 }
 
 const config: Config = JSON.parse(localStorage.getItem('config'));
-const { name: queryName, auto } = querystring.parse(document.location.search);
+const { name: queryName } = querystring.parse(document.location.search);
 
 export const SearchList = () => {
     const navigate = useNavigate();
@@ -53,7 +53,6 @@ export const SearchList = () => {
         isFetching,
         isAutocompletion,
         searchText,
-        shouldUpdate,
         isMenuOpen,
         rows,
         pageCount,
@@ -90,18 +89,25 @@ export const SearchList = () => {
     };
 
     useEffect(() => {
+        const {
+            isAutocompletion,
+            searchText,
+            shouldUpdate,
+            rows
+        } = state;
+
         if (shouldUpdate) {
             requestData(searchText, isAutocompletion, rows);
         }
-    }, [shouldUpdate, searchText, isAutocompletion, rows])
+    });
 
     useEffect(() => {
-        const { name: queryName, auto } = querystring.parse(document.location.search);
+        const { name } = querystring.parse(document.location.search);
 
-        if (queryName !== searchText) {
-            setState({ ...state, searchText: queryName as string });
+        if (name !== searchText) {
+            setState({ ...state, searchText: name as string });
         }
-    }, [searchText])
+    }, [searchText]);
 
 
     const openMenu = useCallback(() => {
