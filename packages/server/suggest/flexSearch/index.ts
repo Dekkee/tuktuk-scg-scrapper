@@ -26,7 +26,7 @@ const updateIndex = async () => {
             const { headers, download, destroy } = await downloadFile(s3IndexPath);
 
             if (etag !== headers.etag) {
-                console.log('New index detected. Downloading.');
+                console.log(`New index detected. Downloading. (old etag: ${etag} new etag: ${headers.etag})`);
                 fs.writeFileSync(metaPath, JSON.stringify({ etag: headers.etag }));
                 await download(fs.createWriteStream(indexPath));
                 return true;
