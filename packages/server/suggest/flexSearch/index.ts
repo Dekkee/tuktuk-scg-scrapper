@@ -32,7 +32,7 @@ const updateIndex = async () => {
                 return true;
             } else {
                 destroy();
-                logError('Index is up to date', {} as any);
+                logError(`Index is up to date. etag: ${etag}`, {} as any);
             }
         } catch (e) {
             logError('Failed to update index: ', e);
