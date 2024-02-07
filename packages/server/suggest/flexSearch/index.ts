@@ -14,25 +14,25 @@ if (!fs.existsSync('./data')) {
 
 const updateIndex = async () => {
     if (!fs.existsSync(metaPath)) {
-        console.log('No index detected. Initializing.');
+        logError('No index detected. Initializing.', {} as any);
         const { headers, download } = await downloadFile(s3IndexPath);
         const { etag } = headers;
         fs.writeFileSync(metaPath, JSON.stringify({ etag }));
         await download(fs.createWriteStream(indexPath));
     } else {
-        console.log('Index found.');
         const { etag } = JSON.parse(fs.readFileSync(metaPath).toString());
+        logError(`Index found. etag: ${etag}`, {} as any);
         try {
             const { headers, download, destroy } = await downloadFile(s3IndexPath);
 
             if (etag !== headers.etag) {
-                console.log(`New index detected. Downloading. (old etag: ${etag} new etag: ${headers.etag})`);
+                logError(`New index detected. Downloading. (old etag: ${etag} new etag: ${headers.etag})`, {} as any);
                 fs.writeFileSync(metaPath, JSON.stringify({ etag: headers.etag }));
                 await download(fs.createWriteStream(indexPath));
                 return true;
             } else {
                 destroy();
-                console.log('Index is up to date');
+                logError('Index is up to date', {} as any);
             }
         } catch (e) {
             logError('Failed to update index: ', e);
