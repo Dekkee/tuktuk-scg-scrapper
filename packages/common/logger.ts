@@ -11,5 +11,5 @@ export const logError = (message: string, err: Error) => {
 };
 
 export const logInfo = (message: string) => {
-    console.info(buildMessage(message))
+    console.log(buildMessage(message))
 };
