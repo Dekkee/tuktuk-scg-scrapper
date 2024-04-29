@@ -1,8 +1,8 @@
 const prefix = '[SERVER]';
 
 const buildMessage = (message: string, err?: Error) => {
-    const stack = !!err.stack ? ` [STACK] ${err.stack}` : '';
-    const details = !!message ? `[DETAILS] ${err.message}` : '';
+    const stack = !!err?.stack ? ` [STACK] ${err.stack}` : '';
+    const details = !!message ? `[DETAILS] ${err?.message}` : '';
     return `${prefix} [MESSAGE] ${message || err.message}${details}${stack}`.replace(/\n/gm, "\\n");
 };
 
