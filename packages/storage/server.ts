@@ -42,7 +42,7 @@ const shutdown = function (server) {
 
     server.close((err) => {
         if (err) {
-            logError('', err);
+            logError('Failed to shutdown', err);
             process.exit(1);
         }
 
