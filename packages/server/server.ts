@@ -150,7 +150,8 @@ app.get('/api/suggest', async function (req, resp, next) {
     try {
         const name = String(req.query.name);
         const id = decodeURIComponent(name);
-        resp.status(200).send(suggest(id));
+        const suggested = suggest(id);
+        resp.status(200).send(suggested);
     } catch (e) {
         logError('/api/suggest request failed', e);
         next(e);
