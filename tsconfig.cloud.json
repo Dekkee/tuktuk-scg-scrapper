@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "system",
+    "moduleResolution": "node",
+    "outFile": "./build/cloud.js",
+    "sourceMap": true,
+    "target": "es2018",
+    "strict": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "files": [
+    "./tools/generator/scryfall/cloud.ts"
+  ],
+  "exclude": ["./packages/frontend"]
+}
