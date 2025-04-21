@@ -16,6 +16,10 @@ const { streamArray } = require('stream-json/streamers/StreamArray');
 type GenerateOpts = { slim?: boolean, local?: boolean, upload?: boolean };
 
 export const generate = (opts: GenerateOpts) => {
+    if (!fs.existsSync('./generated')) {
+        fs.mkdirSync('./generated');
+    }
+
     return new Promise<void>(async (resolve, reject) => {
         const shouldReadData = opts.slim || opts.local;
         const shouldUpload = opts.upload;

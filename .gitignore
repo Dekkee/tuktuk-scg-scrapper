@@ -3,6 +3,7 @@
 node_modules
 generated
 public/bundle.js
+build
 
 yarn-error.log
 dist

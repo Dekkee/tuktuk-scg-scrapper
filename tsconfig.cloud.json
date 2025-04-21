@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "module": "system",
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "outFile": "./build/cloud.js",
+    "outDir": "build",
     "sourceMap": true,
     "target": "es2018",
     "strict": false,
@@ -12,6 +12,5 @@
   },
   "files": [
     "./tools/generator/scryfall/cloud.ts"
-  ],
-  "exclude": ["./packages/frontend"]
+  ]
 }
