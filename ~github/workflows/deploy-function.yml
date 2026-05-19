@@ -1,0 +1,76 @@
+name: Deploy Scryfall index updater function
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'tools/generator/scryfall/**'
+      - '~github/workflows/deploy-function.yml'
+      - 'package.json'
+      - 'yarn.lock'
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --network-concurrency 1
+
+      - name: Bundle function
+        run: yarn build:function
+
+      - name: Deploy to Yandex Cloud Functions
+        uses: yc-actions/yc-sls-function@v3
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_KEY_JSON }}
+          folder-id: ${{ secrets.YC_FOLDER_ID }}
+          function-name: scryfall-index-updater
+          runtime: nodejs18
+          memory: 2GB
+          entrypoint: index.updater
+          execution-timeout: 600
+          service-account: ${{ secrets.YC_FUNCTION_SA_ID }}
+          environment: |
+            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          source-root: build/function
+
+# One-time manual setup (do NOT automate — these are stateful resources):
+#
+# 1. Create the function:
+#    yc serverless function create --name scryfall-index-updater
+#
+# 2. Create service account for the function with role storage.uploader on bucket "tuktuk":
+#    yc iam service-account create --name scryfall-index-updater-fn
+#    yc resource-manager folder add-access-binding --id <FOLDER_ID> \
+#      --role storage.uploader --subject serviceAccount:<FN_SA_ID>
+#    → save FN_SA_ID into GH secret YC_FUNCTION_SA_ID
+#
+# 3. Create CI service account with roles functions.admin + iam.serviceAccounts.user:
+#    yc iam service-account create --name ci-deployer
+#    yc resource-manager folder add-access-binding --id <FOLDER_ID> \
+#      --role functions.admin --subject serviceAccount:<CI_SA_ID>
+#    yc resource-manager folder add-access-binding --id <FOLDER_ID> \
+#      --role iam.serviceAccounts.user --subject serviceAccount:<CI_SA_ID>
+#    yc iam key create --service-account-id <CI_SA_ID> -o ci-key.json
+#    → paste ci-key.json into GH secret YC_SA_KEY_JSON
+#    → save FOLDER_ID into GH secret YC_FOLDER_ID
+#
+# 4. After the first successful deploy, create the timer trigger:
+#    yc serverless trigger create timer \
+#      --name update-scryfall-index \
+#      --cron-expression '17 4 ? * * *' \
+#      --invoke-function-id <FUNCTION_ID> \
+#      --invoke-function-service-account-id <FN_SA_ID>

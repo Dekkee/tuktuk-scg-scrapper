@@ -1,5 +1,5 @@
-import * as prettyBytes from "pretty-bytes";
-import * as Progress from 'progress';
+import prettyBytes from "pretty-bytes";
+import Progress from 'progress';
 
 import readline = require('readline');
 
