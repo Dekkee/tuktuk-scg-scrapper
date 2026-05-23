@@ -1,11 +1,11 @@
 # Build frontend
-FROM node:14-alpine as front
+FROM node:22-alpine as front
 
 WORKDIR /home/app
 ENV NODE_ENV=production
 RUN apk update && apk upgrade && apk add --no-cache bash git openssh
 
-COPY package.json package-lock.json lerna.json /home/app/
+COPY package.json package-lock.json /home/app/
 COPY packages/frontend/package.json /home/app/packages/frontend/
 COPY packages/common/package.json /home/app/packages/common/
 
@@ -19,7 +19,7 @@ COPY packages/common /home/app/packages/common/
 
 RUN npm run build --workspace=@tuktuk-scg-scrapper/frontend
 
-FROM node:16-alpine
+FROM node:22-alpine
 
 WORKDIR /home/app
 ENV NODE_ENV=production
