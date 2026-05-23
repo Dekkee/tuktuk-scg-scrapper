@@ -1,23 +1,28 @@
-import * as AWS from 'aws-sdk';
+import { S3Client } from '@aws-sdk/client-s3';
+import { Upload } from '@aws-sdk/lib-storage';
 
 export const uploadToS3 = async (body: Buffer | string) => {
-    const cred = new AWS.Credentials(process.env.AWS_ACCESS_KEY_ID, process.env.AWS_SECRET_ACCESS_KEY);
-    const s3 = new AWS.S3({
-        credentials: cred,
-        endpoint: 'storage.yandexcloud.net',
+    const s3 = new S3Client({
+        credentials: {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        },
+        endpoint: 'https://storage.yandexcloud.net',
+        region: 'ru-central1',
     });
     try {
-        const data = await s3
-            .upload({
+        const upload = new Upload({
+            client: s3,
+            params: {
                 Body: body,
                 Key: 'index.json',
                 Bucket: 'tuktuk',
                 ACL: 'public-read',
-            })
-            .promise();
-
-        console.log(`Uploading done: ${JSON.stringify(data)}`)
+            },
+        });
+        const data = await upload.done();
+        console.log(`Uploading done: ${JSON.stringify(data)}`);
     } catch (e) {
-        console.error(`Uploading failed: ${e}`)
+        console.error(`Uploading failed: ${e}`);
     }
 };
