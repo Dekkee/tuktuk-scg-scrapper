@@ -13,25 +13,31 @@ if (!fs.existsSync('./data')) {
 }
 
 const updateIndex = async () => {
-    if (!fs.existsSync(metaPath)) {
-        logInfo('No index detected. Initializing.');
-        const { headers, download } = await downloadFile(s3IndexPath);
-        const { etag } = headers;
+    const downloadIndex = async (etag: string) => {
+        const tmpPath = `${indexPath}.tmp`;
+        const { download } = await downloadFile(s3IndexPath);
+        await download(fs.createWriteStream(tmpPath));
+        fs.renameSync(tmpPath, indexPath);
         fs.writeFileSync(metaPath, JSON.stringify({ etag }));
-        await download(fs.createWriteStream(indexPath));
+    };
+
+    if (!fs.existsSync(metaPath) || !fs.existsSync(indexPath)) {
+        logInfo('No index detected. Initializing.');
+        const { headers, destroy } = await downloadFile(s3IndexPath);
+        destroy();
+        await downloadIndex(headers.etag);
     } else {
         const { etag } = JSON.parse(fs.readFileSync(metaPath).toString());
         logInfo(`Index found. etag: ${etag}`);
         try {
-            const { headers, download, destroy } = await downloadFile(s3IndexPath);
+            const { headers, destroy } = await downloadFile(s3IndexPath);
+            destroy();
 
             if (etag !== headers.etag) {
                 logInfo(`New index detected. Downloading. (old etag: ${etag} new etag: ${headers.etag})`);
-                fs.writeFileSync(metaPath, JSON.stringify({ etag: headers.etag }));
-                await download(fs.createWriteStream(indexPath));
+                await downloadIndex(headers.etag);
                 return true;
             } else {
-                destroy();
                 logInfo(`Index is up to date. etag: ${etag}`);
             }
         } catch (e) {
