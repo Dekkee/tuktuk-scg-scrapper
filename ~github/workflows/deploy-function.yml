@@ -9,7 +9,7 @@ on:
       - 'tools/generator/scryfall/**'
       - '~github/workflows/deploy-function.yml'
       - 'package.json'
-      - 'yarn.lock'
+      - 'package-lock.json'
 
 jobs:
   deploy:
@@ -23,13 +23,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: yarn
+          cache: npm
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --network-concurrency 1
+        run: npm ci
 
       - name: Bundle function
-        run: yarn build:function
+        run: npm run build:function
 
       - name: Deploy to Yandex Cloud Functions
         uses: yc-actions/yc-sls-function@v3

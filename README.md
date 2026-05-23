@@ -24,5 +24,5 @@ docker-compose up -d
 #once
 docker run --name mongo -d mongo:6.0.3
 
-yarn dev
+npm run dev
 ```

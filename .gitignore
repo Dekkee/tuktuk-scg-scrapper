@@ -5,10 +5,12 @@ generated
 build
 public/bundle.js
 
-yarn-error.log
+npm-debug.log*
 dist
 **/data/*
 update-index.ts
 upsert-database.ts
 
 .DS_Store
+
+.claude/settings.local.json
