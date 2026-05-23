@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { WriteStream } from "fs";
-import * as Progress from 'progress';
+import Progress from 'progress';
 
 const prettyBytes = require('pretty-bytes');
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import * as cn from 'classnames';
+import cn from 'classnames';
 
 import { SearchInput } from '../../components/SearchInput';
 import { CardsTable } from '../../components/CardsTable';

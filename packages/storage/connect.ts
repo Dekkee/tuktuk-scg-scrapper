@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { mongoConnectionString } from '@tuktuk-scg-scrapper/common/config/mongo';
 import { logError } from '@tuktuk-scg-scrapper/common/logger';
 

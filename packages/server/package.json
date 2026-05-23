@@ -11,10 +11,9 @@
     "dependencies": {
         "@tuktuk-scg-scrapper/common": "0.0.1",
         "@types/async": "^3.0.3",
-        "@types/cheerio": "0.22.8",
         "@types/lodash": "^4.14.115",
         "async": "^3.1.0",
-        "cheerio": "1.0.0-rc.12",
+        "cheerio": "^1.0.0",
         "flexsearch": "0.7.21",
         "lodash": "^4.17.10",
         "prom-client": "^15.1.3"

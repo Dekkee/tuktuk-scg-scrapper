@@ -1,9 +1,9 @@
 import { Application } from 'express';
-import * as bodyParser from 'body-parser';
-import * as express from 'express';
+import bodyParser from 'body-parser';
+import express from 'express';
 import { connect } from './connect';
 import { cardRoute } from './routes/card';
-import * as morgan from 'morgan';
+import morgan from 'morgan';
 import * as colors from 'colors';
 import { config } from '@tuktuk-scg-scrapper/common/config/storage';
 import { stopCronJobs } from './maintenance/scheduler';
