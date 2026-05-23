@@ -9,7 +9,7 @@
     },
     "scripts": {
         "build": "npm run build --workspaces --if-present",
-        "dev": "npm run dev --workspaces --if-present",
+        "dev": "concurrently -n proxy,server,storage,frontend -c blue,green,yellow,magenta \"npm:dev -w @tuktuk-scg-scrapper/proxy\" \"npm:dev -w @tuktuk-scg-scrapper/server\" \"npm:dev -w @tuktuk-scg-scrapper/storage\" \"npm:dev -w @tuktuk-scg-scrapper/frontend\"",
         "test": "vitest run",
         "test:ci": "vitest run --reporter=default",
         "update-index": "node --max_old_space_size=8192 -r ts-node/register ./update-index.ts",
@@ -46,6 +46,7 @@
         "@types/mongoose": "^5.7.13",
         "@types/node": "^22",
         "async": "^3.2.0",
+        "concurrently": "^9.0.1",
         "cross-env": "^7.0.2",
         "esbuild": "^0.20.0",
         "husky": "^9.1.7",
