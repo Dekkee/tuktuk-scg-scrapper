@@ -1,0 +1,15 @@
+{
+    "permissions": {
+        "allow": [
+            "Bash(npm ci *)",
+            "Read(//Users/dekker/**)",
+            "Bash(npm run *)",
+            "Bash(git stash *)",
+            "Bash(npm ls *)",
+            "Bash(npm view *)",
+            "Bash(npm install *)",
+            "Bash(npx sass-migrator *)",
+            "Bash(npx webpack *)"
+        ]
+    }
+}

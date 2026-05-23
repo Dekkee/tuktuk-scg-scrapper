@@ -64,6 +64,10 @@
     "workspaces": [
         "packages/*"
     ],
+    "overrides": {
+        "ajv": "^8.0.0",
+        "bson": "~4.7.0"
+    },
     "husky": {
         "hooks": {
             "pre-commit": "lint-staged"

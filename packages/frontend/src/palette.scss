@@ -1,3 +1,4 @@
+@use "sass:map";
 $tuktuk-colors: (
     'primary-light': #bef57a,
     'primary': #8bc24a,
@@ -10,5 +11,5 @@ $tuktuk-colors: (
     'error': #ef9a9a,
 );
 @function tuktuk-color($key: 'primary') {
-    @return map-get($tuktuk-colors, $key);
+    @return map.get($tuktuk-colors, $key);
 }

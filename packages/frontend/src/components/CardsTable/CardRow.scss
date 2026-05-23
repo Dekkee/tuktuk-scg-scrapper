@@ -1,11 +1,11 @@
-@import "../../palette";
+@use "../../palette";
 .card-row {
     &__name {
         font-weight: 500;
         padding-bottom: 10px;
     }
     &__header {
-        color: tuktuk-color('foreground');
+        color: palette.tuktuk-color('foreground');
         text-decoration: none;
     }
     &__foil,
@@ -16,7 +16,7 @@
     &__foil,
     &__lang {
         font-weight: 400;
-        color: tuktuk-color('secondary-dark');
+        color: palette.tuktuk-color('secondary-dark');
     }
     &__price {
         justify-self: end;
@@ -25,7 +25,7 @@
         padding-right: 10px;
     }
     &__stock {
-        color: tuktuk-color('secondary-dark');
+        color: palette.tuktuk-color('secondary-dark');
         font-size: 0.9em;
     }
     &__discount {

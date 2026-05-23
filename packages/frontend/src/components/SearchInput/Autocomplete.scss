@@ -1,4 +1,4 @@
-@import "../../palette";
+@use "../../palette";
 
 .autocompletion {
     &__container {
@@ -9,8 +9,8 @@
     &__content {
         position: absolute;
         width: 100%;
-        background: tuktuk-color('background');
-        border: 1px solid tuktuk-color('secondary');
+        background: palette.tuktuk-color('background');
+        border: 1px solid palette.tuktuk-color('secondary');
         border-top: none;
         box-sizing: border-box;
         border-radius: 0 0 8px 8px;
@@ -19,13 +19,13 @@
     &__card {
         padding: 0px;
         display: flex;
-        border-top: 1px solid tuktuk-color(secondary);
+        border-top: 1px solid palette.tuktuk-color(secondary);
         cursor: pointer;
         height: 100px;
 
         &:hover {
-            background: tuktuk-color(primary);
-            color: tuktuk-color(background);
+            background: palette.tuktuk-color(primary);
+            color: palette.tuktuk-color(background);
         }
     }
 
@@ -48,8 +48,8 @@
     }
 
     &--active {
-        background: tuktuk-color(primary);
-        color: tuktuk-color(background);
+        background: palette.tuktuk-color(primary);
+        color: palette.tuktuk-color(background);
     }
 
     &__card-name {
@@ -59,7 +59,7 @@
     }
 
     &__card-secondary-name {
-        color: tuktuk-color('secondary-dark');
+        color: palette.tuktuk-color('secondary-dark');
         font-size: 18px;
     }
 

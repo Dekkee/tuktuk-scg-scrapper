@@ -1,4 +1,4 @@
-@import "../../palette";
+@use "../../palette";
 .update-label-container {
     position: fixed;
     display: flex;
@@ -7,7 +7,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    background: tuktuk-color('primary');
+    background: palette.tuktuk-color('primary');
 
     transition-property: all;
     transition-duration: .5s;
@@ -19,7 +19,7 @@
         max-height: 0;
     }
     &--failed {
-        background: tuktuk-color('error');
+        background: palette.tuktuk-color('error');
     }
 }
 

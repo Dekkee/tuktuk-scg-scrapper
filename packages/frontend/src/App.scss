@@ -1,4 +1,4 @@
-@import "palette";
+@use "palette";
 html,
 body,
 #root {
@@ -7,8 +7,8 @@ body,
 
 body {
     margin: 0;
-    background-color: tuktuk-color(accent);
-    color: tuktuk-color(foreground);
+    background-color: palette.tuktuk-color(accent);
+    color: palette.tuktuk-color(foreground);
     font-family: "Roboto", Arial, Helvetica, sans-serif;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
@@ -17,7 +17,7 @@ body {
 
 .main-container {
     min-height: 100%;
-    background: tuktuk-color(background);
+    background: palette.tuktuk-color(background);
     display: flex;
     position: relative;
     flex-direction: column;

@@ -1,12 +1,12 @@
-@import "../../palette";
+@use "../../palette";
 .header {
     height: 50px;
     display: flex;
     position: relative;
     justify-content: center;
     align-items: center;
-    background: tuktuk-color('accent');
-    color: tuktuk-color('background');
+    background: palette.tuktuk-color('accent');
+    color: palette.tuktuk-color('background');
 
     &__menu-button {
         position: absolute;
@@ -49,7 +49,7 @@
 
     &__menu {
         position: absolute;
-        background: tuktuk-color('background');
+        background: palette.tuktuk-color('background');
         z-index: 1;
         top: 0;
         left: -300px;

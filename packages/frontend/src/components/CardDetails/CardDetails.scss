@@ -1,4 +1,4 @@
-@import "../../palette";
+@use "../../palette";
 
 .card-details {
     display: grid;
@@ -21,7 +21,7 @@
 
     &__set {
         a {
-            color: tuktuk-color(secondary-dark);
+            color: palette.tuktuk-color(secondary-dark);
         }
     }
 
@@ -59,8 +59,8 @@
 
     &__container {
         padding: 20px;
-        background: tuktuk-color(primary-light);
-        color: tuktuk-color(foreground);
+        background: palette.tuktuk-color(primary-light);
+        color: palette.tuktuk-color(foreground);
         display: flex;
         justify-content: space-between;
     }
@@ -79,7 +79,7 @@
     &__stock {
         font-size: 0.9em;
         font-weight: 600;
-        color: tuktuk-color(foreground);
+        color: palette.tuktuk-color(foreground);
     }
 
     &__condition {

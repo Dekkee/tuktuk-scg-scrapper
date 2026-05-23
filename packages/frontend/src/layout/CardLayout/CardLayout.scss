@@ -1,4 +1,4 @@
-@import "../../palette";
+@use "../../palette";
 .card-layout {
     height: 100%;
     &__header {
@@ -6,7 +6,7 @@
         justify-content: center;
         align-items: center;
         position: relative;
-        background: tuktuk-color('accent');
+        background: palette.tuktuk-color('accent');
         height: 50px;
     }
     &__back-button {
@@ -16,6 +16,6 @@
         cursor: pointer;
     }
     &__name {
-        color: tuktuk-color('background');
+        color: palette.tuktuk-color('background');
     }
 }

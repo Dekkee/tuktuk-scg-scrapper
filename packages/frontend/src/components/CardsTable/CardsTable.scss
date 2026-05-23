@@ -1,7 +1,7 @@
-@import "../../palette";
+@use "../../palette";
 .row-separator td {
     width: 100%;
-    border-bottom: 1px solid tuktuk-color('secondary');
+    border-bottom: 1px solid palette.tuktuk-color('secondary');
 }
 
 .cards-container {

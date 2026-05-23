@@ -1,4 +1,4 @@
-@import "../../palette";
+@use "../../palette";
 
 .menu {
     &__header {
@@ -29,7 +29,7 @@
         width: 40px;
         outline: none;
         text-align: right;
-        border: 1px solid tuktuk-color(accent);
+        border: 1px solid palette.tuktuk-color(accent);
         border-radius: 8px;
         padding: 5px;
         font-size: 15px;

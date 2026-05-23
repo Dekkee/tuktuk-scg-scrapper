@@ -1,4 +1,4 @@
-@import "../../palette";
+@use "../../palette";
 .button {
     &__container {
 
@@ -9,12 +9,12 @@
         }
         cursor: pointer;
         outline: none;
-        background: tuktuk-color('accent');
-        color: tuktuk-color('background');
+        background: palette.tuktuk-color('accent');
+        color: palette.tuktuk-color('background');
         padding: 10px;
         border-radius: 8px;
-        border: 1px solid tuktuk-color('accent');
-        box-shadow: 0 1px 6px tuktuk-color('');
+        border: 1px solid palette.tuktuk-color('accent');
+        box-shadow: 0 1px 6px palette.tuktuk-color('');
         font-weight: bold;
         text-align: center;
         font-size: 15px;

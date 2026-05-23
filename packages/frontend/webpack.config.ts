@@ -6,7 +6,7 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
-const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
+const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 const { config } = require('@tuktuk-scg-scrapper/common/config/frontend');
 const path = require('path');
 const manifest = require('./src/pwa/manifest');
@@ -64,7 +64,9 @@ module.exports = (_, argv): Configuration => {
     if (isProd) {
         plugins.push(
             new WebpackPwaManifest(manifest),
-            new HtmlWebpackExternalsPlugin({ externals }),
+            new HtmlWebpackTagsPlugin({
+                scripts: externals.map(({ entry }) => ({ path: entry, publicPath: false, append: false })),
+            }),
             new MiniCssExtractPlugin(),
             new OfflinePlugin({
                 ServiceWorker: {
@@ -96,7 +98,10 @@ module.exports = (_, argv): Configuration => {
                     use: [
                         isProd ? MiniCssExtractPlugin.loader : 'style-loader', // creates style nodes from JS strings
                         'css-loader', // translates CSS into CommonJS
-                        'sass-loader' // compiles Sass to CSS
+                        {
+                            loader: 'sass-loader',
+                            options: { api: 'modern' },
+                        },
                     ]
                 },
                 {

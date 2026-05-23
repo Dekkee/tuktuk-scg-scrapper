@@ -1,6 +1,6 @@
-@import "../../palette";
+@use "../../palette";
 
 .secondary-price {
     font-size: 0.8em;
-    color: tuktuk-color(secondary-dark);
+    color: palette.tuktuk-color(secondary-dark);
 }
