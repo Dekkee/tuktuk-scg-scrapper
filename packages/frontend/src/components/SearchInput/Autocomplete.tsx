@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as cn from 'classnames';
+import cn from 'classnames';
 import { AutocompleteCard } from '../../../../common/AutocompleteCard';
 
 import './Autocomplete.scss';

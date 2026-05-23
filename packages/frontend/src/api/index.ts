@@ -1,10 +1,17 @@
-import { stringify } from 'querystring';
-
 import { AutocompleteCard } from '../../../common/AutocompleteCard';
 import { GetResponse, ListResponse } from '../../../common/Response';
 import { abortableFetch } from '../utils/abortableFetch';
 
 const url = !__dev__ ? '' : '//localhost:8081';
+
+const stringify = (params: Record<string, string | number | boolean | null | undefined>) => {
+    const sp = new URLSearchParams();
+    for (const [k, v] of Object.entries(params)) {
+        if (v === null || v === undefined) continue;
+        sp.set(k, String(v));
+    }
+    return sp.toString();
+};
 
 let controller: AbortController = null;
 
@@ -23,7 +30,6 @@ export const searchByName = async (value: string, isAutocompletion: boolean, pag
         controller = response.controller;
         return (await (await response).json()) as ListResponse;
     } catch (e) {
-        // ignore abortError
         if (e.name === 'AbortError') {
             return;
         }
@@ -42,15 +48,12 @@ export const getCard = async (value: string) => {
     }
     controller = new AbortController();
     try {
-        const query = stringify({
-            name: value,
-        });
+        const query = stringify({ name: value });
         controller?.abort();
         const response = abortableFetch(`${url}/api/get?${query}`);
         controller = response.controller;
         return (await (await response).json()) as GetResponse;
     } catch (e) {
-        // ignore abortError
         if (e.name === 'AbortError') {
             return { card: undefined };
         }
@@ -61,8 +64,6 @@ export const getCard = async (value: string) => {
 };
 
 export const autocomplete = async (text: string): Promise<Record<string, AutocompleteCard> | undefined> => {
-    const query = stringify({
-        name: text,
-    });
+    const query = stringify({ name: text });
     return await (await fetch(`${url}/api/suggest?${query}`)).json();
 };

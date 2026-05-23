@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as cn from 'classnames';
+import cn from 'classnames';
 import { ParsedRow } from '../../../../common/Row';
 import { CardRow } from './CardRow';
 import SearchIcon from '../../icons/search.svg';
