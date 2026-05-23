@@ -3,32 +3,46 @@ import * as fs from 'fs';
 const { Writable } = require('stream');
 const FlexSearch = require('flexsearch');
 
-const index = new FlexSearch.Document({
-    split: /\s+| % /,
-    preset: "score",
-    tokenize: "forward",
-    doc: {
-        id: 'id',
-        index: ['search'],
-        store: ['en', 'ru', 'text'],
-    },
-});
-
-const path = './generated/index';
-
-if (!fs.existsSync(path)) {
-    fs.mkdirSync(path);
-}
-
 const filteredLayouts = new Set(['art_series', 'emblem', 'token']);
 const filteredSetTypes = new Set(['slu', 'promo']);
 
-const filteredCards = [];
-const failedCards = [];
-let i = 0;
+export type IndexPayload = {
+    index: Record<string, unknown>;
+    filtered: unknown[];
+    failed: unknown[];
+};
 
-export const createIndexStream = () => {
-    const map = {};
+export type CreateIndexStreamOpts = {
+    onReady?: (payload: IndexPayload) => Promise<void> | void;
+};
+
+const diskPath = './generated/index';
+
+const writeToDisk = ({ index, filtered, failed }: IndexPayload) => {
+    if (!fs.existsSync(diskPath)) {
+        fs.mkdirSync(diskPath, { recursive: true });
+    }
+    fs.writeFileSync(`${diskPath}/index.json`, JSON.stringify(index));
+    fs.writeFileSync(`${diskPath}/filtered.json`, JSON.stringify(filtered));
+    fs.writeFileSync(`${diskPath}/failed.json`, JSON.stringify(failed));
+};
+
+export const createIndexStream = ({ onReady }: CreateIndexStreamOpts = {}) => {
+    const index = new FlexSearch.Document({
+        split: /\s+| % /,
+        preset: 'score',
+        tokenize: 'forward',
+        doc: {
+            id: 'id',
+            index: ['search'],
+            store: ['en', 'ru', 'text'],
+        },
+    });
+
+    const filteredCards: unknown[] = [];
+    const failedCards: unknown[] = [];
+    const map: Record<string, any> = {};
+    let i = 0;
 
     const parseCard = (card) => {
         i++;
@@ -37,7 +51,7 @@ export const createIndexStream = () => {
             if (
                 filteredLayouts.has(card.layout) ||
                 card.digital ||
-                filteredSetTypes.has(card.set_type) || 
+                filteredSetTypes.has(card.set_type) ||
                 (card.border_color === 'borderless' && map[card.name]?.[card.lang])
             ) {
                 filteredCards.push(card);
@@ -46,16 +60,6 @@ export const createIndexStream = () => {
             const isRu = card.lang === 'ru';
             const isEn = card.lang === 'en';
             if (isRu || isEn) {
-                // if (card.name.includes('Myrel') && card.set != 'slu') {
-                //     console.log(`==========`);
-                //     console.log(card.lang);
-                //     console.log(card.set);
-                //     console.log(card.name);
-                //     console.log(card.printed_name);
-                //     console.log(card.card_faces?.map(({ printed_name, name }) => `${printed_name} || ${name}`));
-                //     console.log(card.border_color);
-                // }
-
                 if (!(card.name in map)) {
                     map[card.name] = {
                         names: new Set(),
@@ -84,9 +88,6 @@ export const createIndexStream = () => {
                         scryfallId: card.id,
                     }
                 }
-                // if (card.name.includes('Myrel') && card.set != 'slu') {
-                //     console.log('===', map[card.name])
-                // }
             }
         } catch (e) {
             console.error(e);
@@ -104,7 +105,7 @@ export const createIndexStream = () => {
         final: (callback) => {
             let id = 0;
 
-            Object.entries(map).forEach(([key, value]: any[]) => {
+            Object.entries(map).forEach(([, value]: any[]) => {
                 const c = {
                     id: id++,
                     search: `${[...value.names.values()].filter(Boolean).reverse().join(' % ')}`,
@@ -137,23 +138,19 @@ export const createIndexStream = () => {
             console.log(`Cards filtered: ${filteredCards.length}`);
             console.log(`Cards failed: ${failedCards.length}`);
 
-            const storage = {};
+            const storage: Record<string, unknown> = {};
             return new Promise<void>((resolve) => {
                 index.export(((key, value) => {
                     storage[key] = value;
                     if (key === 'store') {
-                        console.log('Save index');
-                        try {
-                            fs.writeFileSync(`${path}/index.json`, JSON.stringify(storage));
-                            fs.writeFileSync(`${path}/filtered.json`, JSON.stringify(filteredCards));
-                            fs.writeFileSync(`${path}/failed.json`, JSON.stringify(failedCards));
-                        }
-                        catch (e) {
-                            console.error(e);
-                        }
-                        finally {
-                            resolve();
-                        }
+                        const payload: IndexPayload = {
+                            index: storage,
+                            filtered: filteredCards,
+                            failed: failedCards,
+                        };
+                        Promise.resolve(onReady ? onReady(payload) : writeToDisk(payload))
+                            .catch((e) => console.error(e))
+                            .finally(() => resolve());
                     }
                 }))
             }).then(callback);

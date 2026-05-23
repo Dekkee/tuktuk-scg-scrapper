@@ -2,6 +2,7 @@
 
 node_modules
 generated
+build
 public/bundle.js
 
 yarn-error.log
