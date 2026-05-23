@@ -12,7 +12,7 @@ export const downloadFile = async (url: string) => {
     });
 
     const download = (writer: WriteStream) => new Promise<void>(async (resolve, reject) => {
-        const totalLength = headers['content-length'];
+        const totalLength = headers['content-length'] as string | undefined;
         if (!totalLength) {
             let currentBytes = 0;
             const prefix = 'Loaded: ';

@@ -7,22 +7,17 @@
     },
     "dependencies": {
         "@babel/runtime": "^7.0.0",
-        "abortcontroller-polyfill": "^1.1.9",
         "classnames": "^2.2.6",
         "dygraphs": "^2.1.0",
         "lodash": "^4.17.10",
         "mini-css-extract-plugin": "^2.7.2",
-        "query-string": "^6.2.0",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-router": "^6.6.1",
-        "react-router-dom": "^6.6.1",
-        "whatwg-fetch": "^3.0.0",
-        "yet-another-abortcontroller-polyfill": "^0.0.3"
+        "react-router-dom": "^6.6.1"
     },
     "devDependencies": {
         "@babel/plugin-proposal-decorators": "^7.8.3",
-        "@babel/plugin-proposal-optional-chaining": "^7.11.0",
         "@babel/preset-react": "^7.9.4",
         "@types/lodash": "^4.14.115",
         "@types/react": "^18.0.26",
