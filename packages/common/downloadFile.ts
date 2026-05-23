@@ -16,12 +16,15 @@ export const downloadFile = async (url: string) => {
         if (!totalLength) {
             let currentBytes = 0;
             const prefix = 'Loaded: ';
-            process.stdout.write(`${prefix}${currentBytes} B`);
+            const isTTY = process.stdout.isTTY;
+            process.stdout.write(`${prefix}${currentBytes} B${isTTY ? '' : '\n'}`);
             data.on('data', chunk => {
                 currentBytes += chunk.length;
-                process.stdout.cursorTo(prefix.length);
-                process.stdout.clearLine(1);
-                process.stdout.write(`${prettyBytes(currentBytes)}`);
+                if (isTTY) {
+                    process.stdout.cursorTo(prefix.length);
+                    process.stdout.clearLine(1);
+                    process.stdout.write(`${prettyBytes(currentBytes)}`);
+                }
             });
         } else {
             const progressBar = new Progress(
