@@ -5,8 +5,8 @@
         "start": "ts-node ./server.ts",
         "build": "tsc -b",
         "dev": "nodemon",
-        "test": "../../node_modules/.bin/jest --colors",
-        "test:ci": "jest --ci --reporters=default"
+        "test": "vitest run",
+        "test:ci": "vitest run --reporter=default"
     },
     "dependencies": {
         "@tuktuk-scg-scrapper/common": "0.0.1",
