@@ -4,16 +4,19 @@
     "description": "The starcitygames.com shop price srapper.",
     "homepage": "https://scg.dekker.gdn",
     "email": "dekker25@gmail.com",
+    "engines": {
+        "node": ">=22"
+    },
     "scripts": {
-        "bootstrap": "lerna bootstrap",
-        "build": "lerna run build --stream",
-        "dev": "lerna run dev --stream",
-        "test": "lerna run test --stream",
-        "test:ci": "lerna run test:ci --stream",
+        "build": "npm run build --workspaces --if-present",
+        "dev": "concurrently -n proxy,server,storage,frontend -c blue,green,yellow,magenta \"npm:dev -w @tuktuk-scg-scrapper/proxy\" \"npm:dev -w @tuktuk-scg-scrapper/server\" \"npm:dev -w @tuktuk-scg-scrapper/storage\" \"npm:dev -w @tuktuk-scg-scrapper/frontend\"",
+        "test": "vitest run",
+        "test:ci": "vitest run --reporter=default",
         "update-index": "node --max_old_space_size=8192 -r ts-node/register ./update-index.ts",
         "upsert-database": "cross-env MONGO_INITDB_ROOT_USERNAME=$MONGO_USER MONGO_INITDB_ROOT_PASSWORD=$MONGO_PWORD node --max_old_space_size=8192 -r ts-node/register ./tools/updater/upsert.ts",
         "docker:build": "docker-compose build && node ./tools/tag.js",
-        "build:function": "esbuild tools/generator/scryfall/cloud.ts --bundle --platform=node --target=node18 --outfile=build/function/index.js --minify --sourcemap"
+        "build:function": "esbuild tools/generator/scryfall/cloud.ts --bundle --platform=node --target=node22 --outfile=build/function/index.js --minify --sourcemap",
+        "prepare": "husky"
     },
     "repository": "https://github.com/Dekkee/tuktuk-scg-scrapper.git",
     "main": "index.js",
@@ -21,12 +24,11 @@
     "license": "MIT",
     "private": true,
     "dependencies": {
-        "@babel/cli": "^7.8.4",
         "@types/body-parser": "^1.17.0",
         "@types/cors": "^2.8.4",
         "@types/express": "^4.16.0",
         "@types/morgan": "^1.7.35",
-        "axios": "^0.21.1",
+        "axios": "^1.7.7",
         "body-parser": "^1.18.3",
         "colors": "^1.3.1",
         "compression": "^1.7.4",
@@ -39,26 +41,22 @@
         "ts-node": "^10.9.1"
     },
     "devDependencies": {
-        "@babel/core": "^7.9.6",
-        "@babel/preset-env": "^7.9.6",
-        "@babel/preset-typescript": "^7.9.0",
-        "@types/jest": "^29.2.4",
+        "@aws-sdk/client-s3": "^3.658.0",
+        "@aws-sdk/lib-storage": "^3.658.0",
         "@types/mongoose": "^5.7.13",
-        "@types/node": "^18.11.17",
+        "@types/node": "^22",
         "async": "^3.2.0",
-        "aws-sdk": "^2.1282.0",
-        "babel-jest": "^29.3.1",
+        "concurrently": "^9.0.1",
         "cross-env": "^7.0.2",
         "esbuild": "^0.20.0",
-        "husky": "^4.0.3",
-        "jest": "^26.2.1",
-        "lerna": "^6.3.0",
-        "lint-staged": "^10.2.2",
+        "husky": "^9.1.7",
+        "lint-staged": "^15.2.10",
         "nodemon": "^2.0.3",
-        "prettier": "^2.0.5",
+        "prettier": "^3.3.3",
         "stream-chain": "^2.2.1",
         "stream-json": "^1.3.3",
-        "typescript": "^4.1.0",
+        "typescript": "^5.5.4",
+        "vitest": "^2.1.1",
         "yargs": "^17.5.1"
     },
     "workspaces": [
@@ -68,15 +66,9 @@
         "ajv": "^8.0.0",
         "bson": "~4.7.0"
     },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
-    },
     "lint-staged": {
         "!(*generated|*data)/*.{ts,js,css,json,md}": [
-            "prettier --write",
-            "git add"
+            "prettier --write"
         ]
     }
 }

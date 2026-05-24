@@ -1,7 +1,5 @@
 import * as async from 'async';
-import fetch, { Headers } from 'node-fetch';
 import { Meta, ParsedRow } from '@tuktuk-scg-scrapper/common/Row';
-import { URLSearchParams } from 'url';
 
 export type cardName = {
     name: string;

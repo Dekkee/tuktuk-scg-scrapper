@@ -1,9 +1,9 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as morgan from 'morgan';
+import express from 'express';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
 import * as colors from 'colors';
 import * as path from 'path';
-import * as cors from 'cors';
+import cors from 'cors';
 import { config } from '@tuktuk-scg-scrapper/common/config/frontend';
 
 const compression = require('compression');

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { ParsedRowDetails } from '@tuktuk-scg-scrapper/common/Row';
-import { stringify } from 'querystring';
 
 import './MtgGoldfishGraph.scss';
 import { LoadingLabel } from '../LoadingLabel';
@@ -21,14 +20,14 @@ const requestCard = async (state, setState, props) => {
         setState({ ...state, data: undefined, annotations: undefined, isFetching: true });
 
         const { card } = props;
-        const q = {
+        const q = new URLSearchParams({
             name: card.name,
             sub: card.subtitle,
-            set: card.meta['set'] || card.meta,
-            foil: card.meta['foil'] || false,
-        };
+            set: String(card.meta['set'] || card.meta),
+            foil: String(card.meta['foil'] || false),
+        });
         controller?.abort();
-        const response = abortableFetch(`/api/graph?${stringify(q)}`);
+        const response = abortableFetch(`/api/graph?${q.toString()}`);
         controller = response.controller;
         const { data, annotations } = await (await response).json();
         setState({ ...state, data, annotations, isFetching: false });

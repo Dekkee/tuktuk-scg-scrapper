@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import * as cn from 'classnames';
-import * as querystring from 'query-string';
+import cn from 'classnames';
 
 import { SearchInput } from '../../components/SearchInput';
 import { CardsTable } from '../../components/CardsTable';
@@ -35,7 +34,7 @@ interface Config {
 }
 
 const config: Config = JSON.parse(localStorage.getItem('config'));
-const { name: queryName } = querystring.parse(document.location.search);
+const queryName = new URLSearchParams(document.location.search).get('name');
 
 export const SearchList = () => {
     const navigate = useNavigate();
@@ -102,10 +101,10 @@ export const SearchList = () => {
     });
 
     useEffect(() => {
-        const { name } = querystring.parse(document.location.search);
+        const name = new URLSearchParams(document.location.search).get('name');
 
         if (name !== searchText) {
-            setState({ ...state, searchText: name as string });
+            setState({ ...state, searchText: name });
         }
     }, [searchText]);
 
@@ -119,13 +118,13 @@ export const SearchList = () => {
             return;
         }
 
-        const query: { name: string, auto?: boolean } = { name: value };
+        const query = new URLSearchParams({ name: value });
         if (isAutocompletion) {
-            query.auto = true;
+            query.set('auto', 'true');
         }
 
         await requestData(value, isAutocompletion);
-        navigate(`?${querystring.stringify(query)}`);
+        navigate(`?${query.toString()}`);
     };
 
 

@@ -1,5 +1,4 @@
 import * as cheerio from 'cheerio';
-import fetch from 'node-fetch';
 import { logError } from '@tuktuk-scg-scrapper/common/logger';
 import { getMtgGoldfishSet } from '../entities/parseSet';
 
@@ -31,8 +30,9 @@ export const parseGraph = async ({ name, sub, set, foil }: ParserArguments) => {
         const scripts = dom('script:not([src])');
         let s;
         for (let i = 0; i < scripts.length; i++) {
-            if (scripts[i].children[0].data.includes('MTGGoldfishDygraph')) {
-                s = scripts[i].children[0].data;
+            const data = (scripts[i].children[0] as any)?.data ?? '';
+            if (data.includes('MTGGoldfishDygraph')) {
+                s = data;
             }
         }
 

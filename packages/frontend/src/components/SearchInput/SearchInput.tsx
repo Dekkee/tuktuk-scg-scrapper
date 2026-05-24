@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ChangeEvent } from 'react';
-import * as cn from 'classnames';
+import cn from 'classnames';
 
 import './SearchInput.scss';
 import { AutocompleteCard } from '../../../../common/AutocompleteCard';

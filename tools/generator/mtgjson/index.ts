@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import * as fs from 'fs';
 import { generateJson } from './generateJson';
 import { generateTypings } from './generateTypings';

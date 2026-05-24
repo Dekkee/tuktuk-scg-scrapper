@@ -1,11 +1,10 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as morgan from 'morgan';
+import express from 'express';
+import bodyParser from 'body-parser';
+import morgan from 'morgan';
 import * as colors from 'colors';
-import * as cors from 'cors';
+import cors from 'cors';
 import * as querystring from 'querystring';
 import * as path from 'path';
-import fetch from 'node-fetch';
 import { parseScgPostAnswer } from './html-parser/list';
 import { parseScgGetAnswer } from './html-parser/get';
 import { suggest } from './suggest';
@@ -113,7 +112,7 @@ app.get('/api/get', async function (req, resp, next) {
         console.log(`get request: id: ${id}, scg_id: ${preparedName}`);
 
         const response = await fetch(`https://www.starcitygames.com/${preparedName}`);
-        const cookies = response.headers.raw()['set-cookie'].join(';');
+        const cookies = (response.headers as any).getSetCookie().join(';');
         const answer = await response.text();
         const parsed = await parseScgGetAnswer(answer, cookies);
         resp.status(200).send(parsed);

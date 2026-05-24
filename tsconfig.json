@@ -1,17 +1,20 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
     "sourceMap": true,
-    "target": "es2018",
+    "target": "es2022",
     "lib": [
-      "es2017",
+      "es2022",
       "dom"
     ],
     "jsx": "react-jsx",
     "strict": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "./**/*.test.*"

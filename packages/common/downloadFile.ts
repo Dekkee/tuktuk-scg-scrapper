@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { WriteStream } from "fs";
-import * as Progress from 'progress';
+import Progress from 'progress';
 
 const prettyBytes = require('pretty-bytes');
 
@@ -12,16 +12,19 @@ export const downloadFile = async (url: string) => {
     });
 
     const download = (writer: WriteStream) => new Promise<void>(async (resolve, reject) => {
-        const totalLength = headers['content-length'];
+        const totalLength = headers['content-length'] as string | undefined;
         if (!totalLength) {
             let currentBytes = 0;
             const prefix = 'Loaded: ';
-            process.stdout.write(`${prefix}${currentBytes} B`);
+            const isTTY = process.stdout.isTTY;
+            process.stdout.write(`${prefix}${currentBytes} B${isTTY ? '' : '\n'}`);
             data.on('data', chunk => {
                 currentBytes += chunk.length;
-                process.stdout.cursorTo(prefix.length);
-                process.stdout.clearLine(1);
-                process.stdout.write(`${prettyBytes(currentBytes)}`);
+                if (isTTY) {
+                    process.stdout.cursorTo(prefix.length);
+                    process.stdout.clearLine(1);
+                    process.stdout.write(`${prettyBytes(currentBytes)}`);
+                }
             });
         } else {
             const progressBar = new Progress(

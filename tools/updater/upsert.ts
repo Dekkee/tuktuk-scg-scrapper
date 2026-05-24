@@ -1,8 +1,7 @@
 import { connect, disconnect } from '@tuktuk-scg-scrapper/storage/connect';
 import { Card } from '@tuktuk-scg-scrapper/storage/schemas/card';
-import fetch from 'node-fetch';
-import * as queue from 'async/queue';
-import * as Progress from 'progress';
+import queue from 'async/queue';
+import Progress from 'progress';
 
 const { chain } = require('stream-chain');
 const { Transform } = require('stream');
