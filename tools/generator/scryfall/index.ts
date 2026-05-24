@@ -12,7 +12,7 @@ import yargs from 'yargs';
 const { PassThrough } = require('stream');
 const { chain } = require('stream-chain');
 const { parser } = require('stream-json');
-const { streamArray } = require('stream-json/streamers/StreamArray');
+const { streamArray } = require('stream-json/streamers/stream-array.js');
 
 if (!fs.existsSync('./generated')) {
     fs.mkdirSync('./generated');

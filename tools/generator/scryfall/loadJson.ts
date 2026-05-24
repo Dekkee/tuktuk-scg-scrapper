@@ -16,6 +16,6 @@ export const loadJson = async () => {
 
     return {
         stream: data,
-        total: headers['content-length'], // || compressed_size,
+        total: headers['content-length'] as string | number, // || compressed_size,
     }
 };

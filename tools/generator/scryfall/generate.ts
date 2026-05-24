@@ -8,7 +8,7 @@ import { readJson } from './readJson';
 const { PassThrough } = require('stream');
 const { chain } = require('stream-chain');
 const { parser } = require('stream-json');
-const { streamArray } = require('stream-json/streamers/StreamArray');
+const { streamArray } = require('stream-json/streamers/stream-array.js');
 
 type GenerateOpts = { slim?: boolean, local?: boolean, upload?: boolean, cloud?: boolean };
 
