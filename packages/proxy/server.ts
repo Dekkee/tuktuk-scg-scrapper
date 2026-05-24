@@ -43,7 +43,8 @@ app.put(
     proxy(`http://${storageConfig.host}:${storageConfig.port}`),
 );
 
-app.get('/*splat', proxy(`http://${frontendConfig.host}:${frontendConfig.port}`));
+// Curly braces make the splat optional so this catches `/` as well as `/foo`
+app.get('/{*splat}', proxy(`http://${frontendConfig.host}:${frontendConfig.port}`));
 
 const port = config.port;
 
