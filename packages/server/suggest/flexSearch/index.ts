@@ -2,7 +2,8 @@ import * as fs from 'fs';
 import { downloadFile } from '@tuktuk-scg-scrapper/common/downloadFile';
 import { logError, logInfo } from '@tuktuk-scg-scrapper/common/logger';
 
-const FlexSearch = require('flexsearch');
+import FlexSearchDefault from 'flexsearch';
+const FlexSearch: any = FlexSearchDefault;
 
 const s3IndexPath = 'https://storage.yandexcloud.net/tuktuk/index.json';
 const metaPath = './data/index.meta.json';

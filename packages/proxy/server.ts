@@ -8,8 +8,8 @@ import { config } from '@tuktuk-scg-scrapper/common/config/proxy';
 import { config as scgProviderConfig } from '@tuktuk-scg-scrapper/common/config/scgProvider';
 import { config as frontendConfig } from '@tuktuk-scg-scrapper/common/config/frontend';
 import { config as storageConfig } from '@tuktuk-scg-scrapper/common/config/storage';
+import compression from 'compression';
 
-const compression = require('compression');
 const app = express()
     .use(morgan(':method :url -> :status ":referrer" :remote-addr'))
     .use(bodyParser.urlencoded({ extended: true }))
@@ -26,16 +26,16 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/api/*', proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
+app.get('/api/*splat', proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
 
-app.get('/metrics/*',  proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
+app.get('/metrics/*splat',  proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
 
 app.get('/metrics', proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
 
-app.get('/storage/*',  proxy(`http://${storageConfig.host}:${storageConfig.port}`));
+app.get('/storage/*splat',  proxy(`http://${storageConfig.host}:${storageConfig.port}`));
 
 app.put(
-    '/storage/*',
+    '/storage/*splat',
     (req, res, next) => {
         // todo: check cookie
         next();
@@ -43,7 +43,8 @@ app.put(
     proxy(`http://${storageConfig.host}:${storageConfig.port}`),
 );
 
-app.get('*', proxy(`http://${frontendConfig.host}:${frontendConfig.port}`));
+// Curly braces make the splat optional so this catches `/` as well as `/foo`
+app.get('/{*splat}', proxy(`http://${frontendConfig.host}:${frontendConfig.port}`));
 
 const port = config.port;
 

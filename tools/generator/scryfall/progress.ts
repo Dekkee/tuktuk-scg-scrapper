@@ -1,7 +1,6 @@
 import prettyBytes from "pretty-bytes";
 import Progress from 'progress';
-
-import readline = require('readline');
+import * as readline from 'readline';
 
 export const createProgressStream = (total: string | number) => {
   if (!total) {

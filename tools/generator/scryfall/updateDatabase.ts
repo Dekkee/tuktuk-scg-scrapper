@@ -1,7 +1,6 @@
 import { connect, disconnect } from '@tuktuk-scg-scrapper/storage/connect';
 import { Card } from '@tuktuk-scg-scrapper/storage/schemas/card';
-
-const { Transform } = require('stream');
+import { Transform } from 'stream';
 
 export const createDatabaseStream = async () => {
     await connect();

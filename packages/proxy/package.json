@@ -1,21 +1,21 @@
 {
-  "name": "@tuktuk-scg-scrapper/proxy",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "nodemon"
-  },
-  "dependencies": {
-    "@types/express-http-proxy": "^1.6.3",
-    "express-http-proxy": "^1.6.3"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "."
-    ],
-    "ext": "ts",
-    "ignore": [
-      "./**/*.spec.ts"
-    ],
-    "exec": "ts-node ./server.ts"
-  }
+    "name": "@tuktuk-scg-scrapper/proxy",
+    "version": "0.0.1",
+    "scripts": {
+        "dev": "nodemon"
+    },
+    "dependencies": {
+        "@types/express-http-proxy": "1.6.7",
+        "express-http-proxy": "2.1.2"
+    },
+    "nodemonConfig": {
+        "watch": [
+            "."
+        ],
+        "ext": "ts",
+        "ignore": [
+            "./**/*.spec.ts"
+        ],
+        "exec": "ts-node ./server.ts"
+    }
 }

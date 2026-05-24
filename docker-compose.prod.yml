@@ -1,5 +1,3 @@
-version: '3.2'
-
 services:
   scg-provider:
     container_name: tuktuk-scg-provider-prod

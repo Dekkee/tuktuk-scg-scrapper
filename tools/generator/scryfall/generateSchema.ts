@@ -1,6 +1,5 @@
 import * as fs from 'fs';
-
-const { Transform } = require('stream');
+import { Transform } from 'stream';
 
 export const createSchemaStream = initFilename => {
     if (!fs.existsSync('./generated/schema')) {

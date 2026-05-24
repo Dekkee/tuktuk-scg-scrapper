@@ -2,9 +2,8 @@ import { connect, disconnect } from '@tuktuk-scg-scrapper/storage/connect';
 import { Card } from '@tuktuk-scg-scrapper/storage/schemas/card';
 import queue from 'async/queue';
 import Progress from 'progress';
-
-const { chain } = require('stream-chain');
-const { Transform } = require('stream');
+import { chain } from 'stream-chain';
+import { Transform } from 'stream';
 
 const arr = [];
 

@@ -5,10 +5,7 @@ import { logError } from '@tuktuk-scg-scrapper/common/logger';
 export const connect = () => {
     return mongoose
         .connect(mongoConnectionString, {
-            useNewUrlParser: true,
             connectTimeoutMS: 10000,
-            useFindAndModify: true,
-            useUnifiedTopology: true,
         })
         .then(() => {
             // mongoose.connection.on('disconnected', connect);

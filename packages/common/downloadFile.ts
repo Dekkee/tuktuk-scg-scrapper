@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { WriteStream } from "fs";
 import Progress from 'progress';
-
-const prettyBytes = require('pretty-bytes');
+import prettyBytes from 'pretty-bytes';
 
 export const downloadFile = async (url: string) => {
     const { data, headers } = await axios({
