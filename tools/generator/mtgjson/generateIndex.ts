@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-
-const FlexSearch = require('flexsearch');
+import FlexSearchDefault from 'flexsearch';
+const FlexSearch: any = FlexSearchDefault;
 
 const index = new FlexSearch.Document({
     split: /\s+| % /,

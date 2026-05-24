@@ -14,6 +14,8 @@ import { config } from '@tuktuk-scg-scrapper/common/config/scgProvider';
 import { config as storageConfig } from '@tuktuk-scg-scrapper/common/config/storage';
 import { parseGraph } from './html-parser/mtggoldfish';
 import { logError } from '@tuktuk-scg-scrapper/common/logger';
+import compression from 'compression';
+import { version as pkgVersion } from './package.json';
 
 collectDefaultMetrics();
 
@@ -30,7 +32,6 @@ const httpRequestDurationMicroseconds = new Histogram({
     buckets: [0.1, 5, 15, 50, 100, 200, 300, 400, 500, 1000, 1500, 2000, 5000, 10000], // buckets for response time from 0.1ms to 500ms
 });
 
-const compression = require('compression');
 const app = express()
     .use(morgan(':method :url -> :status'))
     .use(bodyParser.urlencoded({ extended: true }))
@@ -160,7 +161,7 @@ app.get('/api/suggest', async function (req, resp, next) {
 
 app.get('/api/version', async function (req, resp, next) {
     resp.status(200).send({
-        version: require('./package.json').version,
+        version: pkgVersion,
         buildNumber: process.env.BUILD_NUMBER,
     });
     next();

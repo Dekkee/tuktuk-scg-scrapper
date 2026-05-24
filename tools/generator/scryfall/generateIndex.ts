@@ -1,7 +1,7 @@
 import * as fs from 'fs';
-
-const { Writable } = require('stream');
-const FlexSearch = require('flexsearch');
+import { Writable } from 'stream';
+import FlexSearchDefault from 'flexsearch';
+const FlexSearch: any = FlexSearchDefault;
 
 const filteredLayouts = new Set(['art_series', 'emblem', 'token']);
 const filteredSetTypes = new Set(['slu', 'promo']);

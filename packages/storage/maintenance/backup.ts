@@ -1,8 +1,7 @@
 import { mongoDb } from "@tuktuk-scg-scrapper/common/config/mongo";
-
-const fs = require('fs');
-const exec = require('child_process').exec;
-const path = require('path');
+import * as fs from 'fs';
+import { exec } from 'child_process';
+import * as path from 'path';
 
 // Concatenate root directory path with our backup folder.
 const backupDirPath = path.join(__dirname, 'data', 'database-backup');

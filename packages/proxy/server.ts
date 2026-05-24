@@ -8,8 +8,8 @@ import { config } from '@tuktuk-scg-scrapper/common/config/proxy';
 import { config as scgProviderConfig } from '@tuktuk-scg-scrapper/common/config/scgProvider';
 import { config as frontendConfig } from '@tuktuk-scg-scrapper/common/config/frontend';
 import { config as storageConfig } from '@tuktuk-scg-scrapper/common/config/storage';
+import compression from 'compression';
 
-const compression = require('compression');
 const app = express()
     .use(morgan(':method :url -> :status ":referrer" :remote-addr'))
     .use(bodyParser.urlencoded({ extended: true }))

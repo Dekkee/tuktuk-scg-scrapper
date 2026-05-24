@@ -4,9 +4,12 @@ import { createProgressStream } from './progress';
 import { uploadToS3 } from './uploadToS3';
 import { createIndexStream, IndexPayload } from './generateIndex';
 import { readJson } from './readJson';
+import { createSchemaStream } from './generateSchema';
 
-const { PassThrough } = require('stream');
-const { chain } = require('stream-chain');
+import { PassThrough } from 'stream';
+import { chain } from 'stream-chain';
+// stream-json 3.x ships ESM "exports" map that TS moduleResolution "node10" cannot follow,
+// so use require() to bypass type-resolution while keeping runtime interop via Node 22 require(esm).
 const { parser } = require('stream-json');
 const { streamArray } = require('stream-json/streamers/stream-array.js');
 
@@ -40,7 +43,6 @@ export const generate = (opts: GenerateOpts) => {
         ];
 
         if (!isCloud) {
-            const { createSchemaStream } = require('./generateSchema');
             stages.push(createSchemaStream('card'));
         }
 
@@ -61,6 +63,9 @@ export const generate = (opts: GenerateOpts) => {
             try {
                 if (!isCloud) {
                     console.log('Generate typings');
+                    // Lazy require: generateTypings.ts has a top-level fs.mkdirSync side
+                    // effect that would run at cold-start in the Yandex Cloud bundle and
+                    // fail on the read-only function-code directory.
                     const { generateTypings } = require('./generateTypings');
                     await generateTypings();
                 }

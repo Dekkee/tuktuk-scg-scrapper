@@ -1,6 +1,6 @@
-const isDocker = require("is-docker")();
+import isDocker from 'is-docker';
 
 export const config = {
-  host: isDocker ? 'scg-provider' : 'localhost',
+  host: isDocker() ? 'scg-provider' : 'localhost',
   port: 8082
 }

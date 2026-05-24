@@ -1,6 +1,6 @@
-const isDocker = require("is-docker")();
+import isDocker from 'is-docker';
 
 export const config = {
-  host: isDocker ? 'proxy' : 'localhost',
+  host: isDocker() ? 'proxy' : 'localhost',
   port: 8081
 }

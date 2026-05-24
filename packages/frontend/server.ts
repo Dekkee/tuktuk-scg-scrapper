@@ -5,8 +5,8 @@ import * as colors from 'colors';
 import * as path from 'path';
 import cors from 'cors';
 import { config } from '@tuktuk-scg-scrapper/common/config/frontend';
+import compression from 'compression';
 
-const compression = require('compression');
 const app = express()
     .use(morgan(':method :url -> :status'))
     .use(bodyParser.urlencoded({ extended: true }))

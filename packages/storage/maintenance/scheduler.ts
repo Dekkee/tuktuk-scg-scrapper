@@ -1,5 +1,5 @@
 import { dbAutoBackUp } from './backup';
-const CronJob = require('cron').CronJob;
+import { CronJob } from 'cron';
 
 const cronJobs = [
     // AutoBackUp every week (at 00:00 on Sunday)
