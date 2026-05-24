@@ -1,5 +1,3 @@
-version: '3.2'
-
 volumes:
   db:
 
@@ -10,7 +8,7 @@ services:
       context: .
       dockerfile: ./packages/proxy/Dockerfile
       cache_from:
-        - node:22-alpine
+        - node:24-alpine
         - cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper-proxy:stable
     image: cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper-proxy
     restart: always
@@ -20,7 +18,7 @@ services:
       context: .
       dockerfile: ./packages/frontend/Dockerfile
       cache_from:
-        - node:22-alpine
+        - node:24-alpine
         - cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper-frontend:stable
     image: cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper-frontend
     restart: always
@@ -30,7 +28,7 @@ services:
       context: .
       dockerfile: ./packages/server/Dockerfile
       cache_from:
-        - node:22-alpine
+        - node:24-alpine
         - cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper-scg-provider:stable
     image: cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper-scg-provider
     restart: always
@@ -40,7 +38,7 @@ services:
       context: .
       dockerfile: ./packages/storage/Dockerfile
       cache_from:
-        - node:22-alpine
+        - node:24-alpine
         - cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper-storage:stable
     image: cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper-storage
     restart: always
