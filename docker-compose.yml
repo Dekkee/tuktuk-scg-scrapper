@@ -49,7 +49,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWORD-example}
 
   mongo:
-    image: mongo:7.0
+    image: mongo:8.0
     container_name: mongo
     restart: always
     ports:

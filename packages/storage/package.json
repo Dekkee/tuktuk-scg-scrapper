@@ -4,16 +4,15 @@
     "main": "server.ts",
     "license": "MIT",
     "scripts": {
-        "mongo": "docker run -v ./data:/data/db -p 27017-27019:27017-27019 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example --name some-mongo -d mongo:7.0",
+        "mongo": "docker run -v ./data:/data/db -p 27017-27019:27017-27019 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=example --name some-mongo -d mongo:8.0",
         "dev": "nodemon"
     },
     "dependencies": {
         "body-parser": "2.2.2",
         "cron": "4.4.0",
         "express": "5.2.1",
-        "mongoose": "8.24.0"
+        "mongoose": "9.6.2"
     },
-    "devDependencies": {},
     "nodemonConfig": {
         "watch": [
             "."
