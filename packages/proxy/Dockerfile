@@ -16,8 +16,8 @@ RUN npm ci && npm cache clean --force
 COPY packages/common/ /home/app/packages/common/
 COPY packages/proxy/ /home/app/packages/proxy/
 
-ARG TEAMCITY_BUILD_NUMBER
-ENV BUILD_NUMBER=$TEAMCITY_BUILD_NUMBER
+ARG BUILD_NUMBER=local
+ENV BUILD_NUMBER=$BUILD_NUMBER
 
 WORKDIR /home/app/packages/proxy
 

@@ -6,7 +6,7 @@ services:
       - NODE_ENV=production
     build:
       args:
-        TEAMCITY_BUILD_NUMBER: ${BUILD_NUMBER}
+        BUILD_NUMBER: ${BUILD_NUMBER:-local}
 
   proxy:
     ports:
@@ -15,4 +15,4 @@ services:
       - NODE_ENV=production
     build:
       args:
-        TEAMCITY_BUILD_NUMBER: ${BUILD_NUMBER}
+        BUILD_NUMBER: ${BUILD_NUMBER:-local}

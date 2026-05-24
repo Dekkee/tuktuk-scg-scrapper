@@ -40,8 +40,8 @@ COPY packages/frontend /home/app/packages/frontend/
 COPY packages/common /home/app/packages/common/
 COPY --from=front /home/app/dist /home/app/dist/
 
-ARG TEAMCITY_BUILD_NUMBER
-ENV BUILD_NUMBER=$TEAMCITY_BUILD_NUMBER
+ARG BUILD_NUMBER=local
+ENV BUILD_NUMBER=$BUILD_NUMBER
 
 WORKDIR /home/app/packages/frontend
 

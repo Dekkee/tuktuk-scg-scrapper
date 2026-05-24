@@ -16,8 +16,8 @@ RUN npm ci && npm cache clean --force
 COPY packages/common/ /home/app/packages/common/
 COPY packages/server/ /home/app/packages/server/
 
-ARG TEAMCITY_BUILD_NUMBER
-ENV BUILD_NUMBER=$TEAMCITY_BUILD_NUMBER
+ARG BUILD_NUMBER=local
+ENV BUILD_NUMBER=$BUILD_NUMBER
 
 WORKDIR /home/app/packages/server
 
