@@ -1,7 +1,5 @@
 Tuktuk Screen Scrapper
-<a href="https://teamcity.dekker.gdn/viewType.html?buildTypeId=Tuktuk_BuildDocker&guest=1">
-<img src="https://teamcity.dekker.gdn/app/rest/builds/buildType:(id:Tuktuk_BuildDocker)/statusIcon"/>
-</a>
+
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 ---
