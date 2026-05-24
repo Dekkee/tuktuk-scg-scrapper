@@ -167,9 +167,9 @@ app.get('/api/version', async function (req, resp, next) {
     next();
 });
 
-app.get('/metrics', (req, res) => {
+app.get('/metrics', async (req, res) => {
     res.set('Content-Type', register.contentType);
-    res.end(register.metrics());
+    res.end(await register.metrics());
 });
 
 app.get(/^(\/card|\/$)/, function (req, resp, next) {
