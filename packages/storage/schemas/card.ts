@@ -164,13 +164,13 @@ const CardSchema: Schema = new Schema(
     },
     {
         toObject: {
-            transform: function (doc, ret) {
+            transform: function (doc, ret: any) {
                 //delete ret._id;
                 delete ret.__v;
             },
         },
         toJSON: {
-            transform: function (doc, ret) {
+            transform: function (doc, ret: any) {
                 delete ret._id;
                 delete ret.__v;
             },
