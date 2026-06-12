@@ -1,7 +1,7 @@
 import * as fs from 'fs';
-import { loadJson } from './loadJson';
+import { loadJson, getBulkInfo, BulkInfo } from './loadJson';
 import { createProgressStream } from './progress';
-import { uploadToS3 } from './uploadToS3';
+import { uploadToS3, getStoredUpdatedAt } from './uploadToS3';
 import { createIndexStream, IndexPayload } from './generateIndex';
 import { readJson } from './readJson';
 import { createSchemaStream } from './generateSchema';
@@ -21,8 +21,24 @@ export const generate = (opts: GenerateOpts) => {
         const shouldReadData = !isCloud && (opts.slim || opts.local);
         const shouldUpload = opts.upload;
 
+        // Throttle: only rebuild when Scryfall's bulk has actually changed since
+        // the index.json we last uploaded (nightly cloud path only). On unchanged
+        // days this skips the ~2 GB download and the in-memory rebuild entirely.
+        let bulkInfo: BulkInfo | undefined;
+        if (!shouldReadData) {
+            bulkInfo = await getBulkInfo();
+            if (isCloud) {
+                const stored = await getStoredUpdatedAt();
+                if (stored && stored === bulkInfo.updatedAt) {
+                    console.log(`Index already current (scryfall updated_at=${bulkInfo.updatedAt}); skipping rebuild`);
+                    resolve();
+                    return;
+                }
+            }
+        }
+
         const localPath = opts.slim ? './generated/data.json' : './generated/data.json';
-        const { stream: dataStream, total } = await (shouldReadData ? readJson(localPath) : loadJson());
+        const { stream: dataStream, total } = await (shouldReadData ? readJson(localPath) : loadJson(bulkInfo));
         shouldReadData ? console.log(`Reading ${localPath}`) : console.log('Downloading');
 
         const rawDataStream = new PassThrough({ allowHalfOpen: false, objectMode: true });
@@ -74,7 +90,10 @@ export const generate = (opts: GenerateOpts) => {
                     const body = isCloud && indexPayload
                         ? JSON.stringify(indexPayload.index)
                         : fs.readFileSync('./generated/index/index.json');
-                    await uploadToS3(body);
+                    const metadata = bulkInfo
+                        ? { 'scryfall-updated-at': bulkInfo.updatedAt }
+                        : undefined;
+                    await uploadToS3(body, metadata);
                     console.log('Success');
                 }
                 resolve();
