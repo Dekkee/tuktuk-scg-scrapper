@@ -43,6 +43,11 @@ export const uploadToS3 = async (body: Buffer | string, metadata?: Record<string
         const data = await upload.done();
         console.log(`Uploading done: ${JSON.stringify(data)}`);
     } catch (e) {
+        // Rethrow so a failed upload fails the function invocation instead of
+        // silently "succeeding" and letting index.json go stale unnoticed. The
+        // watermark is only stamped on a successful PutObject, so the next run
+        // re-detects the mismatch and retries.
         console.error(`Uploading failed: ${e}`);
+        throw e;
     }
 };
