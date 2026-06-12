@@ -8,7 +8,7 @@ import { Transform } from 'stream';
 const arr = [];
 
 const fetchQueue = queue((value, callback) => {
-    fetch('https://scg.dekker.gdn/storage/card', {
+    fetch('https://scg.dekker.lol/storage/card', {
         method: 'PUT',
         body: JSON.stringify(value),
         headers: {
