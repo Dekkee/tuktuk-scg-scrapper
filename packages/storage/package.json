@@ -11,7 +11,7 @@
         "body-parser": "2.2.2",
         "cron": "4.4.0",
         "express": "5.2.1",
-        "mongoose": "9.6.2"
+        "mongoose": "9.7.0"
     },
     "nodemonConfig": {
         "watch": [
