@@ -17,9 +17,9 @@ jobs:
       run: docker-compose build --parallel
 
     - name: Setup node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
-        node-version: 16
+        node-version: 24
 
     - name: Push stable
       run: node ./tools/tag.js

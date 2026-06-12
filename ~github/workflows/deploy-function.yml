@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -37,7 +37,7 @@ jobs:
           yc-sa-json-credentials: ${{ secrets.YC_SA_KEY_JSON }}
           folder-id: ${{ secrets.YC_FOLDER_ID }}
           function-name: scryfall-index-updater
-          runtime: nodejs18
+          runtime: nodejs22
           memory: 2GB
           entrypoint: index.updater
           execution-timeout: 600
