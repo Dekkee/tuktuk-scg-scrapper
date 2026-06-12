@@ -5,7 +5,7 @@ Tuktuk Screen Scrapper
 ---
 
 StarCityGames prices scrapper
-url: https://scg.dekker.gdn
+url: https://scg.dekker.lol
 
 ## How to run
 

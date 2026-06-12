@@ -2,7 +2,7 @@
     "name": "tuktuk-scg-scrapper",
     "version": "0.3.0",
     "description": "The starcitygames.com shop price srapper.",
-    "homepage": "https://scg.dekker.gdn",
+    "homepage": "https://scg.dekker.lol",
     "email": "dekker25@gmail.com",
     "engines": {
         "node": ">=22.12"
