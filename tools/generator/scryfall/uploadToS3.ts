@@ -1,7 +1,26 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
+import axios from 'axios';
 
-export const uploadToS3 = async (body: Buffer | string) => {
+const BUCKET = 'tuktuk';
+const KEY = 'index.json';
+const PUBLIC_URL = `https://storage.yandexcloud.net/${BUCKET}/${KEY}`;
+const WATERMARK_HEADER = 'x-amz-meta-scryfall-updated-at';
+
+// Read the Scryfall updated_at we stamped onto the last uploaded index.json.
+// index.json is public-read, so a plain HEAD needs no S3 credentials (the SA's
+// storage.uploader role does not grant read). Missing object / header / network
+// error => undefined, i.e. "unknown" => caller rebuilds.
+export const getStoredUpdatedAt = async (): Promise<string | undefined> => {
+    try {
+        const { headers } = await axios.head(PUBLIC_URL);
+        return headers[WATERMARK_HEADER] as string | undefined;
+    } catch {
+        return undefined;
+    }
+};
+
+export const uploadToS3 = async (body: Buffer | string, metadata?: Record<string, string>) => {
     const s3 = new S3Client({
         credentials: {
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -15,9 +34,10 @@ export const uploadToS3 = async (body: Buffer | string) => {
             client: s3,
             params: {
                 Body: body,
-                Key: 'index.json',
-                Bucket: 'tuktuk',
+                Key: KEY,
+                Bucket: BUCKET,
                 ACL: 'public-read',
+                Metadata: metadata,
             },
         });
         const data = await upload.done();
