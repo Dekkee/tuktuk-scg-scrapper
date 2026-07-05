@@ -100,7 +100,7 @@ app.get('/api/list', async function (req, resp, next) {
         resp.status(200).send(pagedAnswer);
     } catch (e) {
         logError('/api/list request failed', e);
-        next(e);
+        return next(e);
     }
     next();
 });
@@ -119,7 +119,7 @@ app.get('/api/get', async function (req, resp, next) {
         resp.status(200).send(parsed);
     } catch (e) {
         logError('/api/get request failed', e);
-        next(e);
+        return next(e);
     }
 
     next();
@@ -140,7 +140,7 @@ app.get('/api/graph', async function (req, resp, next) {
         resp.status(200).send(res);
     } catch (e) {
         logError('/api/graph request failed', e);
-        next(e);
+        return next(e);
     }
 
     next();
@@ -154,7 +154,7 @@ app.get('/api/suggest', async function (req, resp, next) {
         resp.status(200).send(suggested);
     } catch (e) {
         logError('/api/suggest request failed', e);
-        next(e);
+        return next(e);
     }
     next();
 });

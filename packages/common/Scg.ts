@@ -79,7 +79,7 @@ export type Card = {
     arena_id?: number;
     life_modifier?: string;
     hand_modifier?: string;
-    mtgo_foil_id?: number;
+    mtgo_foil_id?: string;
     scg_regular_id?: number;
     scg_foil_id?: number;
     scg_regular_prices?: ScgCardPrice;

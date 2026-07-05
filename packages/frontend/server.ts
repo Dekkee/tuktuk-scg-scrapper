@@ -1,3 +1,17 @@
+/**
+ * Production static server for the frontend container.
+ *
+ * The frontend UI is bundled by Vite (`npm run build` -> repo-root `/dist`).
+ * This small Express app is what actually serves that bundle in production:
+ * it is the ENTRYPOINT of packages/frontend/Dockerfile
+ * (`node -r ts-node/register server.ts`, EXPOSE 8083) and backs the `frontend`
+ * service in docker-compose.yml. It serves the compiled assets from ../../dist
+ * and falls back to dist/index.html for client-side (SPA) routes (`/`, `/card...`).
+ *
+ * It is NOT used in local development -- `npm run dev` runs the Vite dev server
+ * (see packages/frontend/package.json), so this file only runs inside the
+ * production container.
+ */
 import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';

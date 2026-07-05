@@ -1,4 +1,4 @@
-import { Schema, Document, model } from 'mongoose';
+import { Schema, HydratedDocument, model } from 'mongoose';
 import { Card as CardType } from '@tuktuk-scg-scrapper/common/Scg';
 
 const cardFaceSchema = {
@@ -41,9 +41,11 @@ const scgPrice = {
     ],
   };
 
-type CardSchemaType = CardType & Document;
+// Hydrated Mongoose document for a Scryfall card (the domain `Card` type plus
+// Mongoose document methods/virtuals). This is the shape returned by queries.
+export type CardDocument = HydratedDocument<CardType>;
 
-const CardSchema: Schema = new Schema(
+const CardSchema = new Schema<CardType>(
     {
         id: { type: String, required: true, unique: true },
         oracle_id: { type: String, required: true },
@@ -164,13 +166,13 @@ const CardSchema: Schema = new Schema(
     },
     {
         toObject: {
-            transform: function (doc, ret: any) {
+            transform: function (doc, ret: Record<string, unknown>) {
                 //delete ret._id;
                 delete ret.__v;
             },
         },
         toJSON: {
-            transform: function (doc, ret: any) {
+            transform: function (doc, ret: Record<string, unknown>) {
                 delete ret._id;
                 delete ret.__v;
             },
@@ -178,4 +180,4 @@ const CardSchema: Schema = new Schema(
     }
 );
 
-export const Card = model<CardSchemaType>('Card', CardSchema);
+export const Card = model<CardType>('Card', CardSchema);

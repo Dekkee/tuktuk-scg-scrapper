@@ -1,3 +1,5 @@
+import { QueryFilter } from 'mongoose';
+
 import { Card } from '../schemas/card';
 import { Card as CardType, ScgCardPrice } from '@tuktuk-scg-scrapper/common/Scg';
 
@@ -10,7 +12,7 @@ const numberRegexp = /^(.*)_(\d+)$/;
 export const cardRoute = ({ app }: TRoutesInput) => {
     app.get('/storage/card', async (req, res) => {
         const now = Date.now();
-        const query: any = {};
+        const query: QueryFilter<CardType> = {};
         const { name, price, limit, page } = req.query;
         if (name) {
             console.log(`Looking for: ${req.query.name}`);
@@ -84,7 +86,7 @@ export const cardRoute = ({ app }: TRoutesInput) => {
             const scgCard = parseScgCard(row);
             if (scgCard) {
                 const doc = await Card.findOne({
-                    set: scgCard.set as any,
+                    set: scgCard.set,
                     collector_number: scgCard.collector_number,
                     lang: scgCard.lang,
                 });
