@@ -12,6 +12,7 @@
         "dev": "concurrently -n proxy,server,storage,frontend -c blue,green,yellow,magenta \"npm:dev -w @tuktuk-scg-scrapper/proxy\" \"npm:dev -w @tuktuk-scg-scrapper/server\" \"npm:dev -w @tuktuk-scg-scrapper/storage\" \"npm:dev -w @tuktuk-scg-scrapper/frontend\"",
         "test": "vitest run",
         "test:ci": "vitest run --reporter=default",
+        "typecheck:tools": "tsc -p tsconfig.tools.json",
         "update-index": "node --max_old_space_size=8192 -r ts-node/register ./update-index.ts",
         "upsert-database": "cross-env MONGO_INITDB_ROOT_USERNAME=$MONGO_USER MONGO_INITDB_ROOT_PASSWORD=$MONGO_PWORD node --max_old_space_size=8192 -r ts-node/register ./tools/updater/upsert.ts",
         "docker:build": "docker-compose build && node ./tools/tag.js",
