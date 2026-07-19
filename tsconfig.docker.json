@@ -1,0 +1,21 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "build/docker",
+        "rootDir": "."
+    },
+    "include": [
+        "packages/common/**/*",
+        "packages/server/**/*",
+        "packages/proxy/**/*",
+        "packages/storage/**/*",
+        "packages/frontend/server.ts"
+    ],
+    "exclude": [
+        "./**/*.test.*",
+        "./**/*.spec.*",
+        "packages/frontend/src/**",
+        "packages/server/data/**",
+        "packages/server/dist/**"
+    ]
+}
