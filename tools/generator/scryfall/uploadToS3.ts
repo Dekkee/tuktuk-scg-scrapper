@@ -20,7 +20,7 @@ export const getStoredUpdatedAt = async (): Promise<string | undefined> => {
     }
 };
 
-export const uploadToS3 = async (body: Buffer | string, metadata?: Record<string, string>) => {
+export const uploadToS3 = async (body: Buffer | string, metadata?: Record<string, string>, key: string = KEY) => {
     const s3 = new S3Client({
         credentials: {
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -34,7 +34,7 @@ export const uploadToS3 = async (body: Buffer | string, metadata?: Record<string
             client: s3,
             params: {
                 Body: body,
-                Key: KEY,
+                Key: key,
                 Bucket: BUCKET,
                 ACL: 'public-read',
                 Metadata: metadata,
