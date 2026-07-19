@@ -153,7 +153,7 @@ export const createIndexStream = ({ onReady }: CreateIndexStreamOpts = {}) => {
                             .finally(() => resolve());
                     }
                 }))
-            }).then(callback);
+            }).then(() => callback());
         },
     });
 };
