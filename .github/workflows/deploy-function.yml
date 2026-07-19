@@ -47,9 +47,14 @@ jobs:
                   execution-timeout: 600
                   service-account: ${{ secrets.YC_FUNCTION_SA_ID }}
                   environment: |
-                      AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-                      AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
                       NODE_OPTIONS=--max-old-space-size=7168
+                  # AWS-креды S3 — из Lockbox scryfall-index-updater-runtime (SoT, DEK-63),
+                  # НЕ из GitHub secrets: копия там протухла после ротации и версии функции
+                  # уезжали с невалидной парой ключей (SignatureDoesNotMatch, DEK-193).
+                  # При ротации секрета обновить version-id ниже.
+                  secrets: |
+                      AWS_ACCESS_KEY_ID=e6qqhs3k8tiut6gcrs3a/e6qacnmuh9a3uphslu9g/AWS_ACCESS_KEY_ID
+                      AWS_SECRET_ACCESS_KEY=e6qqhs3k8tiut6gcrs3a/e6qacnmuh9a3uphslu9g/AWS_SECRET_ACCESS_KEY
                   source-root: build/function
 
 # One-time manual setup (do NOT automate — these are stateful resources):
