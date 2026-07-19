@@ -1,13 +1,31 @@
 import { getIndex, shouldUpdateIndex } from './flexSearch';
+import { logError } from '@tuktuk-scg-scrapper/common/logger';
 
 let index;
-getIndex().then((i) => (index = i));
+
+// Инициализация не должна ронять процесс: несовместимый/битый индекс в S3
+// (например, экспорт другой major-версии flexsearch) деградирует suggest до
+// пустого ответа, а интервальный цикл ниже ретраит импорт до успеха.
+const initIndex = async () => {
+    try {
+        index = await getIndex();
+    } catch (e) {
+        logError('Failed to build suggest index, suggest is degraded until next retry', e);
+    }
+};
+initIndex();
 
 setInterval(
     async () => {
-        if (await shouldUpdateIndex()) {
-            console.log('Index update detected');
-            index = await getIndex();
+        try {
+            if (await shouldUpdateIndex()) {
+                console.log('Index update detected');
+                index = await getIndex();
+            } else if (!index) {
+                await initIndex();
+            }
+        } catch (e) {
+            logError('Failed to refresh suggest index', e);
         }
     },
     10 * 60 * 1000
