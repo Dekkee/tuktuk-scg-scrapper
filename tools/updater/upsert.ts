@@ -40,7 +40,7 @@ const createUploadStream = (tick) => {
 
 const upsertDatabase = async () => {
     await connect();
-    const total = await Card.find().count();
+    const total = await Card.countDocuments();
     const progressBar = new Progress('-> uploading [:bar] :current/:total :percent :etas', {
         width: 40,
         complete: '=',

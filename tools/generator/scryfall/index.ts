@@ -77,7 +77,7 @@ const generate = () => {
             await generateTypings();
             if (shouldUpload) {
                 console.log('Uploading index to S3');
-                await uploadToS3();
+                await uploadToS3(fs.readFileSync('./generated/index/index.json'));
                 console.log('Success');
             }
             resolve();
