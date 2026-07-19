@@ -8,10 +8,8 @@ import { createSchemaStream } from './generateSchema';
 
 import { PassThrough } from 'stream';
 import { chain } from 'stream-chain';
-// stream-json 3.x ships ESM "exports" map that TS moduleResolution "node10" cannot follow,
-// so use require() to bypass type-resolution while keeping runtime interop via Node 22 require(esm).
-const { parser } = require('stream-json');
-const { streamArray } = require('stream-json/streamers/stream-array.js');
+import { parser } from 'stream-json';
+import { streamArray } from 'stream-json/streamers/stream-array.js';
 
 type GenerateOpts = { slim?: boolean; local?: boolean; upload?: boolean; cloud?: boolean };
 
