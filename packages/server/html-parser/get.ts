@@ -1,15 +1,26 @@
 import * as cheerio from 'cheerio';
 import { ParsedRowDetails } from '@tuktuk-scg-scrapper/common/Row';
 import { fillCardPrices, parseMeta } from './entities';
+import { parseCondition } from './list';
 import { GetResponse } from '@tuktuk-scg-scrapper/common/Response';
 
 const productRegex = /context\s=\s(.*)/;
-const csrfRegex = /var\sBCData\s=\s\{\"csrf_token\":\"(\w+)\".*\"selected_attributes\":\{\"(\d+)\"/;
 
-export const parseScgGetAnswer = async (input: string, cookies: string): Promise<GetResponse> => {
+export type ConditionOption = { value: number; condition: string };
+
+export type ParsedProductPage = {
+    card: Partial<ParsedRowDetails>;
+    attributeKey: number;
+    options: ConditionOption[];
+};
+
+// Чистый разбор продуктовой страницы SCG (без сети) — отдельно от прайс-филла,
+// чтобы тестироваться на фикстуре.
+export const parseScgProductPage = (input: string): ParsedProductPage | null => {
     const [, productString] = input.match(productRegex) || [];
 
-    const product = JSON.parse(eval(productString)).productCustomFields;
+    const context = JSON.parse(eval(productString));
+    const product = context.productCustomFields;
 
     const parsed: Record<string, string> = {};
 
@@ -24,8 +35,9 @@ export const parseScgGetAnswer = async (input: string, cookies: string): Promise
     const dom = cheerio.load(input);
     const desc = dom('.productView');
 
-    // id
-    const id = +desc.attr('data-entity-id');
+    // id: тема SCG 2026-07 убрала data-entity-id с .productView,
+    // но тот же id лежит в inline context JSON
+    const id = +context.productId;
 
     if (!id) {
         return null;
@@ -44,7 +56,26 @@ export const parseScgGetAnswer = async (input: string, cookies: string): Promise
     const imageContainer = dom(desc).find('.productView-image--default');
     const image = imageContainer.attr('srcset');
 
-    const [, csrfToken, attribute] = input.match(csrfRegex) || [];
+    // Ключ атрибута и value-id кондиций меняются со временем — берём со страницы,
+    // а не хардкодим (csrf_token из BCData исчез, remote/v1 работает без него)
+    let attributeKey = 0;
+    const options: ConditionOption[] = [];
+    dom('.form-option-wrapper').each((_, el) => {
+        const radio = dom(el).find('input.form-radio');
+        const keyMatch = (radio.attr('name') || '').match(/attribute\[(\d+)\]/);
+        if (keyMatch) {
+            attributeKey = +keyMatch[1];
+        }
+        const value = +(
+            dom(el).find('label.form-option').attr('data-product-attribute-value') ||
+            radio.attr('value') ||
+            0
+        );
+        const condition = dom(el).find('.form-option-variant').text().trim();
+        if (value && condition) {
+            options.push({ value, condition: parseCondition(condition) });
+        }
+    });
 
     const card: Partial<ParsedRowDetails> = {
         id,
@@ -63,7 +94,19 @@ export const parseScgGetAnswer = async (input: string, cookies: string): Promise
         image,
     };
 
-    await fillCardPrices([card], csrfToken, cookies, parseInt(attribute, 10));
+    return { card, attributeKey, options };
+};
+
+export const parseScgGetAnswer = async (input: string, cookies: string): Promise<GetResponse> => {
+    const parsedPage = parseScgProductPage(input);
+
+    if (!parsedPage) {
+        return null;
+    }
+
+    const { card, attributeKey, options } = parsedPage;
+
+    await fillCardPrices([card], cookies, attributeKey, options);
 
     return { card: card as ParsedRowDetails };
 };

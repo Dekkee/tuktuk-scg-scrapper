@@ -32,34 +32,35 @@ export const parseMeta = (m: string): Meta => {
 
 export const fillCardPrices = async (
     cards: Partial<ParsedRow>[],
-    csrfToken: string,
     cookie: string,
-    attribute: number
+    attributeKey: number,
+    options: { value: number; condition: string }[]
 ) => {
+    // csrf_token пропал из BCData при редизайне SCG 2026-07;
+    // remote/v1 отвечает и без x-xsrf-token — достаточно cookie
     const headers = new Headers({
-        'x-xsrf-token': csrfToken,
         cookie,
-        credentials: 'include',
+        'x-requested-with': 'XMLHttpRequest',
     });
     await async.map(cards, async (row) => {
         row.cards = [];
-        await async.map(conditions, async (condition) => {
+        await async.map(options, async ({ value, condition }) => {
             const fd = new URLSearchParams();
-            fd.append(`attribute[${attribute}]`, condition.toString());
+            fd.append(`attribute[${attributeKey}]`, value.toString());
             const response = await fetch(`https://starcitygames.com/remote/v1/product-attributes/${row.id}`, {
                 headers,
                 method: 'POST',
                 body: fd,
             });
             const { data } = await response.json();
-            parsePrice(data, row.cards);
+            parsePrice(data, row.cards, condition);
 
             return row;
         });
     });
 };
 
-const parsePrice = ({ price, stock, purchasable, selected_attributes }: any, arr: any[]) => {
+const parsePrice = ({ price, stock, purchasable }: any, arr: any[], condition: string) => {
     if (!price) {
         return;
     }
@@ -67,19 +68,10 @@ const parsePrice = ({ price, stock, purchasable, selected_attributes }: any, arr
         price: price?.without_tax?.value,
         stock,
         purchasing_disabled: !purchasable,
-        condition: conditionMap[`${Object.values<number>(selected_attributes)[0]}`],
+        condition,
     };
 
     if (!card.purchasing_disabled) {
         arr.push(card);
     }
-};
-
-const conditions = [114, 115, 116];
-
-const conditionMap = {
-    114: 'NM',
-    115: 'PL',
-    116: 'HP',
-    // 117: 'DM',
 };

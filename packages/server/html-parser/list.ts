@@ -127,7 +127,7 @@ export const parseScgListAnswer = async (input: HawkSearchAnswer) => {
     };
 };
 
-const parseCondition = (cond: string) => {
+export const parseCondition = (cond: string) => {
     switch (cond) {
         case 'Played':
             return 'PL';
