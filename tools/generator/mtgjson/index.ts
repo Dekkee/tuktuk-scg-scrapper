@@ -28,14 +28,8 @@ const initialize = async () => {
         try {
             const json = await resp.json();
             console.log('Store json');
-            fs.writeFileSync(
-                '../generated/source/AllCards.json',
-                JSON.stringify(json)
-            );
-            fs.writeFileSync(
-                '../generated/source/meta.json',
-                JSON.stringify(meta)
-            );
+            fs.writeFileSync('../generated/source/AllCards.json', JSON.stringify(json));
+            fs.writeFileSync('../generated/source/meta.json', JSON.stringify(meta));
             console.log('Generate schema');
             generateJson('card', Object.values(json));
             console.log('Generate typings');
@@ -47,4 +41,4 @@ const initialize = async () => {
     }
 };
 
-initialize().then(_ => console.log('initialization finished'));
+initialize().then((_) => console.log('initialization finished'));

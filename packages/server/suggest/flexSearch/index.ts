@@ -65,6 +65,6 @@ export const getIndex = async () => {
     const storage = JSON.parse(fs.readFileSync(indexPath).toString());
     Object.entries(storage).forEach(([key, value]) => {
         index.import(key, value);
-    })
+    });
     return index;
 };

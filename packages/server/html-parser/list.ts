@@ -58,7 +58,7 @@ type ChildAttributes = {
 
 export const parseScgPostAnswer = async (input: HawkSearchPostAnswer) => {
     const parsedRows: Partial<ParsedRow>[] = [];
-    
+
     input.Results.forEach((res) => {
         const card: ParsedRow = {
             id: parseInt(res.Document.unique_id?.[0], 10),
@@ -76,14 +76,10 @@ export const parseScgPostAnswer = async (input: HawkSearchPostAnswer) => {
                 stock: parseInt(childObject.qty?.[0], 10) || 0,
                 purchasing_disabled: false,
                 language: childObject.variant_language?.[0] || 'English',
-            })
+            });
         });
 
-        card.cards.sort(
-          (a, b) =>
-            (conditionMap[b.condition] || 0) -
-            (conditionMap[a.condition] || 0)
-        );
+        card.cards.sort((a, b) => (conditionMap[b.condition] || 0) - (conditionMap[a.condition] || 0));
 
         parsedRows.push(card);
     });
@@ -97,7 +93,7 @@ export const parseScgPostAnswer = async (input: HawkSearchPostAnswer) => {
 
 export const parseScgListAnswer = async (input: HawkSearchAnswer) => {
     const parsedRows: Partial<ParsedRow>[] = [];
-    
+
     input.Results.forEach((res) => {
         const card: ParsedRow = {
             id: parseInt(res.Custom.unique_id, 10),
@@ -116,14 +112,10 @@ export const parseScgListAnswer = async (input: HawkSearchAnswer) => {
                 stock: parseInt(childObject.qty, 10) || 0,
                 purchasing_disabled: false,
                 language: childObject.language || 'English',
-            })
+            });
         });
 
-        card.cards.sort(
-          (a, b) =>
-            (conditionMap[b.condition] || 0) -
-            (conditionMap[a.condition] || 0)
-        );
+        card.cards.sort((a, b) => (conditionMap[b.condition] || 0) - (conditionMap[a.condition] || 0));
 
         parsedRows.push(card);
     });

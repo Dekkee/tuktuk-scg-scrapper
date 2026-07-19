@@ -1,56 +1,56 @@
 name: Deploy Scryfall index updater function
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths:
-      - 'tools/generator/scryfall/**'
-      - '~github/workflows/deploy-function.yml'
-      - 'package.json'
-      - 'package-lock.json'
+    workflow_dispatch:
+    push:
+        branches:
+            - master
+        paths:
+            - 'tools/generator/scryfall/**'
+            - '~github/workflows/deploy-function.yml'
+            - 'package.json'
+            - 'package-lock.json'
 
 jobs:
-  deploy:
-    name: Build and deploy
-    runs-on: ubuntu-latest
+    deploy:
+        name: Build and deploy
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Bundle function
-        run: npm run build:function
+            - name: Bundle function
+              run: npm run build:function
 
-      - name: Deploy to Yandex Cloud Functions
-        uses: yc-actions/yc-sls-function@v3
-        with:
-          yc-sa-json-credentials: ${{ secrets.YC_SA_KEY_JSON }}
-          folder-id: ${{ secrets.YC_FOLDER_ID }}
-          function-name: scryfall-index-updater
-          runtime: nodejs22
-          # Building the full Scryfall all_cards FlexSearch index in memory needs
-          # ~8 GB heap (cf. the update-index script's --max_old_space_size=8192);
-          # 2 GB OOM-killed the runtime (signal 9). NODE_OPTIONS raises the V8
-          # heap so it actually uses the 8 GB container.
-          memory: 8GB
-          entrypoint: index.updater
-          execution-timeout: 600
-          service-account: ${{ secrets.YC_FUNCTION_SA_ID }}
-          environment: |
-            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            NODE_OPTIONS=--max-old-space-size=7168
-          source-root: build/function
+            - name: Deploy to Yandex Cloud Functions
+              uses: yc-actions/yc-sls-function@v3
+              with:
+                  yc-sa-json-credentials: ${{ secrets.YC_SA_KEY_JSON }}
+                  folder-id: ${{ secrets.YC_FOLDER_ID }}
+                  function-name: scryfall-index-updater
+                  runtime: nodejs22
+                  # Building the full Scryfall all_cards FlexSearch index in memory needs
+                  # ~8 GB heap (cf. the update-index script's --max_old_space_size=8192);
+                  # 2 GB OOM-killed the runtime (signal 9). NODE_OPTIONS raises the V8
+                  # heap so it actually uses the 8 GB container.
+                  memory: 8GB
+                  entrypoint: index.updater
+                  execution-timeout: 600
+                  service-account: ${{ secrets.YC_FUNCTION_SA_ID }}
+                  environment: |
+                      AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+                      AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                      NODE_OPTIONS=--max-old-space-size=7168
+                  source-root: build/function
 
 # One-time manual setup (do NOT automate — these are stateful resources):
 #

@@ -8,7 +8,7 @@ const csrfRegex = /var\sBCData\s=\s\{\"csrf_token\":\"(\w+)\".*\"selected_attrib
 
 export const parseScgGetAnswer = async (input: string, cookies: string): Promise<GetResponse> => {
     const [, productString] = input.match(productRegex) || [];
-    
+
     const product = JSON.parse(eval(productString)).productCustomFields;
 
     const parsed: Record<string, string> = {};
@@ -35,7 +35,7 @@ export const parseScgGetAnswer = async (input: string, cookies: string): Promise
     const nameContainer = dom('.mobile-product-title');
     const name = nameContainer.text().trim();
 
-    // Meta 
+    // Meta
     const metaContainer = dom('.product-option-container');
     const dataSelectedSku = metaContainer.attr('data-selected-sku');
     const meta = parseMeta(dataSelectedSku);

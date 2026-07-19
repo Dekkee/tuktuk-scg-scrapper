@@ -39,8 +39,7 @@ export const CardRow = (props: Props) => {
             ))}
         </>
     );
-
-}
+};
 
 const stringToLangShort = (langString: string) => {
     let flag = null;

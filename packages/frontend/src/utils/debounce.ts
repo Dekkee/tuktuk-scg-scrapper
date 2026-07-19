@@ -13,10 +13,10 @@ export function debounce<F extends Procedure>(
 ): F & { cancel: VoidFunction } {
     let timeoutId: number | undefined;
 
-    const debounced = function(this: any, ...args: any[]) {
+    const debounced = function (this: any, ...args: any[]) {
         const context = this;
 
-        const doLater = function() {
+        const doLater = function () {
             timeoutId = undefined;
             if (!options.isImmediate) {
                 func.apply(context, args);

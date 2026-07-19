@@ -13,7 +13,7 @@ import { chain } from 'stream-chain';
 const { parser } = require('stream-json');
 const { streamArray } = require('stream-json/streamers/stream-array.js');
 
-type GenerateOpts = { slim?: boolean, local?: boolean, upload?: boolean, cloud?: boolean };
+type GenerateOpts = { slim?: boolean; local?: boolean; upload?: boolean; cloud?: boolean };
 
 export const generate = (opts: GenerateOpts) => {
     return new Promise<void>(async (resolve, reject) => {
@@ -46,17 +46,11 @@ export const generate = (opts: GenerateOpts) => {
         let indexPayload: IndexPayload | undefined;
         const onReady = isCloud
             ? async (payload: IndexPayload) => {
-                indexPayload = payload;
-            }
+                  indexPayload = payload;
+              }
             : undefined;
 
-        const stages: any[] = [
-            dataStream,
-            rawDataStream,
-            createProgressStream(total),
-            parser(),
-            streamArray(),
-        ];
+        const stages: any[] = [dataStream, rawDataStream, createProgressStream(total), parser(), streamArray()];
 
         if (!isCloud) {
             stages.push(createSchemaStream('card'));
@@ -87,12 +81,11 @@ export const generate = (opts: GenerateOpts) => {
                 }
                 if (shouldUpload || isCloud) {
                     console.log('Uploading index to S3');
-                    const body = isCloud && indexPayload
-                        ? JSON.stringify(indexPayload.index)
-                        : fs.readFileSync('./generated/index/index.json');
-                    const metadata = bulkInfo
-                        ? { 'scryfall-updated-at': bulkInfo.updatedAt }
-                        : undefined;
+                    const body =
+                        isCloud && indexPayload
+                            ? JSON.stringify(indexPayload.index)
+                            : fs.readFileSync('./generated/index/index.json');
+                    const metadata = bulkInfo ? { 'scryfall-updated-at': bulkInfo.updatedAt } : undefined;
                     await uploadToS3(body, metadata);
                     console.log('Success');
                 }

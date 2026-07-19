@@ -1,4 +1,4 @@
-@use "../../palette";
+@use '../../palette';
 .header {
     height: 50px;
     display: flex;
@@ -31,7 +31,7 @@
     min-height: 100%;
     &__backdrop {
         position: absolute;
-        background: rgba(0,0,0,0.3);
+        background: rgba(0, 0, 0, 0.3);
         left: 0;
         top: 0;
         right: 0;

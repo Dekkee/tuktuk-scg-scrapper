@@ -43,29 +43,26 @@ export const SearchList = () => {
         ...config,
         isFetching: false,
         isAutocompletion: false,
-        searchText: queryName as string || (config && config.searchText) || '',
+        searchText: (queryName as string) || (config && config.searchText) || '',
         shouldUpdate: Boolean(queryName) && queryName !== config.searchText,
-        isMenuOpen: false
-    })
+        isMenuOpen: false,
+    });
 
-    const {
-        isFetching,
-        isAutocompletion,
-        searchText,
-        isMenuOpen,
-        rows,
-        pageCount,
-        page,
-    } = state;
+    const { isFetching, isAutocompletion, searchText, isMenuOpen, rows, pageCount, page } = state;
 
-    const requestData = async (value: string, isAutocompletion: boolean, stateRows: ParsedRow[] = [], newPage: number = 1) => {
+    const requestData = async (
+        value: string,
+        isAutocompletion: boolean,
+        stateRows: ParsedRow[] = [],
+        newPage: number = 1
+    ) => {
         const newStateRows = newPage > 0 ? stateRows : [];
         setState({
             ...state,
             isFetching: true,
             rows: newStateRows.length > 0 ? newStateRows : undefined,
             isAutocompletion,
-            searchText: value
+            searchText: value,
         });
         const res = await searchByName(value, isAutocompletion, newPage);
         if (!res) {
@@ -76,24 +73,19 @@ export const SearchList = () => {
             rows: [...newStateRows, ...rows],
             page,
             pageCount,
-            searchText: value
+            searchText: value,
         };
         localStorage.setItem('config', JSON.stringify(config));
         setState({
             ...state,
             ...config,
             isFetching: false,
-            shouldUpdate: false
+            shouldUpdate: false,
         });
     };
 
     useEffect(() => {
-        const {
-            isAutocompletion,
-            searchText,
-            shouldUpdate,
-            rows
-        } = state;
+        const { isAutocompletion, searchText, shouldUpdate, rows } = state;
 
         if (shouldUpdate) {
             requestData(searchText, isAutocompletion, rows);
@@ -107,7 +99,6 @@ export const SearchList = () => {
             setState({ ...state, searchText: name });
         }
     }, [searchText]);
-
 
     const openMenu = useCallback(() => {
         setState({ ...state, isMenuOpen: true });
@@ -127,7 +118,6 @@ export const SearchList = () => {
         navigate(`?${query.toString()}`);
     };
 
-
     const onMore = useCallback(() => {
         requestData(searchText, isAutocompletion, rows, page + 1);
     }, [searchText, isAutocompletion, page, rows]);
@@ -136,25 +126,25 @@ export const SearchList = () => {
         setState({ ...state, isMenuOpen: false });
     }, []);
 
-    return (<div className="search-layout">
-        <div className="search-layout__container">
-            <header className="header">
-                <MenuIcon className="header__menu-button" onClick={openMenu} fill="#fff" />
-                <div className="header__name">TukTuk</div>
-                <CameraIcon className="header__camera-button" fill="#fff" />
-            </header>
-            <SearchInput onSearchRequested={onSearch}
-                initialText={searchText} />
-            <article className="content-container">
-                {(!isFetching || rows) && <CardsTable rows={rows} />}
-                {isFetching && <LoadingLabel />}
-            </article>
-            {page < pageCount && !isFetching && <ShowMore onMoreRequested={onMore} />}
+    return (
+        <div className="search-layout">
+            <div className="search-layout__container">
+                <header className="header">
+                    <MenuIcon className="header__menu-button" onClick={openMenu} fill="#fff" />
+                    <div className="header__name">TukTuk</div>
+                    <CameraIcon className="header__camera-button" fill="#fff" />
+                </header>
+                <SearchInput onSearchRequested={onSearch} initialText={searchText} />
+                <article className="content-container">
+                    {(!isFetching || rows) && <CardsTable rows={rows} />}
+                    {isFetching && <LoadingLabel />}
+                </article>
+                {page < pageCount && !isFetching && <ShowMore onMoreRequested={onMore} />}
+            </div>
+            <div className={cn('search-layout__backdrop', { 'search-layout--backdrop-visible': isMenuOpen })} />
+            <div className={cn('search-layout__menu', { 'search-layout--menu-open': isMenuOpen })}>
+                <Menu onClose={closeMenu} />
+            </div>
         </div>
-        <div className={cn('search-layout__backdrop', { 'search-layout--backdrop-visible': isMenuOpen })} />
-        <div className={cn('search-layout__menu', { 'search-layout--menu-open': isMenuOpen })}>
-            <Menu onClose={closeMenu} />
-        </div>
-    </div>);
-
-}
+    );
+};

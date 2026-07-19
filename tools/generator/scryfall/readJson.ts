@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from 'fs';
 
 export const readJson = async (path) => {
     const stat = fs.statSync(path);
@@ -7,5 +7,5 @@ export const readJson = async (path) => {
     return {
         stream: stream,
         total: stat.size,
-    }
+    };
 };

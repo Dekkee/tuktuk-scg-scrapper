@@ -99,15 +99,15 @@ export const MtgGoldfishGraph = (props: Props) => {
 
                     <div className="mtg-goldfish-graph__wrapper">
                         <div id="graph" />
-                        {!state.isFetching && state.data ? null : <>
-                            <ErrorIcon width={50} height={50} />
-                            <div>Graph is not available</div>
-                        </>
-                        }
+                        {!state.isFetching && state.data ? null : (
+                            <>
+                                <ErrorIcon width={50} height={50} />
+                                <div>Graph is not available</div>
+                            </>
+                        )}
                     </div>
                 </div>
-            )
-            }
-        </div >
+            )}
+        </div>
     );
 };

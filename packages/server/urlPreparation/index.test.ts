@@ -16,7 +16,7 @@ const testCases = [
 ];
 
 describe('urlPreparation', () => {
-    testCases.forEach(testCase => {
+    testCases.forEach((testCase) => {
         it(`${testCase.input} -> ${testCase.output}`, () => {
             expect(prepareUrl(testCase.input)).toEqual(testCase.output);
         });

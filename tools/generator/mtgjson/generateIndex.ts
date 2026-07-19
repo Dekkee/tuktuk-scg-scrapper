@@ -16,16 +16,14 @@ if (!fs.existsSync('./data')) {
 
 export const initializeIndex = async () => {
     let values;
-    const json = JSON.parse(
-        fs.readFileSync('../generated/source/AllCards.json').toString()
-    );
+    const json = JSON.parse(fs.readFileSync('../generated/source/AllCards.json').toString());
     values = Object.values(json);
 
     const doc = [];
     let id = 0;
-    values.forEach(card => {
+    values.forEach((card) => {
         const namesArr = [card.name];
-        card.foreignData.forEach(data => {
+        card.foreignData.forEach((data) => {
             if (data.language === 'Russian') {
                 namesArr.push(data.name);
             }
@@ -35,10 +33,7 @@ export const initializeIndex = async () => {
             search: `${namesArr.reverse().join(' % ')}`,
             card: {
                 name: card.name,
-                text:
-                    card.text && card.text.length > 70
-                        ? `${card.text.slice(0, 70)}...`
-                        : card.text,
+                text: card.text && card.text.length > 70 ? `${card.text.slice(0, 70)}...` : card.text,
             },
         });
     });

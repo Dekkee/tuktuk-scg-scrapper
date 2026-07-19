@@ -6,8 +6,7 @@ if (!fs.existsSync('./generated/typing')) {
 
 const extractRe = /\((\w+)\)$/;
 
-const toPascalCase = (camelCaseString: string) =>
-    `${camelCaseString[0].toUpperCase()}${camelCaseString.slice(1)}`;
+const toPascalCase = (camelCaseString: string) => `${camelCaseString[0].toUpperCase()}${camelCaseString.slice(1)}`;
 const primitives = new Set(['string', 'number', 'boolean']);
 
 // Map a single schema type token to its TypeScript type:
@@ -30,15 +29,13 @@ const mapType = (rawType: string): string => {
 export const generateTypings = async () => {
     const schemas = fs.readdirSync('./generated/schema');
     const availableTypes = new Set();
-    schemas.forEach(schema => {
+    schemas.forEach((schema) => {
         const [, name] = schema.match(/(\w+)\.json/);
         availableTypes.add(name);
     });
     const typedSchemas = [];
-    availableTypes.forEach(schema => {
-        const content = JSON.parse(
-            fs.readFileSync(`./generated/schema/${schema}.json`).toString()
-        );
+    availableTypes.forEach((schema) => {
+        const content = JSON.parse(fs.readFileSync(`./generated/schema/${schema}.json`).toString());
         const ts = Object.entries(content).map(([key, value]: any[]) => {
             // A field may carry a union of types (e.g. ["string", "object(foo)"]).
             // Map each member and join with `|`; the old code interpolated the raw
@@ -49,11 +46,7 @@ export const generateTypings = async () => {
 
             return `\t${key}${value.required ? '' : '?'}: ${calculatedType},\n`;
         });
-        typedSchemas.push(
-            `export type ${toPascalCase(schema as string)} = {\n${ts.join(
-                ''
-            )}}\n`
-        );
+        typedSchemas.push(`export type ${toPascalCase(schema as string)} = {\n${ts.join('')}}\n`);
     });
     fs.writeFileSync('./generated/typing/index.d.ts', typedSchemas.join('\n'));
 };

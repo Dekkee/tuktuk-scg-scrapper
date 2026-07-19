@@ -73,7 +73,7 @@ export const cardRoute = ({ app }: TRoutesInput) => {
         (body || []).forEach((card) => {
             console.log(`Upserting: ${card.name} ${card.id}`);
             upserts.push(Card.findOneAndUpdate({ id: card.id }, card, { upsert: true }));
-        })
+        });
         await Promise.all(upserts);
         res.sendStatus(200);
     });

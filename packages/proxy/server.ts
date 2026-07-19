@@ -15,7 +15,7 @@ const app = express()
     .use(bodyParser.urlencoded({ extended: true }))
     .use(cors());
 
-app.enable("trust proxy");
+app.enable('trust proxy');
 
 app.use(compression({ threshold: 0 }));
 app.use(express.static('../../dist'));
@@ -28,11 +28,11 @@ app.use((req, res, next) => {
 
 app.get('/api/*splat', proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
 
-app.get('/metrics/*splat',  proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
+app.get('/metrics/*splat', proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
 
 app.get('/metrics', proxy(`http://${scgProviderConfig.host}:${scgProviderConfig.port}`));
 
-app.get('/storage/*splat',  proxy(`http://${storageConfig.host}:${storageConfig.port}`));
+app.get('/storage/*splat', proxy(`http://${storageConfig.host}:${storageConfig.port}`));
 
 app.put(
     '/storage/*splat',
@@ -40,7 +40,7 @@ app.put(
         // todo: check cookie
         next();
     },
-    proxy(`http://${storageConfig.host}:${storageConfig.port}`),
+    proxy(`http://${storageConfig.host}:${storageConfig.port}`)
 );
 
 // Curly braces make the splat optional so this catches `/` as well as `/foo`

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { Transform } from 'stream';
 
-export const createSchemaStream = initFilename => {
+export const createSchemaStream = (initFilename) => {
     if (!fs.existsSync('./generated/schema')) {
         fs.mkdirSync('./generated/schema');
     }
@@ -40,11 +40,11 @@ export const createSchemaStream = initFilename => {
     };
 
     const generateSchema = (filename, chunk) => {
-        if(!countsMap[filename]) {
+        if (!countsMap[filename]) {
             countsMap[filename] = {};
         }
 
-        if(!globalMap[filename]) {
+        if (!globalMap[filename]) {
             globalMap[filename] = {};
         }
 
@@ -72,7 +72,7 @@ export const createSchemaStream = initFilename => {
         writableObjectMode: true,
         readableObjectMode: true,
         autoDestroy: true,
-        write: function(chunk, encoding, callback) {
+        write: function (chunk, encoding, callback) {
             generateSchema(initFilename, chunk.value);
             this.push(chunk);
             callback();
