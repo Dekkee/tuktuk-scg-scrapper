@@ -79,7 +79,7 @@ const stringToLangShort = (langString: string) => {
             break;
     }
     if (flag) {
-        return <img src={`https://manage.hawksearch.com/sites/starcitygames/images/${flag.toString()}.png`} />;
+        return <img className="card-row__flag" src={`/flags/${flag}.svg`} alt={langString} />;
     } else {
         return `(${langString})`;
     }
