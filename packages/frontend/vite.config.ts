@@ -23,9 +23,9 @@ export default defineConfig(({ mode }) => ({
                 theme_color: '#5a9117',
                 background_color: '#FFFFFF',
                 icons: [
-                    { src: '/icons/android-icon-192x192.png', sizes: '192x192', type: 'image/png' },
-                    { src: '/icons/apple-icon-1024x1024.png', sizes: '1024x1024', type: 'image/png' },
-                    { src: '/icons/ms-icon-310x310.png', sizes: '310x310', type: 'image/png' },
+                    { src: '/android-icon-192x192.png', sizes: '192x192', type: 'image/png' },
+                    { src: '/apple-icon-1024x1024.png', sizes: '1024x1024', type: 'image/png' },
+                    { src: '/ms-icon-310x310.png', sizes: '310x310', type: 'image/png' },
                 ],
             },
         }),
