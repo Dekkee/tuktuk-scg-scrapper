@@ -67,24 +67,30 @@ app.get('/api/list', async function (req, resp, next) {
         }
 
         const query = querystring.stringify(queryObject);
-        console.log(`list request: name: ${queryObject.search_query}, page: ${queryObject.pg}`);
+        console.log(`list request: name: ${queryObject.search_query || queryObject.card_name}, page: ${queryObject.pg}`);
         searchTotal.inc({ card_name: name });
 
-        const request = {
-            FacetSelections:  {card_name: [name]},
-            Variant : {MaxPerPage: 32},
-            MaxPerPage :  32,
-            PageNo: page,
-            clientguid: "cc3be22005ef47d3969c3de28f09571b"
-        };
+        const searchScg = async (criteria: Record<string, unknown>) =>
+            (await fetch(`https://essearchapi-na.hawksearch.com/api/v2/search`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    Variant: { MaxPerPage: 32 },
+                    MaxPerPage: 32,
+                    PageNo: page || 1,
+                    clientguid: 'cc3be22005ef47d3969c3de28f09571b',
+                    ...criteria,
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })).json();
 
-        const answer = await (await fetch(`https://essearchapi-na.hawksearch.com/api/v2/search`, {
-            method: 'POST',
-            body: JSON.stringify(request),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })).json(); 
+        // The card_name facet only matches the exact card name (case-sensitive),
+        // so it fits autocompletion picks; free-form input goes through Keyword.
+        let answer = auto ? await searchScg({ FacetSelections: { card_name: [name] } }) : null;
+        if (!answer?.Results?.length) {
+            answer = await searchScg({ Keyword: name });
+        }
         const pagedAnswer = await parseScgPostAnswer(answer);
 
         fetch(`http://${storageConfig.host}:${storageConfig.port}/storage/card/update-ids`, {
