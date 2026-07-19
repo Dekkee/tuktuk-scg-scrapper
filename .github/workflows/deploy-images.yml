@@ -1,0 +1,106 @@
+name: Deploy service images
+
+on:
+    push:
+        branches:
+            - master
+        paths:
+            - 'packages/**'
+            - 'package.json'
+            - 'package-lock.json'
+            - 'tsconfig.json'
+            - 'tsconfig.docker.json'
+            - 'docker-compose.yml'
+            - 'docker-compose.override.yml'
+            - '.github/workflows/deploy-images.yml'
+    workflow_dispatch:
+
+concurrency:
+    group: deploy-images
+    cancel-in-progress: false
+
+env:
+    IMAGE_PREFIX: cr.yandex/crpsmb4r20h7k2j950c4/tuktuk-scg-scrapper
+    # VM tuktuk by id: the CI SA has instance-scoped access only, so it cannot
+    # resolve the instance by name (that needs a folder-level list).
+    INSTANCE_ID: epds1ivafar9rqsui8e3
+    SERVICES: proxy frontend scg-provider storage
+
+jobs:
+    deploy:
+        name: Build, push, roll tuktuk VM
+        runs-on: ubuntu-latest
+        timeout-minutes: 40
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Compute tag
+              id: tag
+              run: |
+                  VERSION=$(node -p "require('./package.json').version")
+                  SHA=$(git rev-parse HEAD | cut -c1-6)
+                  echo "tag=$VERSION-$SHA" >> "$GITHUB_OUTPUT"
+                  echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+            - name: Login to Yandex Container Registry
+              uses: yc-actions/yc-cr-login@v3
+              with:
+                  yc-sa-json-credentials: ${{ secrets.YC_DEPLOY_SA_JSON }}
+
+            - name: Build images
+              run: BUILD_NUMBER=${{ steps.tag.outputs.sha }} docker compose build
+
+            - name: Push versioned tags
+              run: |
+                  for svc in $SERVICES; do
+                      docker tag "$IMAGE_PREFIX-$svc:latest" "$IMAGE_PREFIX-$svc:${{ steps.tag.outputs.tag }}"
+                      docker push "$IMAGE_PREFIX-$svc:${{ steps.tag.outputs.tag }}"
+                  done
+
+            - name: Install yc CLI
+              run: |
+                  curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -i "$HOME/yc" -n
+                  echo "$HOME/yc/bin" >> "$GITHUB_PATH"
+
+            - name: Flip image tags in VM metadata
+              env:
+                  YC_SA_JSON: ${{ secrets.YC_DEPLOY_SA_JSON }}
+              run: |
+                  echo "$YC_SA_JSON" > /tmp/sa.json
+                  yc config set service-account-key /tmp/sa.json
+                  yc config set cloud-id ${{ vars.YC_CLOUD_ID }}
+                  yc config set folder-id ${{ vars.YC_FOLDER_ID }}
+                  # metadata contains a secret (MONGO_INITDB_ROOT_PASSWORD, until DEK-68):
+                  # never print its content to the log; keep CRLF line endings intact.
+                  yc compute instance get "$INSTANCE_ID" --full --format json \
+                      | python3 -c "import json,sys; sys.stdout.write(json.load(sys.stdin)['metadata']['docker-compose'])" > /tmp/dc.yml
+                  # flip only the 4 app images; mongo / fluent-bit stay untouched
+                  sed -i -E "s#(tuktuk-scg-scrapper-(proxy|frontend|scg-provider|storage)):[0-9A-Za-z._-]+#\1:${{ steps.tag.outputs.tag }}#g" /tmp/dc.yml
+                  test "$(grep -c '${{ steps.tag.outputs.tag }}' /tmp/dc.yml)" -eq 4
+                  yc compute instance update "$INSTANCE_ID" --metadata-from-file docker-compose=/tmp/dc.yml > /dev/null
+                  rm -f /tmp/dc.yml /tmp/sa.json
+
+            - name: Smoke
+              run: |
+                  # COI recreates containers in ~30-60s; poll /api/version until the
+                  # new buildNumber is live (up to 5 min), then check the endpoints.
+                  expected="${{ steps.tag.outputs.sha }}"
+                  for i in $(seq 1 30); do
+                      got=$(curl -sf --max-time 10 https://scg.dekker.lol/api/version \
+                          | python3 -c 'import json,sys; print(json.load(sys.stdin)["buildNumber"])' 2>/dev/null || true)
+                      [ "$got" = "$expected" ] && break
+                      sleep 10
+                  done
+                  test "$got" = "$expected"
+                  curl -sf --max-time 15 -o /dev/null -w "front: %{http_code}\n" https://scg.dekker.lol/
+                  test "$(curl -sf --max-time 30 'https://scg.dekker.lol/api/list?name=lightning%20bolt' \
+                      | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["rows"]))')" -gt 0
+
+            - name: Promote stable
+              # floating rollback anchor — moved only after smoke passed
+              run: |
+                  for svc in $SERVICES; do
+                      docker tag "$IMAGE_PREFIX-$svc:latest" "$IMAGE_PREFIX-$svc:stable"
+                      docker push "$IMAGE_PREFIX-$svc:stable"
+                  done
