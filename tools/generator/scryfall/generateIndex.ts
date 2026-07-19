@@ -139,21 +139,23 @@ export const createIndexStream = ({ onReady }: CreateIndexStreamOpts = {}) => {
             console.log(`Cards failed: ${failedCards.length}`);
 
             const storage: Record<string, unknown> = {};
-            return new Promise<void>((resolve) => {
+            // 0.8: набор ключей экспорта не фиксирован (нет финального 'store'),
+            // завершение — по возврату export() (sync или Promise при async-хендлере)
+            return Promise.resolve(
                 index.export((key, value) => {
                     storage[key] = value;
-                    if (key === 'store') {
-                        const payload: IndexPayload = {
-                            index: storage,
-                            filtered: filteredCards,
-                            failed: failedCards,
-                        };
-                        Promise.resolve(onReady ? onReady(payload) : writeToDisk(payload))
-                            .catch((e) => console.error(e))
-                            .finally(() => resolve());
-                    }
-                });
-            }).then(() => callback());
+                })
+            )
+                .then(() => {
+                    const payload: IndexPayload = {
+                        index: storage,
+                        filtered: filteredCards,
+                        failed: failedCards,
+                    };
+                    return onReady ? onReady(payload) : writeToDisk(payload);
+                })
+                .catch((e) => console.error(e))
+                .then(() => callback());
         },
     });
 };
