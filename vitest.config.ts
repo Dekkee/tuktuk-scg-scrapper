@@ -3,6 +3,6 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
     test: {
         globals: true,
-        include: ['packages/**/*.{test,spec}.{ts,tsx}'],
+        include: ['packages/**/*.{test,spec}.{ts,tsx}', 'tools/**/*.{test,spec}.{ts,tsx}'],
     },
 });
