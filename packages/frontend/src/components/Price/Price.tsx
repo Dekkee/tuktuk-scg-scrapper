@@ -18,13 +18,13 @@ export const Price = ({ value, className }: Props) => {
 
     if (settings.rubleCourse > 0) {
         formattedPrice = ruTemplate.replace(/{price}/, (value * settings.rubleCourse).toFixed());
-        return <div className={className}>
-            <div>{value}</div>
-            <div className="secondary-price">{formattedPrice}</div>
-        </div>
+        return (
+            <div className={className}>
+                <div>{value}</div>
+                <div className="secondary-price">{formattedPrice}</div>
+            </div>
+        );
     }
 
-    return (
-        <div className={className}>{formattedPrice}</div>
-    );
+    return <div className={className}>{formattedPrice}</div>;
 };

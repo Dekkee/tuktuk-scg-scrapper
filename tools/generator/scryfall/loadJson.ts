@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export interface BulkInfo {
     // Scryfall regenerates the bulk file periodically; updated_at changes only
@@ -35,5 +35,5 @@ export const loadJson = async (info?: BulkInfo) => {
     return {
         stream: data,
         total: (headers['content-length'] as string | number) ?? size,
-    }
+    };
 };

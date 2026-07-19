@@ -13,7 +13,7 @@ export interface SettingsType {
 type SettingsHook = [SettingsType, Dispatch<SetStateAction<SettingsType>>];
 
 const initialSettings: SettingsType = JSON.parse(localStorage.getItem(SettingsKey)) || {
-    rubleCourse: 0
+    rubleCourse: 0,
 };
 
 const SettingsContext = React.createContext<SettingsHook>([initialSettings, () => {}]);
@@ -25,11 +25,7 @@ const SettingsProvider = ({ children }) => {
         setState(settings);
     }, 100);
 
-    return (
-        <SettingsContext.Provider value={[state, debounceSetState]}>
-            {children}
-        </SettingsContext.Provider>
-    );
+    return <SettingsContext.Provider value={[state, debounceSetState]}>{children}</SettingsContext.Provider>;
 };
 
 export { SettingsContext, SettingsProvider };

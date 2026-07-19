@@ -50,10 +50,10 @@ app.use((req, res, next) => {
 app.get('/api/list', async function (req, resp, next) {
     try {
         const name = String(req.query.name)
-        // ó -> o
-        .replace('ó', 'o')
-        // í -> i
-        .replace('í', 'i'); //.replace(/,/g, "%c%")
+            // ó -> o
+            .replace('ó', 'o')
+            // í -> i
+            .replace('í', 'i'); //.replace(/,/g, "%c%")
         const page = parseInt(String(req.query.page) || '', 10);
         const auto = req.query.auto === 'true';
         const queryObject: Record<string, string | number> = {
@@ -67,23 +67,27 @@ app.get('/api/list', async function (req, resp, next) {
         }
 
         const query = querystring.stringify(queryObject);
-        console.log(`list request: name: ${queryObject.search_query || queryObject.card_name}, page: ${queryObject.pg}`);
+        console.log(
+            `list request: name: ${queryObject.search_query || queryObject.card_name}, page: ${queryObject.pg}`
+        );
         searchTotal.inc({ card_name: name });
 
         const searchScg = async (criteria: Record<string, unknown>) =>
-            (await fetch(`https://essearchapi-na.hawksearch.com/api/v2/search`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    Variant: { MaxPerPage: 32 },
-                    MaxPerPage: 32,
-                    PageNo: page || 1,
-                    clientguid: 'cc3be22005ef47d3969c3de28f09571b',
-                    ...criteria,
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })).json();
+            (
+                await fetch(`https://essearchapi-na.hawksearch.com/api/v2/search`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        Variant: { MaxPerPage: 32 },
+                        MaxPerPage: 32,
+                        PageNo: page || 1,
+                        clientguid: 'cc3be22005ef47d3969c3de28f09571b',
+                        ...criteria,
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+            ).json();
 
         // The card_name facet only matches the exact card name (case-sensitive),
         // so it fits autocompletion picks; free-form input goes through Keyword.

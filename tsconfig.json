@@ -1,24 +1,19 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "moduleResolution": "node10",
-    "ignoreDeprecations": "6.0",
-    "sourceMap": true,
-    "target": "es2022",
-    "lib": [
-      "es2022",
-      "dom"
-    ],
-    "jsx": "react-jsx",
-    "strict": false,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true
-  },
-  "exclude": [
-    "./**/*.test.*"
-  ]
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node10",
+        "ignoreDeprecations": "6.0",
+        "sourceMap": true,
+        "target": "es2022",
+        "lib": ["es2022", "dom"],
+        "jsx": "react-jsx",
+        "strict": false,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true
+    },
+    "exclude": ["./**/*.test.*"]
 }

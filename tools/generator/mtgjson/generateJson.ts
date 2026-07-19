@@ -2,7 +2,7 @@ import * as fs from 'fs';
 
 const initMap = (map, values) => {
     const keys = {};
-    values.forEach(v => {
+    values.forEach((v) => {
         Object.keys(v).forEach((vk: string) => {
             if (!(vk in keys)) {
                 keys[vk] = 1;
@@ -62,7 +62,7 @@ export const generateJson = (filename, values) => {
 
     const objectsMap = {};
 
-    values.forEach(v => {
+    values.forEach((v) => {
         fillMapWithTypes(mapTypes, Object.entries(v), objectsMap);
     });
 
@@ -75,8 +75,5 @@ export const generateJson = (filename, values) => {
         v.type = values.length > 1 ? values : values[0];
     });
 
-    fs.writeFileSync(
-        `../generated/schema/${filename}.json`,
-        JSON.stringify(mapTypes)
-    );
+    fs.writeFileSync(`../generated/schema/${filename}.json`, JSON.stringify(mapTypes));
 };

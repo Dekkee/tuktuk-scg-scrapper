@@ -1,4 +1,4 @@
-@use "palette";
+@use 'palette';
 html,
 body,
 #root {
@@ -9,7 +9,7 @@ body {
     margin: 0;
     background-color: palette.tuktuk-color(accent);
     color: palette.tuktuk-color(foreground);
-    font-family: "Roboto", Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;

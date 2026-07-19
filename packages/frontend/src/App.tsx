@@ -16,13 +16,13 @@ interface State {
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: '/',
         element: <SearchList />,
     },
     {
-        path: "/card/:id",
+        path: '/card/:id',
         element: <CardLayout />,
-    }
+    },
 ]);
 
 export class App extends React.Component<{}, State> {
@@ -53,11 +53,13 @@ export class App extends React.Component<{}, State> {
             <SettingsProvider>
                 <main className="main-container" role="main">
                     <ErrorTrap>
-                        <RouterProvider router={router}/>
+                        <RouterProvider router={router} />
 
-                        <UpdateLabel status={updateStatus}
+                        <UpdateLabel
+                            status={updateStatus}
                             onRequestUpdate={() => this.pwaUpdater.performUpdate()}
-                            onUpdateCancelled={() => this.onUpdateCancelled()} />
+                            onUpdateCancelled={() => this.onUpdateCancelled()}
+                        />
                     </ErrorTrap>
                 </main>
             </SettingsProvider>

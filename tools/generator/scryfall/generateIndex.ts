@@ -86,7 +86,7 @@ export const createIndexStream = ({ onReady }: CreateIndexStreamOpts = {}) => {
                         ...map[card.name][card.lang],
                         name: card.printed_name || card.name,
                         scryfallId: card.id,
-                    }
+                    };
                 }
             }
         } catch (e) {
@@ -118,7 +118,7 @@ export const createIndexStream = ({ onReady }: CreateIndexStreamOpts = {}) => {
                     c.en = {
                         name: variant.name,
                         scryfallId: variant.scryfallId,
-                    }
+                    };
                     variant = null;
                 }
                 variant = value.ru;
@@ -126,7 +126,7 @@ export const createIndexStream = ({ onReady }: CreateIndexStreamOpts = {}) => {
                     c.ru = {
                         name: variant.name,
                         scryfallId: variant.scryfallId,
-                    }
+                    };
                     variant = null;
                 }
 
@@ -140,7 +140,7 @@ export const createIndexStream = ({ onReady }: CreateIndexStreamOpts = {}) => {
 
             const storage: Record<string, unknown> = {};
             return new Promise<void>((resolve) => {
-                index.export(((key, value) => {
+                index.export((key, value) => {
                     storage[key] = value;
                     if (key === 'store') {
                         const payload: IndexPayload = {
@@ -152,7 +152,7 @@ export const createIndexStream = ({ onReady }: CreateIndexStreamOpts = {}) => {
                             .catch((e) => console.error(e))
                             .finally(() => resolve());
                     }
-                }))
+                });
             }).then(callback);
         },
     });

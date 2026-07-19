@@ -47,8 +47,6 @@ export class Autocomplete extends React.Component<Props, State> {
         }
     }
 
-
-
     componentDidMount() {
         document.addEventListener<'keydown'>('keydown', this.onKeyDownBound);
     }
@@ -61,22 +59,33 @@ export class Autocomplete extends React.Component<Props, State> {
         const { cards, onAutocomplete } = this.props;
         const { selected } = this.state;
 
-        return (<div className="autocompletion autocompletion__container">
-            <div className="autocompletion__content">
-                {
-                    cards.map((card, i) =>
+        return (
+            <div className="autocompletion autocompletion__container">
+                <div className="autocompletion__content">
+                    {cards.map((card, i) => (
                         <div
                             className={cn('autocompletion__card', { 'autocompletion--active': i === selected })}
                             key={i}
-                            onClick={() => onAutocomplete(card.name)}>
-                            <div className="autocompletion__thumb"><img src={`https://api.scryfall.com/cards/${(card as any).scryfallId}?format=image&version=small`} /></div>
+                            onClick={() => onAutocomplete(card.name)}
+                        >
+                            <div className="autocompletion__thumb">
+                                <img
+                                    src={`https://api.scryfall.com/cards/${(card as any).scryfallId}?format=image&version=small`}
+                                />
+                            </div>
                             <div className="autocompletion__body">
-                                <div className="autocompletion__card-name">{card.name}{card.localizedName && <span className="autocompletion__card-secondary-name">{` / ${card.localizedName}`}</span>}</div>
+                                <div className="autocompletion__card-name">
+                                    {card.name}
+                                    {card.localizedName && (
+                                        <span className="autocompletion__card-secondary-name">{` / ${card.localizedName}`}</span>
+                                    )}
+                                </div>
                                 <div className="autocompletion__card-text">{card.text}</div>
                             </div>
-                        </div>)
-                }
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>);
+        );
     }
 }

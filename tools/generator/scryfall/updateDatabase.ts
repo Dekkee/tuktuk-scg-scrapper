@@ -9,18 +9,18 @@ export const createDatabaseStream = async () => {
         writableObjectMode: true,
         readableObjectMode: true,
         autoDestroy: true,
-        write: async function(chunk, encoding, callback) {
+        write: async function (chunk, encoding, callback) {
             try {
                 const card = chunk.value;
                 await Card.findOneAndUpdate({ id: card.id }, card, { upsert: true });
             } catch (e) {
                 console.error('Failed to update', e);
-            }finally {
+            } finally {
                 this.push(chunk);
                 callback();
             }
         },
-        final: async callback => {
+        final: async (callback) => {
             await disconnect();
             callback();
         },

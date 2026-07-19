@@ -14,8 +14,9 @@ const fetchQueue = queue((value, callback) => {
         headers: {
             'Content-Type': 'application/json;charset=utf-8',
         },
-    }).then(callback)
-      .catch((e) => arr.push(value.id));
+    })
+        .then(callback)
+        .catch((e) => arr.push(value.id));
 }, 50);
 
 const createUploadStream = (tick) => {
@@ -35,7 +36,7 @@ const createUploadStream = (tick) => {
             }
         },
     });
-}
+};
 
 const upsertDatabase = async () => {
     await connect();
@@ -47,13 +48,10 @@ const upsertDatabase = async () => {
         renderThrottle: 1,
         total,
     });
-    const pipeline = chain([
-        Card.find().cursor(),
-        createUploadStream(() => progressBar.tick(1)),
-    ]);
+    const pipeline = chain([Card.find().cursor(), createUploadStream(() => progressBar.tick(1))]);
     pipeline.on('end', async () => {
         await disconnect();
-        console.log('failed ids: ')
+        console.log('failed ids: ');
         console.info(JSON.stringify(arr));
     });
 };

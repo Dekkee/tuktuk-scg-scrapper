@@ -32,14 +32,14 @@ const cardFaceSchema = {
 const scgPrice = {
     updateTime: Number,
     cards: [
-      {
-        condition: String,
-        price: Number,
-        stock: Number,
-        purchasing_disabled: Boolean,
-      },
+        {
+            condition: String,
+            price: Number,
+            stock: Number,
+            purchasing_disabled: Boolean,
+        },
     ],
-  };
+};
 
 // Hydrated Mongoose document for a Scryfall card (the domain `Card` type plus
 // Mongoose document methods/virtuals). This is the shape returned by queries.

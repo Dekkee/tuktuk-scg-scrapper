@@ -31,7 +31,7 @@ export const CardLayout = () => {
             if (!card) return;
             setIsFetching(false);
             setCard(card);
-        }
+        };
 
         requestCard(id);
     }, []);
@@ -49,5 +49,4 @@ export const CardLayout = () => {
             {isFetching ? <LoadingLabel /> : <CardDetails card={card} />}
         </div>
     );
-
-}
+};

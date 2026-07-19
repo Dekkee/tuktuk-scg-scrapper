@@ -56,7 +56,7 @@ export class SearchInput extends React.PureComponent<Props, State> {
         this.setState({ ...this.state, ...{ text: value } });
 
         this.onTextChangedDebounced(value);
-    };
+    }
 
     private onKeyPressed(e: React.KeyboardEvent<HTMLInputElement>) {
         const { autocompletion, text } = this.state;
@@ -73,31 +73,31 @@ export class SearchInput extends React.PureComponent<Props, State> {
                 }
                 break;
         }
-    };
+    }
 
     private handleSearchRequest(text: string) {
         this.onTextChangedDebounced.cancel();
         this.setState({ ...this.state, text, autocompletion: undefined });
         this.props.onSearchRequested(text, false);
-    };
+    }
 
     private onAutocomplete(text: string) {
         this.onTextChangedDebounced.cancel();
         this.setState({ ...this.state, text, autocompletion: undefined });
         this.props.onSearchRequested(text, true);
-    };
+    }
 
     private onClear() {
         this.onTextChangedDebounced.cancel();
         this.setState({ ...this.state, text: '', autocompletion: undefined });
         this.inputRef.current.focus();
-    };
+    }
 
     private onCancel(text: string) {
         this.onTextChangedDebounced.cancel();
         this.setState({ ...this.state, text: text, autocompletion: undefined });
         this.inputRef.current.blur();
-    };
+    }
 
     render() {
         const { autocompletion, text } = this.state;
@@ -116,32 +116,36 @@ export class SearchInput extends React.PureComponent<Props, State> {
                         <label className="search-panel__label" htmlFor="search-input">
                             <SearchIcon className="search-icon" />
                             <form onSubmit={(e) => e.preventDefault()}>
-                                <input value={text}
+                                <input
+                                    value={text}
                                     onChange={(e) => this.onInput(e)}
                                     onKeyDown={(e) => this.onKeyPressed(e)}
                                     id="search-input"
                                     ref={this.inputRef}
                                     required
-                                    autoComplete="off" />
+                                    autoComplete="off"
+                                />
                             </form>
                             <div className="search-label">
                                 <div className="search-label__placeholder">Search</div>
                             </div>
                         </label>
-                        {<div className={cn('search-cross', { 'search-cross--hidden': !Boolean(text) })}
-                            onClick={() => this.onClear()}>&times;</div>}
+                        {
+                            <div
+                                className={cn('search-cross', { 'search-cross--hidden': !Boolean(text) })}
+                                onClick={() => this.onClear()}
+                            >
+                                &times;
+                            </div>
+                        }
                     </div>
-                    <button
-                        className="search-button"
-                        onClick={() => this.onCancel(text)}
-                        aria-label="search">
+                    <button className="search-button" onClick={() => this.onCancel(text)} aria-label="search">
                         Cancel
                     </button>
                 </div>
-                {
-                    Boolean(text) && aucompleteCards.length > 0 &&
+                {Boolean(text) && aucompleteCards.length > 0 && (
                     <Autocomplete onAutocomplete={this.onAutocomplete.bind(this)} cards={aucompleteCards} />
-                }
+                )}
             </>
         );
     }

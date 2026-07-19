@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { WriteStream } from "fs";
+import { WriteStream } from 'fs';
 import Progress from 'progress';
 import prettyBytes from 'pretty-bytes';
 
@@ -10,48 +10,46 @@ export const downloadFile = async (url: string) => {
         responseType: 'stream',
     });
 
-    const download = (writer: WriteStream) => new Promise<void>(async (resolve, reject) => {
-        const totalLength = headers['content-length'] as string | undefined;
-        if (!totalLength) {
-            let currentBytes = 0;
-            const prefix = 'Loaded: ';
-            const isTTY = process.stdout.isTTY;
-            process.stdout.write(`${prefix}${currentBytes} B${isTTY ? '' : '\n'}`);
-            data.on('data', chunk => {
-                currentBytes += chunk.length;
-                if (isTTY) {
-                    process.stdout.cursorTo(prefix.length);
-                    process.stdout.clearLine(1);
-                    process.stdout.write(`${prettyBytes(currentBytes)}`);
-                }
-            });
-        } else {
-            const progressBar = new Progress(
-                '-> downloading [:bar] :percent :etas',
-                {
+    const download = (writer: WriteStream) =>
+        new Promise<void>(async (resolve, reject) => {
+            const totalLength = headers['content-length'] as string | undefined;
+            if (!totalLength) {
+                let currentBytes = 0;
+                const prefix = 'Loaded: ';
+                const isTTY = process.stdout.isTTY;
+                process.stdout.write(`${prefix}${currentBytes} B${isTTY ? '' : '\n'}`);
+                data.on('data', (chunk) => {
+                    currentBytes += chunk.length;
+                    if (isTTY) {
+                        process.stdout.cursorTo(prefix.length);
+                        process.stdout.clearLine(1);
+                        process.stdout.write(`${prettyBytes(currentBytes)}`);
+                    }
+                });
+            } else {
+                const progressBar = new Progress('-> downloading [:bar] :percent :etas', {
                     width: 40,
                     complete: '=',
                     incomplete: ' ',
                     renderThrottle: 1,
                     total: parseInt(totalLength),
-                }
-            );
-            data.on('data', chunk => progressBar.tick(chunk.length));
-        }
+                });
+                data.on('data', (chunk) => progressBar.tick(chunk.length));
+            }
 
-        data.pipe(writer);
-        data.on('end', () => {
-            process.stdout.write('\n');
-            resolve();
+            data.pipe(writer);
+            data.on('end', () => {
+                process.stdout.write('\n');
+                resolve();
+            });
+            data.on('error', reject);
         });
-        data.on('error', reject);
-    });
 
     const destroy = () => data.destroy();
 
     return {
         headers,
         download,
-        destroy
-    }
+        destroy,
+    };
 };

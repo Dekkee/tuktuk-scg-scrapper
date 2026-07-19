@@ -1,4 +1,4 @@
-@use "../../palette";
+@use '../../palette';
 
 .search {
     &-container {
@@ -31,7 +31,7 @@
 
             &:focus,
             &:valid {
-                &+.search-label {
+                & + .search-label {
                     opacity: 0;
                 }
             }

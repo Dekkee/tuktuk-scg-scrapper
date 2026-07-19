@@ -11,7 +11,7 @@ export enum UpdateStatus {
     NotRequired,
     Updating,
     Failed,
-    Cancelled
+    Cancelled,
 }
 
 export interface Props {
@@ -21,41 +21,45 @@ export interface Props {
 }
 
 export class UpdateLabel extends React.PureComponent<Props> {
-    constructor (props) {
+    constructor(props) {
         super(props);
     }
 
-    render () {
+    render() {
         const { status, onRequestUpdate, onUpdateCancelled } = this.props;
         const isHidden = status === UpdateStatus.NotRequired || status === UpdateStatus.Cancelled;
         const isFailed = status === UpdateStatus.Failed;
         return (
-            <div className={ cn(
-                'update-label-container',
-                { 'update-label-container--hidden': isHidden },
-                { 'update-label-container--failed': isFailed },
-            ) }>
-                {
-                    status === UpdateStatus.Required &&
+            <div
+                className={cn(
+                    'update-label-container',
+                    { 'update-label-container--hidden': isHidden },
+                    { 'update-label-container--failed': isFailed }
+                )}
+            >
+                {status === UpdateStatus.Required && (
                     <div className="update-label update-label--ready">
                         <div className="update-label__text">Update is ready.</div>
-                        <Button label="Refresh" onClick={ onRequestUpdate }/>
+                        <Button label="Refresh" onClick={onRequestUpdate} />
                     </div>
-                }
-                {
-                    status === UpdateStatus.Updating &&
-                    <div className="update-label update-label--updating"><SpinnerIcon width={50} height={50}/>Loading update!</div>
-                }
-                {
-                    status === UpdateStatus.Failed &&
-                    <div className="update-label update-label--failed"><ErrorIcon width={50} height={50}/>Update
-                        is failed!</div>
-                }
-                {
-                    !isHidden &&
-                    <div className="update-label__close"
-                         onClick={ onUpdateCancelled }>&times;</div>
-                }
+                )}
+                {status === UpdateStatus.Updating && (
+                    <div className="update-label update-label--updating">
+                        <SpinnerIcon width={50} height={50} />
+                        Loading update!
+                    </div>
+                )}
+                {status === UpdateStatus.Failed && (
+                    <div className="update-label update-label--failed">
+                        <ErrorIcon width={50} height={50} />
+                        Update is failed!
+                    </div>
+                )}
+                {!isHidden && (
+                    <div className="update-label__close" onClick={onUpdateCancelled}>
+                        &times;
+                    </div>
+                )}
             </div>
         );
     }
