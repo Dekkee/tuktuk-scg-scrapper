@@ -7,7 +7,7 @@ on:
             - master
         paths:
             - 'tools/generator/scryfall/**'
-            - '~github/workflows/deploy-function.yml'
+            - '.github/workflows/deploy-function.yml'
             - 'package.json'
             - 'package-lock.json'
 
