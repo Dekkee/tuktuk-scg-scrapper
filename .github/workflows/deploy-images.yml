@@ -78,10 +78,13 @@ jobs:
                   # flip only the 4 app images; mongo / fluent-bit stay untouched
                   sed -i -E "s#(tuktuk-scg-scrapper-(proxy|frontend|scg-provider|storage)):[0-9A-Za-z._-]+#\1:${{ steps.tag.outputs.tag }}#g" /tmp/dc.yml
                   test "$(grep -c '${{ steps.tag.outputs.tag }}' /tmp/dc.yml)" -eq 4
+                  # add-metadata, NOT `instance update`: a full update replaces the whole
+                  # metadata map and wiped the ssh-keys entry on every deploy (DEK-195);
+                  # add-metadata upserts only the given key.
                   # --async: instance-scoped compute.editor can start the update but cannot
                   # poll folder-level operations (PermissionDenied on first run #32); the
                   # smoke step below polls the actual outcome instead.
-                  yc compute instance update "$INSTANCE_ID" --metadata-from-file docker-compose=/tmp/dc.yml --async > /dev/null
+                  yc compute instance add-metadata "$INSTANCE_ID" --metadata-from-file docker-compose=/tmp/dc.yml --async > /dev/null
                   rm -f /tmp/dc.yml /tmp/sa.json
 
             - name: Smoke
