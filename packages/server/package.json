@@ -14,7 +14,7 @@
         "@types/lodash": "4.17.24",
         "async": "3.2.6",
         "cheerio": "1.2.0",
-        "flexsearch": "0.7.21",
+        "flexsearch": "0.8.212",
         "lodash": "4.18.1",
         "prom-client": "15.1.3"
     },
