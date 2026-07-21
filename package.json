@@ -31,7 +31,7 @@
         "@types/express": "5.0.6",
         "@types/morgan": "1.9.10",
         "axios": "1.17.0",
-        "body-parser": "2.2.2",
+        "body-parser": "2.3.0",
         "colors": "1.4.0",
         "compression": "1.8.1",
         "cors": "2.8.6",
