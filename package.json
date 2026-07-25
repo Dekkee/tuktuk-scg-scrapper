@@ -46,7 +46,7 @@
         "@aws-sdk/lib-storage": "3.1067.0",
         "@types/node": "25.9.3",
         "async": "3.2.6",
-        "concurrently": "10.0.3",
+        "concurrently": "10.0.4",
         "cross-env": "10.1.0",
         "esbuild": "0.28.1",
         "flexsearch": "0.8.212",
