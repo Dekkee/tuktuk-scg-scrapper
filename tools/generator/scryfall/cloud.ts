@@ -31,6 +31,13 @@ module.exports.updater = async function (event?: { probe?: boolean }) {
     if (event?.probe) {
         return await probe();
     }
-    await generate({ cloud: true, upload: true });
-    console.log('Index ready');
+    try {
+        await generate({ cloud: true, upload: true });
+        console.log('Index ready');
+    } catch (e) {
+        // Rethrow so the invocation is marked failed (feeds the error alert)
+        // instead of hanging until the function timeout.
+        console.error('Index update failed:', e);
+        throw e;
+    }
 };

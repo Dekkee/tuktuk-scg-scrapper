@@ -15,11 +15,16 @@ export const getBulkInfo = async (): Promise<BulkInfo> => {
     });
 
     const allCards = bulk.data.find(({ type }) => type === 'all_cards');
+    // Scryfall dropped download_uri (plain json array) in 2026; bulk dumps are
+    // gzipped jsonl now. size is the compressed size — the raw stream we count.
+    if (!allCards?.jsonl_download_uri) {
+        throw new Error(`No jsonl_download_uri for all_cards in bulk-data, got types: ${JSON.stringify(bulk.data?.map(({ type }) => type))}`);
+    }
 
     return {
         updatedAt: allCards.updated_at,
-        downloadUri: allCards.download_uri,
-        size: allCards.size,
+        downloadUri: allCards.jsonl_download_uri,
+        size: allCards.compressed_size,
     };
 };
 
