@@ -1,0 +1,43 @@
+name: Scryfall index freshness alert
+
+# Дежурная проверка после ночного запуска scryfall-index-updater (04:17 UTC).
+# Красный ран = алерт: GitHub шлёт владельцу письмо о падении workflow.
+# Ловит любую причину протухания: ошибки функции, снятый триггер, битый аплоад.
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: '17 6 * * *'
+
+jobs:
+    check:
+        name: Index is fresh
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Compare index watermark with Scryfall bulk updated_at
+              run: |
+                  set -eu
+                  INDEX_URL='https://storage.yandexcloud.net/tuktuk/index.json'
+
+                  stored=$(curl -sfI "$INDEX_URL" | tr -d '\r' | awk -F': ' 'tolower($1)=="x-amz-meta-scryfall-updated-at" {print $2}')
+                  current=$(curl -sf 'https://api.scryfall.com/bulk-data' | jq -re '.data[] | select(.type=="all_cards") | .updated_at')
+
+                  echo "index watermark:   ${stored:-<missing>}"
+                  echo "scryfall updated:  $current"
+
+                  if [ -z "${stored:-}" ]; then
+                      echo '::error::index.json has no scryfall-updated-at watermark — was it uploaded by the updater at all?'
+                      exit 1
+                  fi
+
+                  stored_ts=$(date -d "$stored" +%s)
+                  current_ts=$(date -d "$current" +%s)
+                  lag=$(( current_ts - stored_ts ))
+                  echo "lag: $(( lag / 3600 ))h"
+
+                  # Nightly cron plus one missed run of slack; anything older means
+                  # the updater is not keeping up.
+                  if [ "$lag" -gt $(( 48 * 3600 )) ]; then
+                      echo "::error::index.json is $(( lag / 3600 ))h behind Scryfall — check scryfall-index-updater logs in Yandex Cloud"
+                      exit 1
+                  fi
